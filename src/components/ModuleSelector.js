@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState  } from 'react';
 import axios from 'axios';
 import '../index.css';
+import Modal from 'react-modal';
+
 
 function ModuleSelector() {
   const [selectedModule, setSelectedModule] = useState('');
   const [responseMessage, setResponseMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleChange = (e) => {
     setSelectedModule(e.target.value);
@@ -15,6 +18,7 @@ function ModuleSelector() {
     e.preventDefault();
     if (!selectedModule) {
       setResponseMessage('Модулиа сонгоно уу.');
+      setIsModalOpen(true);
       return;
     }
 
@@ -24,16 +28,22 @@ function ModuleSelector() {
     axios.post('http://localhost:8282/api/execute', { module: selectedModule })
       .then(response => {
         setResponseMessage(response.data);
+        setIsModalOpen(true);
         setIsLoading(false);
       })
       .catch(error => {
         setResponseMessage('Модуль ажиллуулахад алдаа гарлаа.');
+        setIsModalOpen(true);
         setIsLoading(false);
       });
   };
 
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
-    <div className="p-3 max-w-md mx-auto bg-black bg-opacity-80 shadow-md rounded-lg">
+    <div className="p-3 max-w-md mx-auto bg-black bg-opacity-80 shadow-md rounded-lg w-[500px]">
       <form onSubmit={handleSubmit} className="space-y-4">
         <label className="block text-lg font-semibold text-white text-center">
           Тест хийх модулиа сонгоно уу?
@@ -54,14 +64,31 @@ function ModuleSelector() {
         </select>
       </label>
       <button 
-        type="submit" 
-        className={`button-19 w-full ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`} 
-        disabled={isLoading}
-        >
-        {isLoading ? 'Тестлэж байна...' : 'Тестлэх'}
+          type="submit" 
+          className={`button-19 w-full ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`} 
+          disabled={isLoading}
+          >
+          {isLoading ? 'Тестлэж байна...' : 'Тестлэх'}
       </button>
       </form>
-      {responseMessage && <p className="mt-1 text-red-500 text-center text-xl">{responseMessage}</p>}
+      <Modal
+        isOpen={isModalOpen}
+        onRequestClose={closeModal}
+        contentLabel="Response Message"
+        className="modal"
+        overlayClassName="modal-overlay"
+      >
+          <div className="modal-content text-">
+              <h2 className="text-2xl font-semibold mb-4">Тестийн хариу</h2>
+              <p>{responseMessage}</p>
+              <button onClick={closeModal} className="button-19 mt-4">
+                Хаах
+              </button>         
+          </div>
+          <div className="second-content">
+          </div>
+      </Modal>
+
     </div>
   
 
