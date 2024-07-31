@@ -42,7 +42,8 @@ function ModuleSelector() {
             value={selectedModule} onChange={handleChange}
           >
           <option value="" disabled>Модулиа сонгоно уу...</option>
-          <option value="salary">Цалингийн систем, Цаг бүртгэлийн систем</option>
+          <option value="salary">Цалингийн систем</option>
+          <option value="time">Цаг бүртгэлийн систем</option>
           <option value="hr">Core HR</option>
           <option value="request">Зээлийн хүсэлтийн удирлага</option>
           <option value="contract">Гэрээний удирдлага</option>
