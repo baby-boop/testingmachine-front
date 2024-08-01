@@ -32,7 +32,7 @@ function ModuleSelector() {
         setIsLoading(false);
       })
       .catch(error => {
-        setResponseMessage('Модуль ажиллуулахад алдаа гарлаа.');
+        setResponseMessage('Модуль ажиллуулахад алдаа гарлаа!');
         setIsModalOpen(true);
         setIsLoading(false);
       });
@@ -80,7 +80,7 @@ function ModuleSelector() {
       >
           <div className="modal-content text-">
               <h2 className="text-2xl font-semibold mb-4">Тестийн хариу</h2>
-              <p>{responseMessage}</p>
+              <p className="text-red-700">{responseMessage}</p>
               <button onClick={closeModal} className="button-19 mt-4">
                 Хаах
               </button>         
@@ -88,10 +88,7 @@ function ModuleSelector() {
           <div className="second-content">
           </div>
       </Modal>
-
     </div>
-  
-
   );
 }
 

@@ -1,14 +1,14 @@
-FROM node:20
+FROM node:20.12.2
 
 WORKDIR /app
-
-ENV PATH /app/node_modules/.bin:$PATH
 
 COPY package*.json ./
 
 RUN npm install
 
 COPY . ./
+
+RUN npm run build
 
 RUN git config --global --add safe.directory /app
 
