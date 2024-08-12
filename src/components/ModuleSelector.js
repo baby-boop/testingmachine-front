@@ -24,8 +24,8 @@ function ModuleSelector() {
 
     setIsLoading(true);
     setResponseMessage('');
-
-    axios.post('http://localhost:8282/api/execute', { module: selectedModule })
+    
+    axios.post('http://localhost:8282/api/module', { module: selectedModule })
       .then(response => {
         setResponseMessage(response.data);
         setIsModalOpen(true);
@@ -43,21 +43,23 @@ function ModuleSelector() {
   };
 
   return (
-    <div className="p-3 max-w-md mx-auto bg-black bg-opacity-80 shadow-md rounded-lg w-[500px]">
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <label className="block text-lg font-semibold text-white text-center">
+    <div className="p-3 max-w-md mx-auto bg-black bg-opacity-80 shadow-md rounded-lg w-[500px] ">
+      <form onSubmit={handleSubmit} className="space-y-4 ml-1">
+        <label className="block text-lg font-semibold text-white text-center ">
           Тест хийх модулиа сонгоно уу?
           <select 
-            className="block w-full mt-2 p-3 border border-gray-300 rounded-md shadow-sm text-black focus:ring-blue-500 focus:border-blue-500"
+            className="block w-full mt-3 p-3 border border-gray-300 rounded-md shadow-sm text-black focus:ring-blue-500 focus:border-blue-500"
             value={selectedModule} onChange={handleChange}
           >
           <option value="" disabled>Модулиа сонгоно уу...</option>
+          <option value="task">Ажил үүргийн систем</option>
+          <option value="warehouse">Агуулахын удирдлагын систем</option>
           <option value="salary">Цалингийн систем</option>
           <option value="time">Цаг бүртгэлийн систем</option>
           <option value="hr">Core HR</option>
           <option value="request">Зээлийн хүсэлтийн удирлага</option>
+          <option value="standard">Санхүүгийн стандарт хувилбар</option>
           <option value="contract">Гэрээний удирдлага</option>
-          <option value="task">Ажил үүргийн систем</option>
           <option value="supply">Худалдан авалтын удирдлага</option>
           <option value="store">Дэлгүүрийн удирдлага</option>
           <option value="strategic">Бизнес профайл</option>
