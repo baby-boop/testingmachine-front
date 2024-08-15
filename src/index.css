@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .button-19 {
-  @apply appearance-none bg-customBlue border-0 border-b-4 border-transparent rounded-lg box-border text-white cursor-pointer inline-block font-sans font-semibold tracking-wider leading-5 outline-none overflow-visible py-3 px-4 text-center uppercase transition duration-200 ease-in-out transform;
+  @apply appearance-none bg-customBlue border-0 border-b-2 border-transparent rounded-lg box-border text-white cursor-pointer inline-block font-sans font-semibold tracking-wider leading-5 outline-none overflow-visible py-3 px-4 text-center uppercase transition duration-200 ease-in-out transform;
 }
 
 .button-19:hover:not(:disabled) {
@@ -64,3 +64,10 @@
 
 }
 
+.modal-error {
+  border: 1px solid red;
+}
+
+.modal-success {
+  border: 1px solid green;
+}
