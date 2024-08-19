@@ -4,7 +4,6 @@ import Alert from '@mui/material/Alert';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 
-
 const ErrorMessages = () => {
     const [alerts, setAlerts] = useState([]);
 
@@ -12,7 +11,6 @@ const ErrorMessages = () => {
         const fetchData = () => {
           axios.get('http://localhost:8282/api/messages')
             .then(response => {
-                console.log(response.data);
                 setAlerts(response.data);
             })
             .catch(error => {
@@ -37,7 +35,7 @@ const ErrorMessages = () => {
             <h2 className="text-xl font-bold mb-6">Алдааны жагсаалт</h2>
             <div className="w-full max-w-[750px] text-left overflow-y-auto h-[700px]">
                 {alerts.length === 0 ? (
-                    <p className="text-lg text-indigo-100">Алдаа олдсонгүй...</p>
+                    <p className="text-lg text-indigo-100">Алдааны жагсаалт олдсонгүй...</p>
                 ) : (
                     alerts.map((alert, index) => {
                         const [fieldName, ...fieldMessageParts] = alert.split(':');

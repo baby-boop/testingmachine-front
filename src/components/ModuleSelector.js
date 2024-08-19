@@ -32,8 +32,8 @@ function ModuleSelector() {
           setLoading(false);
         })
         .catch(error => {
-          console.error('Error fetching stats:', error);
-          setError('Error fetching data');
+          console.error('Error stats:', error);
+          setError('Error data');
           setLoading(false);
         });
     };
@@ -44,10 +44,10 @@ function ModuleSelector() {
 
     return () => clearInterval(interval); 
   }, []);
+
+  const { classCount, percent } = stats;
+
   
-  const { classCount, workingClassCount, errorCount, warningCount, infoCount } = stats;
-  const totalCount = workingClassCount + errorCount + warningCount + infoCount;
-  const percentage = classCount > 0 ? (totalCount / classCount) * 100 : 0;
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
 
@@ -140,14 +140,17 @@ function ModuleSelector() {
             {isLoading ? 'Тестлэж байна...' : 'Тестлэх'}
             
           </button>
-          <div>
-          <p className="text-lg font-semibold">Процесс: {percentage.toFixed(1)}%</p>
-
-            <div className="w-full bg-gray-300 rounded-full mt-4">
+          <div className="w-full mt-6">
+            <p className="text-lg font-semibold text-white mb-2">Процесс: {percent}%</p>
+            <div className="relative w-full h-6 bg-gray-300 rounded-full overflow-hidden">
               <div
-                className="h-2 bg-green-500 rounded-full"
-                style={{ width: `${percentage.toFixed(1)}%` }}
-              ></div>
+                className="absolute top-0 left-0 h-full bg-green-500 rounded-full"
+                style={{ width: `${classCount}%` }}
+              />
+              <div
+                className="absolute top-0 left-0 h-full bg-green-500 rounded-full"
+                style={{ width: `${percent}%` }}
+              />
             </div>
           </div>
         </form>
