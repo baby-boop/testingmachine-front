@@ -9,33 +9,41 @@ import 'tailwindcss/tailwind.css';
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, ArcElement);
 
 const CounterDashboard = () => {
-    const [stats, setStats] = useState({ classCount: 0, errorCount: 0, warningCount: 0 });
+    const [stats, setStats] = useState({ classCount: 0, errorCount: 0, warningCount: 0, infoCount:0 });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        axios.get('http://localhost:8282/api/stats')
+        const fetchData = () => {
+          axios.get('http://localhost:8282/api/stats')
             .then(response => {
-                setStats(response.data);
-                setLoading(false);
+              setStats(response.data);
+              setLoading(false);
             })
             .catch(error => {
-                console.error('Статистикийг татахад алдаа гарсан', error);
-                setError('Өгөгдөл олдсонгүй...');
-                setLoading(false);
+              console.error('Error fetching stats:', error);
+              setError('Error fetching data');
+              setLoading(false);
             });
-    }, []);
+        };
+    
+        fetchData();
+    
+        const interval = setInterval(fetchData, 5000);
+    
+        return () => clearInterval(interval);
+      }, []);
 
     if (loading) return <p>Loading...</p>;
     if (error) return <p>{error}</p>;
 
-    const { classCount, workingClassCount, errorCount, warningCount} = stats;
+    const { classCount, workingClassCount, errorCount, warningCount, infoCount} = stats;
 
     const chartData = {
-        labels: [ 'Classes', 'Working', 'Errors', 'Warnings'],
+        labels: [ 'Нийт', 'Ажилласан', 'Алдаа', 'Анхааруулга', 'Үйлдлийн алдаа'],
         datasets: [{
-            data: [ classCount, workingClassCount , errorCount, warningCount],
-            backgroundColor: ['#36A2EB','#0BDA51', '#FF6384', '#FFCE56' ],
+            data: [ classCount, workingClassCount , errorCount, warningCount, infoCount],
+            backgroundColor: ['#c600a2','#0BDA51', '#FF6384', '#FFCE56', '#36A2EB' ],
         }],
     };
 
