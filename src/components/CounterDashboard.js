@@ -20,7 +20,7 @@ const CounterDashboard = () => {
               setLoading(false);
             })
             .catch(error => {
-              console.error('Error stats:', error);
+              console.error('Error stats:', error );
               setError('Error data');
               setLoading(false);
             });
