@@ -45,7 +45,7 @@ function ModuleSelector() {
     return () => clearInterval(interval); 
   }, []);
 
-  const { classCount, percent } = stats;
+  const { percent } = stats;
 
   
   if (loading) return <p>Loading...</p>;
@@ -143,10 +143,6 @@ function ModuleSelector() {
           <div className="w-full mt-6">
             <p className="text-lg font-semibold text-white mb-2">Процесс: {percent}%</p>
             <div className="relative w-full h-6 bg-gray-300 rounded-full overflow-hidden">
-              <div
-                className="absolute top-0 left-0 h-full bg-green-500 rounded-full"
-                style={{ width: `${classCount}%` }}
-              />
               <div
                 className="absolute top-0 left-0 h-full bg-green-500 rounded-full"
                 style={{ width: `${percent}%` }}

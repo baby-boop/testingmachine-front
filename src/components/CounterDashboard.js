@@ -5,7 +5,6 @@ import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, Li
 import 'chart.js/auto';
 import 'tailwindcss/tailwind.css';
 
-// Register ChartJS components
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, ArcElement);
 
 const CounterDashboard = () => {
@@ -21,8 +20,8 @@ const CounterDashboard = () => {
               setLoading(false);
             })
             .catch(error => {
-              console.error('Error fetching stats:', error);
-              setError('Error fetching data');
+              console.error('Error stats:', error);
+              setError('Error data');
               setLoading(false);
             });
         };
