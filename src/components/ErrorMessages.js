@@ -9,7 +9,7 @@ const ErrorMessages = () => {
 
     useEffect(() => {
         const fetchData = () => {
-          axios.get('http://localhost:8282/api/messages')
+          axios.get('http://localhost:8080/api/messages')
             .then(response => {
                 setAlerts(response.data);
             })

@@ -14,7 +14,7 @@ const CounterDashboard = () => {
 
     useEffect(() => {
         const fetchData = () => {
-          axios.get('http://localhost:8282/api/stats')
+          axios.get('http://localhost:8080/api/stats')
             .then(response => {
               setStats(response.data);
               setLoading(false);

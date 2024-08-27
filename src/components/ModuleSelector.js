@@ -26,7 +26,7 @@ function ModuleSelector() {
 
   useEffect(() => {
     const fetchData = () => {
-      axios.get('http://localhost:8282/api/stats')
+      axios.get('http://localhost:8080/api/stats')
         .then(response => {
           setStats(response.data);
           setLoading(false);
@@ -69,7 +69,7 @@ function ModuleSelector() {
     setResponseMessage('');
     setIsError(false);
 
-    axios.post('http://localhost:8282/api/module', { module: selectedModule })
+    axios.post('http://localhost:8080/api/module', { module: selectedModule })
       .then(response => {
         const responseData = response.data;
         if (responseData.includes("Модуль бүрэн ажиллаж дуусаагүй")||responseData.includes("Модуль ажиллуулахад алдаа гарлаа!")) {
