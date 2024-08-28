@@ -166,12 +166,12 @@ function ModuleSelector() {
                       }
                     >
           </div>
-          <div className={`modal-content ${isError ? 'bg-red-50 ' : 'bg-green-50'} p-6 rounded-[80px] `}
+          <div className={`modal-content ${isError ? 'bg-orange-00 ' : 'bg-green-00'} p-6 rounded-[80px] `}
           >
-            <h2 className={`text-3xl font-semibold mb-3 ${isError ? 'text-red-700' : 'text-green-700'}`}>
+            <h2 className={`text-3xl font-semibold mb-3 ${isError ? 'text-orange-500' : 'text-green-700'}`}>
               {isError ? 'Алдаа' : 'Амжилттай'}
             </h2>
-            <p className={isError ? 'text-red-700' : 'text-green-700'}>{responseMessage}</p>
+            <p className={isError ? 'text-orange-500' : 'text-green-700'}>{responseMessage}</p>
             <button onClick={closeModal} className="button-19 mt-4">
               Хаах
             </button>         
