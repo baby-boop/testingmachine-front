@@ -4,7 +4,7 @@ import ErrorMessages from '../components/ErrorMessages';
 
 const DashboardLayout = () => {
     return (
-        <div className=" flex p-4">
+        <div className="bg-white bg-opacity-95 flex p-4">
 
             <div className="flex-1 mr-12 w-[750px]">
                 <CounterDashboard />

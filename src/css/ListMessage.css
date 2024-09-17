@@ -1,0 +1,29 @@
+@media print {
+    body {
+        color: black !important;
+        background-color: white !important;
+    }
+
+    .print-area {
+        display: block !important;
+        color: black !important;
+        max-width: 750px;
+        color: black !important;
+    }
+
+    .MuiAlert-message {
+        color: black !important;
+    }
+
+    .print-page {
+        page-break-before: always;
+    }
+
+    .page-break {
+        display: none;
+    }
+
+    .no-print {
+        display: none !important;
+    }
+}

@@ -2,7 +2,6 @@ import React, { useState,useEffect  } from 'react';
 import axios from 'axios';
 import '../index.css';
 import Modal from 'react-modal';
-import img from '../img/login.png';
 import succImg from '../img/23991388_6895877.jpg';
 import errImg from '../img/11104.jpg';
 
@@ -95,19 +94,7 @@ function ModuleSelector() {
   };
 
   return (
-    <div 
-      style={{
-        backgroundPosition: 'center',
-        backgroundSize: 'cover',
-        backgroundRepeat: 'no-repeat',
-        backgroundImage: `url(${img})`,
-        height: '100vh',   
-        width: '100vw',  
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
-    >
+    
       <div className="p-3 max-w-md mx-auto bg-black bg-opacity-80 shadow-md rounded-lg w-[500px]">
         <form onSubmit={handleSubmit} className="space-y-4 ml-1">
         <label 
@@ -119,13 +106,18 @@ function ModuleSelector() {
               value={selectedModule} onChange={handleChange}
             >
               <option value="" disabled>Модулиа сонгоно уу...</option>
+              <option value="record">record</option>
+              <option value="list">check lists</option>
+              <option value="test">test json</option>
+              <option value="testCase">test selenium option</option>
               <option value="task">Ажил үүргийн систем</option>
               <option value="warehouse">Агуулахын удирдлагын систем</option>
               <option value="salary">Цалингийн систем</option>
               <option value="time">Цаг бүртгэлийн систем</option>
-              <option value="hr">Core HR</option>
+              <option value="hr">Core HR /үндсэн/</option>
+              <option value="hrdata">Core HR /Мастер дата/</option>
               <option value="request">Зээлийн хүсэлтийн удирлага</option>
-              <option value="standard">Санхүүгийн стандарт хувилбар</option>
+              <option value="standard">Санхүүгийн стандарт хувилбар /Мастер дата/</option>
               <option value="contract">Гэрээний удирдлага</option>
               <option value="supply">Худалдан авалтын удирдлага</option>
               <option value="store">Дэлгүүрийн удирдлага</option>
@@ -141,7 +133,7 @@ function ModuleSelector() {
             
           </button>
           <div className="w-full mt-6">
-            <p className="text-lg font-semibold text-white mb-2">Процесс: {percent}%</p>
+            <p className="text-center text-lg font-semibold text-white mb-2">Процесс: {percent}%</p>
             <div className="relative w-full h-6 bg-gray-300 rounded-full overflow-hidden">
               <div
                 className="absolute top-0 left-0 h-full bg-green-500 rounded-full"
@@ -178,7 +170,6 @@ function ModuleSelector() {
           </div>
         </Modal>
       </div>
-    </div>
   );
 }
 

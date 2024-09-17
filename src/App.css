@@ -1,32 +1,37 @@
+/* App.css */
 
-.App {
-  text-align: center;
-}
-
-.App-header {
-  background-color: #282c34;
+.app-container {
+  background-image: url('./img/login.png');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+}
+
+.navigation {
+  margin-bottom: 20px;
+}
+
+.nav-link {
+  margin: 0 15px;
+  padding: 10px 15px;
+  text-decoration: none;
   color: white;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 5px;
+  transition: background-color 0.3s;
 }
 
-form {
-  margin: 20px;
+.nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.2);
 }
 
-select {
-  margin-left: 10px;
-  padding: 5px;
-  font-size: 16px;
-}
-
-button {
-  margin-left: 10px;
-  padding: 5px 10px;
-  font-size: 16px;
-  cursor: pointer;
+.content-container {
+  width: 100%;
+  max-width: 1200px;
+  padding: 20px;
 }
