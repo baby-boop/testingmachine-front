@@ -50,7 +50,6 @@ function ModuleSelector() {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
 
-  //
   const handleChange = (e) => {
     setSelectedModule(e.target.value);
   };
