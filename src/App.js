@@ -1,9 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import ModuleSelector from './components/ModuleSelector';
-import ListMessages from './components/ListMessages';
+import MetaMessages from './components//MetaMessages';
+import MetaverseMessages from './components/MetaverseMessages';
 import DashboardLayout from './layout/DashboardLayout';
-import Test from './test/CategoryForm';
 import './App.css'; 
 
 function App() {
@@ -14,8 +14,8 @@ function App() {
                     <Routes>
                         <Route path="/" element={<ModuleSelector />} />
                         <Route path="/dashboard" element={<DashboardLayout />} />
-                        <Route path="/list" element={<ListMessages />} />
-                        <Route path="/test" element={<Test />} />
+                        <Route path="/meta" element={<MetaMessages />} />
+                        <Route path='/metaverse' element={<MetaverseMessages/>} />
                     </Routes>
                 </div>
             </div>

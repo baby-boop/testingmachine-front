@@ -5,7 +5,7 @@ import '../css/ListMessage.css';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 
-const ListMessages = () => {
+const MetaMessages = () => {
     const [alerts, setAlerts] = useState([]);
     const [timeoutData, setTimeoutData] = useState([]);
     const [metaData, setMetaData] = useState([]);
@@ -210,4 +210,4 @@ const ListMessages = () => {
     );
 };
 
-export default ListMessages;
+export default MetaMessages;
