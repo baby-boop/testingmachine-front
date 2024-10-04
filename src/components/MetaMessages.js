@@ -11,8 +11,8 @@ const MetaMessages = () => {
     const [metaData, setMetaData] = useState([]);
     const [totalCountData, setTotalCountData] = useState([]);
     const [expandAll, setExpandAll] = useState(false);
-    const [fileNameFilter, setFileNameFilter] = useState(''); // Filter for file name
-    const [messageFilter, setMessageFilter] = useState(''); // Filter for message
+    const [fileNameFilter, setFileNameFilter] = useState(''); 
+    const [messageFilter, setMessageFilter] = useState(''); 
     const [itemsToPrint] = useState(5);
 
     useEffect(() => {
@@ -93,14 +93,14 @@ const MetaMessages = () => {
 
 
     return (
-        <div className="w-[1000px] p-6 bg-black bg-opacity-80 print-area">
+        <div className="w-[1000px] p-2 bg-black bg-opacity-80 print-area">
             <h2 className="text-xl text-white font-bold text-center print-area">Алдааны жагсаалт</h2>
             <div className="w-full mt-6 no-print">
-                <p className="text-center text-lg font-semibold text-white mb-2 no-print">Мета: {((metaData.processCount) / (totalCountData.totalCount ) * 100 ).toFixed(1)}%</p>
+                <p className="text-center text-lg font-semibold text-white mb-2 no-print">Мета: {((metaData.processCount) / (totalCountData.indicatorCount ) * 100 ).toFixed(1)}%</p>
                 <div className="relative w-full h-6 bg-gray-300 rounded-full overflow-hidden no-print">
                     <div
                         className="absolute top-0 left-0 h-full bg-green-500 rounded-full no-print"
-                        style={{ width: `${((metaData.processCount / totalCountData.totalCount) * 100).toFixed(1)}%` }}
+                        style={{ width: `${((metaData.processCount / totalCountData.indicatorCount) * 100).toFixed(1)}%` }}
                     />
                 </div>
             </div>
@@ -138,7 +138,7 @@ const MetaMessages = () => {
                 </p>
             </div>
 
-            <div className={`pl-3 w-full max-w-[950px] text-left ${expandAll ? '' : 'overflow-y-auto max-h-[600px] h-[600px] no-print'}`}>
+            <div className={`pl-3 w-full max-w-[950px] text-left ${expandAll ? '' : 'overflow-y-auto max-h-[500px] h-[500px] no-print'}`}>
                 {filteredData.length === 0 ? (
                     <p className="text-lg text-indigo-100">Алдааны жагсаалт олдсонгүй...</p>
                 ) : (

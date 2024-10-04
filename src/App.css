@@ -1,11 +1,11 @@
 /* App.css */
 
 .app-container {
-  background-image: url('./img/login.png');
+  /* background-image: url('./img/login.png'); */
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
-  min-height: 100vh;
+  min-height: 92vh;
   display: flex;
   flex-direction: column;
   align-items: center;
