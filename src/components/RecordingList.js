@@ -1,44 +1,34 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 
 function TestList() {
-  const [tests, setTests] = useState([]);
-  // const [selectedTest, setSelectedTest] = useState('');
-
+  
   useEffect(() => {
-    fetchTests();
+    const socket = new WebSocket("ws://localhost:8080/socket/list");
+  
+    socket.onopen = function(event) {
+        console.log("WebSocket connection established.");
+    };
+    
+    socket.onmessage = function(event) {
+        const messageData = JSON.parse(event.data);
+        // Handle incoming message data
+        console.log("Received message:", messageData);
+    };
+    
+    socket.onerror = function(error) {
+        console.error("WebSocket error: ", error);
+    };
+    
+    socket.onclose = function(event) {
+        console.log("WebSocket connection closed:", event);
+    };
+    
   }, []);
-
-  const fetchTests = () => {
-    axios.get('http://localhost:8080/api/tests')
-      .then(response => {
-        setTests(response.data);
-      })
-      .catch(error => {
-        console.error('There was an error fetching the tests!', error);
-      });
-  };
-
-  const runTest = (testName) => {
-    axios.post(`http://localhost:8080/api/tests/run/${testName}`)
-      .then(response => {
-        alert(response.data);
-      })
-      .catch(error => {
-        console.error('There was an error running the test!', error);
-      });
-  };
 
   return (
     <div className='bg-gray-200'>
-      <h2>Available Test Cases</h2>
+      <h2>Test cases</h2>
       <ul>
-        {tests.map((test, index) => (
-          <li key={index}>
-            {test.name}
-            <button onClick={() => runTest(test.name)}>Run Test</button>
-          </li>
-        ))}
       </ul>
     </div>
   );

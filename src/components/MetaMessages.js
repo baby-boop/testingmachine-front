@@ -9,6 +9,8 @@ const MetaMessages = () => {
     const [alerts, setAlerts] = useState([]);
     const [timeoutData, setTimeoutData] = useState([]);
     const [metaData, setMetaData] = useState([]);
+    const [workflowData, setWorkflowData] = useState([]);
+    const [noDataRow, setDataRow] = useState([]);
     const [totalCountData, setTotalCountData] = useState([]);
     const [expandAll, setExpandAll] = useState(false);
     const [fileNameFilter, setFileNameFilter] = useState(''); 
@@ -18,19 +20,26 @@ const MetaMessages = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const alertsResponse = await axios.get('http://localhost:8080/api/list');
+                const alertsResponse = await axios.get('http://localhost:8080/list');
                 setAlerts(alertsResponse.data);
 
-                const timeoutResponse = await axios.get('http://localhost:8080/api/timeout');
+                const timeoutResponse = await axios.get('http://localhost:8080/timeout');
                 setTimeoutData(timeoutResponse.data);
 
-                const metaDataResponse = await axios.get('http://localhost:8080/api/meta');
+                const metaDataResponse = await axios.get('http://localhost:8080/meta');
                 setMetaData(metaDataResponse.data);
 
-                const metaTotalCountResponse = await axios.get('http://localhost:8080/api/meta-total');
+                const metaTotalCountResponse = await axios.get('http://localhost:8080/meta-total');
                 setTotalCountData(metaTotalCountResponse.data);
+
+                const workflowResponse = await axios.get('http://localhost:8080/workflow');
+                setWorkflowData(workflowResponse.data);
+
+                const workflowNoData = await axios.get('http://localhost:8080/nodata')
+                setDataRow(workflowNoData.data);
+                
             } catch (error) {
-                console.error('Error fetching data:', error);
+                console.error('Error data:', error);
             }
         };
 
@@ -52,45 +61,51 @@ const MetaMessages = () => {
         setAlerts(prevAlerts => prevAlerts.filter((_, i) => i !== index));
     };
 
-    // Combine alerts and timeout data
     const combinedData = alerts.reduce((acc, alert) => {
         const { fileName, metaId, metaCode, message } = alert;
-
+    
         if (!acc[fileName]) {
-            acc[fileName] = { alerts: [], timeouts: [] };
+            acc[fileName] = { alerts: [], timeouts: [], workflowData: [], noDataRow: [] };
         }
         acc[fileName].alerts.push({ metaId, metaCode, message });
-
+    
         return acc;
     }, {});
-
+    
     timeoutData.forEach(timeout => {
         const { fileName, id } = timeout;
         if (!combinedData[fileName]) {
-            combinedData[fileName] = { alerts: [], timeouts: [] };
+            combinedData[fileName] = { alerts: [], timeouts: [], workflowData: [], noDataRow: [] };
         }
         combinedData[fileName].timeouts.push({ id, fileName });
     });
+    
+    workflowData.forEach(workflow => {
+        const { fileName } = workflow;
+        if (!combinedData[fileName]) {
+            combinedData[fileName] = { alerts: [], timeouts: [], workflowData: [], noDataRow: [] };
+        }
+        combinedData[fileName].workflowData.push(workflow);
+    });
 
-    // Filter logic for fileName and message
-    const filteredData = Object.entries(combinedData).map(([fileName, { alerts, timeouts }]) => {
+    noDataRow.forEach(noData => {
+        const { fileName } = noData;
+        if (!combinedData[fileName]) {
+            combinedData[fileName] = { alerts: [], timeouts: [], workflowData: [], noDataRow: [] };
+        }
+        combinedData[fileName].noDataRow.push(noData);
+    });
+    
+    const filteredData = Object.entries(combinedData).map(([fileName, { alerts, timeouts, workflowData, noDataRow }]) => {
         const filteredAlerts = alerts.filter(alert =>
             alert.message.toLowerCase().includes(messageFilter.toLowerCase())
         );
-        return [fileName, { alerts: filteredAlerts, timeouts }];
+        
+        return [fileName, { alerts: filteredAlerts, timeouts, workflowData, noDataRow }];
     }).filter(([fileName, { alerts }]) =>
         fileName.toLowerCase().includes(fileNameFilter.toLowerCase()) && alerts.length > 0
     );
-
-    // const filteredData = Object.entries(combinedData).map(([fileName, { alerts, timeouts }]) => {
-    //     const filteredAlerts = alerts.filter(alert =>
-    //         !alert.message.toLowerCase().includes(messageFilter.toLowerCase()) // Exclude matching messages
-    //     );
-    //     return [fileName, { alerts: filteredAlerts, timeouts }];
-    // }).filter(([fileName, { alerts }]) =>
-    //     fileName.toLowerCase().includes(fileNameFilter.toLowerCase()) && alerts.length > 0 // Keep only files with alerts
-    // );
-
+    
 
     return (
         <div className="w-[1000px] p-2 bg-black bg-opacity-80 print-area">
@@ -125,24 +140,35 @@ const MetaMessages = () => {
                     Хэвлэх
                 </button>
             </div>
-
-            <div className="text-left w-full print-area">
-                <p className="text-white text-base mb-1 no-print">
-                    Нийт шалгасан мета тоо: <strong>{metaData.processCount} </strong>
-                </p>
-                <p className="text-white text-base mb-2 no-print">
-                    Нийт алдааны тоо: <strong>{alerts.length} </strong>
-                </p>
-                <p className="text-white text-base mb-3 no-print">
-                    Нийт ажлуулж чадаагүй мета тоо: <strong>{timeoutData.length }</strong>
-                </p>
+            <div className='flex'>
+                <div className="text-left w-full print-area items-center ">
+                    <p className="text-white text-base mb-1 no-print">
+                        Нийт шалгасан мета тоо: <strong>{metaData.processCount} </strong>
+                    </p>
+                    <p className="text-white text-base mb-2 no-print">
+                        Нийт алдааны тоо: <strong>{alerts.length} </strong>
+                    </p>
+                    <p className="text-white text-base mb-3 no-print">
+                        Нийт ажлуулж чадаагүй мета тоо: <strong>{timeoutData.length }</strong>
+                    </p>
+                </div>
+                <div className="text-left w-full print-area items-center ">
+                    <p className="text-white text-base mb-1 no-print">
+                        Нийт шалгасан ажлын урсгалтай мета тоо: <strong>{metaData.workflowCount} </strong>
+                    </p>
+                    <p className="text-white text-base mb-2 no-print">
+                        Нийт ажлуулж чадаагүй ажлын урсгалын алдааны тоо: <strong>{noDataRow.length}</strong>
+                    </p>
+   
+                </div>
             </div>
+            
 
             <div className={`pl-3 w-full max-w-[950px] text-left ${expandAll ? '' : 'overflow-y-auto max-h-[500px] h-[500px] no-print'}`}>
                 {filteredData.length === 0 ? (
                     <p className="text-lg text-indigo-100">Алдааны жагсаалт олдсонгүй...</p>
                 ) : (
-                    filteredData.map(([fileName, { alerts, timeouts }], index) => (
+                    filteredData.map(([fileName, { alerts, timeouts ,}], index) => (
                         <div key={index} className={index < itemsToPrint ? 'print' : 'no-print'}>
                             <h3 className="text-lg font-semibold text-white print-area">{fileName.split('.').slice(0, -1).join('.')}</h3>
                             {alerts.map((alert, msgIndex) => (
@@ -180,6 +206,8 @@ const MetaMessages = () => {
                                     </div>
                                 </Alert>
                             ))}
+
+
                             {timeouts.length > 0 && (
                                 <h5 className='text-base text-white print-area'>Ажлуулж чадаагүй мета жагсаалт</h5>
                             )}
@@ -197,6 +225,59 @@ const MetaMessages = () => {
                                         <div className="flex flex-col gap-1">
                                             <span className="text-sm text-white print-area">
                                                 Meta ID: {timeout.id}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </Alert>
+                            ))}
+
+
+                             {workflowData.length > 0 && (
+                                <h5 className='text-base text-white print-area'>Алдаа гарсан ажлын урсгал жагсаалт</h5>
+                            )}
+                            {workflowData.map((workflowData, msgIndex) => (
+                                <Alert
+                                    key={`workflow-${msgIndex}`}
+                                    variant="filled"
+                                    severity='warning'
+                                    style={{ marginBottom: '0.4rem' }}
+                                >
+                                    <div style={{ display: 'flex', alignItems: 'flex-start' }}>
+                                        <span className='print-area' style={{ fontWeight: 'bold', marginRight: '8px', color: 'white' }}>
+                                            {msgIndex + 1}.
+                                        </span>
+                                        <div className="flex flex-col gap-1">
+                                            <span className="text-sm text-white print-area">
+                                                Meta ID: {workflowData.metaId}
+                                            </span>
+                                            <span className="text-sm text-white print-area">
+                                                Meta CODE: {workflowData.metaCode}
+                                            </span>
+                                            <span className="text-sm text-white print-area">
+                                                Алдаа: {workflowData.message}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </Alert>
+                            ))}
+
+                             {noDataRow.length > 0 && (
+                                <h5 className='text-base text-white print-area'>Дата олдоогүй мета жагсаалт</h5>
+                            )}
+                            {noDataRow.map((noDataRow, msgIndex) => (
+                                <Alert
+                                    key={`noDataRow-${msgIndex}`}
+                                    variant="filled"
+                                    severity='warning'
+                                    style={{ marginBottom: '0.4rem' }}
+                                >
+                                    <div style={{ display: 'flex', alignItems: 'flex-start' }}>
+                                        <span className='print-area' style={{ fontWeight: 'bold', marginRight: '8px', color: 'white' }}>
+                                            {msgIndex + 1}.
+                                        </span>
+                                        <div className="flex flex-col gap-1">
+                                            <span className="text-sm text-white print-area">
+                                                Meta ID: {noDataRow.id}
                                             </span>
                                         </div>
                                     </div>

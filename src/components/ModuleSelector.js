@@ -105,6 +105,8 @@ function ModuleSelector() {
               value={selectedModule} onChange={handleChange}
             >
               <option value="" disabled>Модулиа сонгоно уу...</option>
+              <option value="cucumber">cucumber test</option>
+              <option value="playwright">playwright test</option>
               <option value="meta">check meta</option>
               <option value="metaverse">check metaverse</option>
               <option value="test">test json</option>
