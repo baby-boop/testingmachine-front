@@ -6,6 +6,7 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 
 const MetaMessages = () => {
+    
     const [alerts, setAlerts] = useState([]);
     const [timeoutData, setTimeoutData] = useState([]);
     const [metaData, setMetaData] = useState([]);
@@ -111,11 +112,11 @@ const MetaMessages = () => {
         <div className="w-[1000px] p-2 bg-black bg-opacity-80 print-area">
             <h2 className="text-xl text-white font-bold text-center print-area">Алдааны жагсаалт</h2>
             <div className="w-full mt-6 no-print">
-                <p className="text-center text-lg font-semibold text-white mb-2 no-print">Мета: {((metaData.processCount) / (totalCountData.indicatorCount ) * 100 ).toFixed(1)}%</p>
+                <p className="text-center text-lg font-semibold text-white mb-2 no-print">Мета: {((metaData.metaCount) / (totalCountData.metaCount ) * 100 ).toFixed(1) } %</p>
                 <div className="relative w-full h-6 bg-gray-300 rounded-full overflow-hidden no-print">
                     <div
                         className="absolute top-0 left-0 h-full bg-green-500 rounded-full no-print"
-                        style={{ width: `${((metaData.processCount / totalCountData.indicatorCount) * 100).toFixed(1)}%` }}
+                        style={{ width: `${((metaData.metaCount / totalCountData.metaCount) * 100).toFixed(1)}%` }}
                     />
                 </div>
             </div>
@@ -143,7 +144,7 @@ const MetaMessages = () => {
             <div className='flex'>
                 <div className="text-left w-full print-area items-center ">
                     <p className="text-white text-base mb-1 no-print">
-                        Нийт шалгасан мета тоо: <strong>{metaData.processCount} </strong>
+                        Нийт шалгасан мета тоо: <strong>{metaData.metaCount} </strong>
                     </p>
                     <p className="text-white text-base mb-2 no-print">
                         Нийт алдааны тоо: <strong>{alerts.length} </strong>
@@ -168,7 +169,7 @@ const MetaMessages = () => {
                 {filteredData.length === 0 ? (
                     <p className="text-lg text-indigo-100">Алдааны жагсаалт олдсонгүй...</p>
                 ) : (
-                    filteredData.map(([fileName, { alerts, timeouts ,}], index) => (
+                    filteredData.map(([fileName, { alerts, timeouts , noDatas, workflows}], index) => (
                         <div key={index} className={index < itemsToPrint ? 'print' : 'no-print'}>
                             <h3 className="text-lg font-semibold text-white print-area">{fileName.split('.').slice(0, -1).join('.')}</h3>
                             {alerts.map((alert, msgIndex) => (
@@ -237,7 +238,7 @@ const MetaMessages = () => {
                             )}
                             {workflowData.map((workflowData, msgIndex) => (
                                 <Alert
-                                    key={`workflow-${msgIndex}`}
+                                    key={`workflowData-${msgIndex}`}
                                     variant="filled"
                                     severity='warning'
                                     style={{ marginBottom: '0.4rem' }}
@@ -261,7 +262,7 @@ const MetaMessages = () => {
                                 </Alert>
                             ))}
 
-                             {noDataRow.length > 0 && (
+                            {noDataRow.length > 0 && (
                                 <h5 className='text-base text-white print-area'>Дата олдоогүй мета жагсаалт</h5>
                             )}
                             {noDataRow.map((noDataRow, msgIndex) => (
