@@ -103,7 +103,7 @@ const MetaMessages = () => {
                 <div className="relative w-full h-6 bg-gray-300 rounded-full overflow-hidden no-print">
                     <div
                         className="absolute top-0 left-0 h-full bg-green-500 rounded-full no-print"
-                        style={{ width: `${((metaData.processCount / totalCountData.indicatorCount) * 100).toFixed(1)}%` }}
+                        style={{ width: `${(((metaData.processCount|| 0) / (totalCountData.indicatorCount || 0)) * 100).toFixed(1)}%` }}
                     />
                 </div>
             </div>

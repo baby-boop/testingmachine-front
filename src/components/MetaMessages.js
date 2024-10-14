@@ -6,7 +6,7 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 
 const MetaMessages = () => {
-    
+
     const [alerts, setAlerts] = useState([]);
     const [timeoutData, setTimeoutData] = useState([]);
     const [metaData, setMetaData] = useState([]);
@@ -106,13 +106,12 @@ const MetaMessages = () => {
     }).filter(([fileName, { alerts }]) =>
         fileName.toLowerCase().includes(fileNameFilter.toLowerCase()) && alerts.length > 0
     );
-    
 
     return (
         <div className="w-[1000px] p-2 bg-black bg-opacity-80 print-area">
-            <h2 className="text-xl text-white font-bold text-center print-area">Алдааны жагсаалт</h2>
-            <div className="w-full mt-6 no-print">
-                <p className="text-center text-lg font-semibold text-white mb-2 no-print">Мета: {((metaData.metaCount) / (totalCountData.metaCount ) * 100 ).toFixed(1) } %</p>
+            <h2 className="text-xl text-white font-bold text-center  print-area">Алдааны жагсаалт</h2>
+            <div className="w-full mt-6 no-print ">
+                <p className="text-center text-lg font-semibold text-white mb-2 no-print">Мета: {((metaData.metaCount || 0) / (totalCountData.metaCount || 1) * 100 ).toFixed(1) }%</p>
                 <div className="relative w-full h-6 bg-gray-300 rounded-full overflow-hidden no-print">
                     <div
                         className="absolute top-0 left-0 h-full bg-green-500 rounded-full no-print"
@@ -153,15 +152,14 @@ const MetaMessages = () => {
                         Нийт ажлуулж чадаагүй мета тоо: <strong>{timeoutData.length }</strong>
                     </p>
                 </div>
-                <div className="text-left w-full print-area items-center ">
+                {/* <div className="text-left w-full print-area items-center ">
                     <p className="text-white text-base mb-1 no-print">
                         Нийт шалгасан ажлын урсгалтай мета тоо: <strong>{metaData.workflowCount} </strong>
                     </p>
                     <p className="text-white text-base mb-2 no-print">
-                        Нийт ажлуулж чадаагүй ажлын урсгалын алдааны тоо: <strong>{noDataRow.length}</strong>
+                        Нийт ажлуулж чадаагүй ажлын урсгал: <strong>{noDataRow.length}</strong>
                     </p>
-   
-                </div>
+                </div> */}
             </div>
             
 
@@ -169,7 +167,7 @@ const MetaMessages = () => {
                 {filteredData.length === 0 ? (
                     <p className="text-lg text-indigo-100">Алдааны жагсаалт олдсонгүй...</p>
                 ) : (
-                    filteredData.map(([fileName, { alerts, timeouts , noDatas, workflows}], index) => (
+                    filteredData.map(([fileName, { alerts, timeouts , noDataRow, workflowData}], index) => (
                         <div key={index} className={index < itemsToPrint ? 'print' : 'no-print'}>
                             <h3 className="text-lg font-semibold text-white print-area">{fileName.split('.').slice(0, -1).join('.')}</h3>
                             {alerts.map((alert, msgIndex) => (
@@ -233,7 +231,7 @@ const MetaMessages = () => {
                             ))}
 
 
-                             {workflowData.length > 0 && (
+                            {workflowData.length > 0 && (
                                 <h5 className='text-base text-white print-area'>Алдаа гарсан ажлын урсгал жагсаалт</h5>
                             )}
                             {workflowData.map((workflowData, msgIndex) => (
