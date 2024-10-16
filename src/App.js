@@ -4,7 +4,7 @@ import ModuleSelector from './components/ModuleSelector';
 import MetaMessages from './components//MetaMessages';
 import MetaverseMessages from './components/MetaverseMessages';
 import DashboardLayout from './layout/DashboardLayout';
-import Recording from './components/Recording';
+import Test from './components/test';
 import NavBar from './layout/NavBar';
 import './App.css'; 
 
@@ -22,7 +22,7 @@ function App() {
                         <Route path="/dashboard" element={<DashboardLayout />} />
                         <Route path="/meta" element={<MetaMessages />} />
                         <Route path='/metaverse' element={<MetaverseMessages/>} />
-                        <Route path='/record' element={<Recording/>} />
+                        <Route path='/test' element={<Test/>} />
                     </Routes>
                 </div>
             </div>

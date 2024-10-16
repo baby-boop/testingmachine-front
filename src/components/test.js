@@ -152,7 +152,7 @@ const MetaMessages = () => {
             </div>
             
 
-            <div className={`pl-3 w-full max-w-[950px] text-left ${expandAll ? '' : 'overflow-y-auto max-h-[500px] h-[500px] no-print'}`}>
+            <div className={`pl-3 w-full w-[1100px] text-left ${expandAll ? '' : 'overflow-y-auto max-h-[500px] h-[500px] no-print'}`}>
                 {filteredData.length === 0 ? (
                     <p className="text-lg text-indigo-100">Алдааны жагсаалт олдсонгүй...</p>
                 ) : (

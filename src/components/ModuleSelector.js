@@ -105,24 +105,8 @@ function ModuleSelector() {
               value={selectedModule} onChange={handleChange}
             >
               <option value="" disabled>Модулиа сонгоно уу...</option>
-              <option value="cucumber">cucumber test</option>
-              <option value="playwright">playwright test</option>
               <option value="meta">check meta</option>
               <option value="metaverse">check metaverse</option>
-              <option value="test">test json</option>
-              <option value="testCase">test selenium option</option>
-              <option value="task">Ажил үүргийн систем</option>
-              <option value="warehouse">Агуулахын удирдлагын систем</option>
-              <option value="salary">Цалингийн систем</option>
-              <option value="time">Цаг бүртгэлийн систем</option>
-              <option value="hr">Core HR /үндсэн/</option>
-              <option value="hrdata">Core HR /Мастер дата/</option>
-              <option value="request">Зээлийн хүсэлтийн удирлага</option>
-              <option value="standard">Санхүүгийн стандарт хувилбар /Мастер дата/</option>
-              <option value="contract">Гэрээний удирдлага</option>
-              <option value="supply">Худалдан авалтын удирдлага</option>
-              <option value="store">Дэлгүүрийн удирдлага</option>
-              <option value="strategic">Бизнес профайл</option>
             </select>
           </label>
           <button 
