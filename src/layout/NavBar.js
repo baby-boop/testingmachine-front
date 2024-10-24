@@ -56,12 +56,12 @@ function NavBar() {
             <li className="nav-item no-print">
               <NavLink
                 exact
-                to="/record"
+                to="/process"
                 activeClassName="active"
                 className="nav-links"
                 onClick={handleClick}
               >
-                Recording
+                Process
               </NavLink>
             </li>
 

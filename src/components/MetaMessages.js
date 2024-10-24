@@ -137,31 +137,33 @@ const MetaMessages = () => {
                         onChange={(e) => setMessageFilter(e.target.value)}
                         className="mt-2 text-base rounded border border-gray-300 no-print text-black w-full h-[40px] "
                     />
-
-                    <button className="bg-blue-500 bg-opacity-80 text-black h-[40px] w-[100px] my-2 rounded mb-6 no-print" onClick={handlePrint}>
-                        Хэвлэх
-                    </button>
+                    <div className='container flex justify-end'>
+                        <button className="container right-0 bg-blue-500 bg-opacity-80 text-black h-[40px] w-[150px] my-2 rounded mb-6 no-print" onClick={handlePrint}>
+                            Хэвлэх
+                        </button>
+                    </div>
+                    
                 </div>
                 <div className='flex '>
                     <div className="text-left w-full print-area items-center ">
-                        <p className="text-white text-base mb-1 print-area h">
+                        <p className="text-white text-base mb-1 no-print h">
                             Нийт шалгасан мета тоо: <strong>{metaData.metaCount || 0} </strong>
                         </p>
-                        <p className="text-white text-base mb-2 print-area h">
+                        <p className="text-white text-base mb-2 no-print h">
                             Нийт алдааны тоо: <strong>{alerts.length} </strong>
                         </p>
-                        <p className="text-white text-base mb-3 print-area h">
+                        <p className="text-white text-base mb-3 no-print h">
                             Нийт ажлуулж чадаагүй мета тоо: <strong>{timeoutData.length }</strong>
                         </p>
                     </div>
                     <div className="text-left w-full print-area items-center ">
-                        <p className="text-white text-base mb-1 print-area h">
+                        <p className="text-white text-base mb-1 no-print h">
                             Нийт шалгасан ажлын урсгалтай мета тоо: <strong>{metaData.workflowCount || 0} </strong>
                         </p>
-                        <p className="text-white text-base mb-2 print-area h">
+                        <p className="text-white text-base mb-2 no-print h">
                             Нийт ажлуулж чадаагүй ажлын урсгал: <strong>{noDataRow.length}</strong>
                         </p>
-                        <p className="text-white text-base mb-3 print-area h">
+                        <p className="text-white text-base mb-3 no-print h">
                             Нийт алдаа гарсан ажлын урсгал: <strong>{workflowData.length}</strong>
                         </p>
                     </div>
