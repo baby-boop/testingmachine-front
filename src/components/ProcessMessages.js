@@ -176,7 +176,7 @@ const ProcessMessages = () => {
                 {filteredData.length === 0 ? (
                     <p className="text-center">Алдааны жагсаалт олдсонгүй...</p>
                 ) : (
-                    filteredData.map(([fileName, { infoProcess, processLog }], index) => (
+                    filteredData.map(([fileName, { infoProcess, processLog, warningProcess, errorProcess, failedProcess }], index) => (
                         <div key={index} className="p-4 bg-gray-700 rounded-lg ">
                             <h3 className="text-lg font-semibold text-white mb-2 print-area">{fileName.split('.').slice(0, -1).join('.')}</h3>
 
