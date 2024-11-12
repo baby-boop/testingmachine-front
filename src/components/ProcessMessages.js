@@ -6,7 +6,6 @@ import CloseIcon from '@mui/icons-material/Close';
 
 const ProcessMessages = () => {
     
-
     const [warningProcess, setWarningProcess] = useState([]);
     const [errorProcess, setErrorProcess] = useState([]);
     const [infoProcess, setInfoProcess] = useState([]);
@@ -64,20 +63,45 @@ const ProcessMessages = () => {
     const combinedData = infoProcess.reduce((acc, alert) => {
         const { fileName, processId, message } = alert;
         if (!acc[fileName]) {
-            acc[fileName] = { infoProcess: [], processLog: [] };
+            acc[fileName] = { infoProcess: [], warningProcess: [], errorProcess: [], failedProcess: [], processLog: [] };
         }
         acc[fileName].infoProcess.push({ processId, message });
         return acc;
     }, {});
 
-    processLog.forEach(process => {
-        const { fileName } = process;
+    warningProcess.forEach(warningProcess => {
+        const { fileName } = warningProcess;
         if (!combinedData[fileName]) {
-            combinedData[fileName] = { infoProcess: [], processLog: [] };
+            combinedData[fileName] = { infoProcess: [], warningProcess: [], errorProcess: [], failedProcess: [], processLog: [] };
         }
-        combinedData[fileName].processLog.push(process);
+        combinedData[fileName].warningProcess.push(warningProcess);
     });
 
+    errorProcess.forEach(errorProcess => {
+        const { fileName } = errorProcess;
+        if (!combinedData[fileName]) {
+            combinedData[fileName] = { infoProcess: [], warningProcess: [], errorProcess: [], failedProcess: [], processLog: [] };
+        }
+        combinedData[fileName].errorProcess.push(errorProcess);
+    });
+    
+    failedProcess.forEach(failedProcess => {
+        const { fileName } = failedProcess;
+        if (!combinedData[fileName]) {
+            combinedData[fileName] = { infoProcess: [], warningProcess: [], errorProcess: [], failedProcess: [], processLog: [] };
+        }
+        combinedData[fileName].failedProcess.push(failedProcess);
+    });
+
+    processLog.forEach(processLog => {
+        const { fileName } = warningProcess;
+        if (!combinedData[fileName]) {
+            combinedData[fileName] = { infoProcess: [], warningProcess: [], errorProcess: [], failedProcess: [], processLog: [] };
+        }
+        combinedData[fileName].processLog.push(processLog);
+    });
+    
+    
     const filteredData = Object.entries(combinedData)
         .filter(([fileName, { infoProcess }]) => 
             fileName.toLowerCase().includes(fileNameFilter.toLowerCase()) &&
@@ -111,18 +135,41 @@ const ProcessMessages = () => {
                     </button>
                 </div>
 
-                    <div className="mb-4 no-print">
-                        <p className="font-semibold text-center">
-                            Мета: {(totalCountData.processCount / totalCountData.totalProcessCount * 100).toFixed(1)}%
-                        </p>
-                        <div className="w-full bg-gray-600 h-4 rounded-md overflow-hidden">
-                            <div
-                                className="bg-green-500 h-full"
-                                style={{ width: `${(totalCountData.processCount / totalCountData.totalProcessCount * 100).toFixed(1)}%` }}
-                            />
-                        </div>
+                <div className="mb-4 no-print">
+                    <p className="font-semibold text-center">
+                       Мета: {((progressData.warningCount + progressData.errorCount + progressData.infoCount + progressData.successCount + progressData.failedCount + processLog.length ) / totalCountData.totalProcessCount * 100).toFixed(1)}%
+                    </p>
+                    <div className="w-full bg-gray-600 h-4 rounded-md overflow-hidden">
+                        <div
+                            className="bg-green-500 h-full"
+                            style={{ width: `${((progressData.warningCount + progressData.errorCount + progressData.infoCount + progressData.successCount + progressData.failedCount + processLog.length ) / totalCountData.totalProcessCount * 100).toFixed(1)}%` }}                            />
                     </div>
                 </div>
+                <div className='flex '>
+                    <div className="text-left w-full print-area">
+                        <p className="text-white text-base mb-1 no-print">
+                            Нийт шалгасан процесс тоо: <strong>{progressData.warningCount + progressData.errorCount + progressData.infoCount + progressData.successCount + progressData.failedCount} </strong>
+                        </p>
+                        <p className="text-white text-base mb-2 no-print">
+                            Нийт алдаатай процесс тоо: <strong>{progressData.errorCount} </strong>
+                        </p>
+                        <p className="text-white text-base mb-3 no-print">
+                            Нийт ажлуулж чадаагүй процесс тоо: <strong>{progressData.failedCount }</strong>
+                        </p>
+                    </div>
+                    <div className="text-left w-full print-area">
+                        <p className="text-white text-base mb-1 no-print">
+                            Нийт анхааруулга өгсөн процесс тоо: <strong>{progressData.warningCount} </strong>
+                        </p>
+                        <p className="text-white text-base mb-2 no-print">
+                            Нийт сануулга өгсөн процесс тоо: <strong>{progressData.infoCount} </strong>
+                        </p>
+                        <p className="text-white text-base mb-3 no-print">
+                            Нийт ажлуулж чадаагүй процесс тоо: <strong>{processLog.length }</strong>
+                        </p>
+                    </div>
+                </div>
+            </div>
                 
 
             <div className={`space-y-4 w-full ${expandAll ? 'max-h-screen' : 'max-h-[500px] overflow-y-auto'}`}>
@@ -163,6 +210,7 @@ const ProcessMessages = () => {
                                 </Alert>
                             ))}
 
+                            
                             {processLog.length > 0 && (
                                 <h4 className="text-base text-white print-area">Expression алдаа</h4>
                             )}
@@ -181,6 +229,85 @@ const ProcessMessages = () => {
                                         <div className="flex flex-col gap-1">
                                             <span className="text-base text-white print-area">Процесс ID: {processLog.processId}</span>
                                             <span className="text-base text-white print-area">Алдаа: {processLog.message.split("https://dev.veritech.mn/assets/core/js/main/jquery.min.v1621833277.js 1:31702")}</span>
+                                            
+                                        </div>
+                                        
+                                    </div>
+                                
+                                </Alert>
+                            ))}
+
+                            {warningProcess.length > 0 && (
+                                <h4 className="text-base text-white print-area">Expression алдаа</h4>
+                            )}
+                            {warningProcess.map((warningProcess, idx) => (
+                                <Alert
+                                    key={`warningProcess-${idx}`}
+                                    variant="filled"
+                                    severity="warning"
+                                    className="mb-2"
+                                >
+                                    <div style={{ display: 'flex', alignItems: 'flex-start' }}>
+
+                                        <span className='print-area' style={{ fontWeight: 'bold', marginRight: '8px', color: 'white' }}>
+                                            {idx + 1}.
+                                        </span>
+                                        <div className="flex flex-col gap-1">
+                                            <span className="text-base text-white print-area">Процесс ID: {warningProcess.processId}</span>
+                                            <span className="text-base text-white print-area">Алдаа: {warningProcess.message}</span>
+                                            
+                                        </div>
+                                        
+                                    </div>
+                                
+                                </Alert>
+                            ))}
+
+                            {errorProcess.length > 0 && (
+                                <h4 className="text-base text-white print-area">Expression алдаа</h4>
+                            )}
+                            {errorProcess.map((errorProcess, idx) => (
+                                <Alert
+                                    key={`errorProcess-${idx}`}
+                                    variant="filled"
+                                    severity="warning"
+                                    className="mb-2"
+                                >
+                                    <div style={{ display: 'flex', alignItems: 'flex-start' }}>
+
+                                        <span className='print-area' style={{ fontWeight: 'bold', marginRight: '8px', color: 'white' }}>
+                                            {idx + 1}.
+                                        </span>
+                                        <div className="flex flex-col gap-1">
+                                            <span className="text-base text-white print-area">Процесс ID: {errorProcess.processId}</span>
+                                            <span className="text-base text-white print-area">Алдаа: {errorProcess.message}</span>
+                                            
+                                        </div>
+                                        
+                                    </div>
+                                
+                                </Alert>
+                            ))}
+
+
+                            {failedProcess.length > 0 && (
+                                <h4 className="text-base text-white print-area">Expression алдаа</h4>
+                            )}
+                            {failedProcess.map((failedProcess, idx) => (
+                                <Alert
+                                    key={`failedProcess-${idx}`}
+                                    variant="filled"
+                                    severity="warning"
+                                    className="mb-2"
+                                >
+                                    <div style={{ display: 'flex', alignItems: 'flex-start' }}>
+
+                                        <span className='print-area' style={{ fontWeight: 'bold', marginRight: '8px', color: 'white' }}>
+                                            {idx + 1}.
+                                        </span>
+                                        <div className="flex flex-col gap-1">
+                                            <span className="text-base text-white print-area">Процесс ID: {failedProcess.processId}</span>
+                                            <span className="text-base text-white print-area">Алдаа: {failedProcess.message}</span>
                                             
                                         </div>
                                         
