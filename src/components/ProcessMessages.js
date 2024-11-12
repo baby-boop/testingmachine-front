@@ -48,6 +48,7 @@ const ProcessMessages = () => {
         return () => clearInterval(interval);
     }, []);
 
+    
     const handlePrint = () => {
         setExpandAll(true);
         setTimeout(() => {
@@ -106,7 +107,7 @@ const ProcessMessages = () => {
         .filter(([fileName, { infoProcess }]) => 
             fileName.toLowerCase().includes(fileNameFilter.toLowerCase()) &&
             infoProcess.some(alert => alert.message.toLowerCase().includes(messageFilter.toLowerCase()))
-        );
+    );
         
     return (
         <div className="container w-full h-[700px] p-6 bg-gray-800 text-white print:w-full print:h-auto print-area">
@@ -209,7 +210,6 @@ const ProcessMessages = () => {
                                     
                                 </Alert>
                             ))}
-
                             
                             {processLog.length > 0 && (
                                 <h4 className="text-base text-white print-area">Expression алдаа</h4>
@@ -218,7 +218,7 @@ const ProcessMessages = () => {
                                 <Alert
                                     key={`processLog-${idx}`}
                                     variant="filled"
-                                    severity="warning"
+                                    severity="error"
                                     className="mb-2"
                                 >
                                     <div style={{ display: 'flex', alignItems: 'flex-start' }}>
@@ -270,7 +270,7 @@ const ProcessMessages = () => {
                                 <Alert
                                     key={`errorProcess-${idx}`}
                                     variant="filled"
-                                    severity="warning"
+                                    severity="error"
                                     className="mb-2"
                                 >
                                     <div style={{ display: 'flex', alignItems: 'flex-start' }}>
@@ -297,7 +297,7 @@ const ProcessMessages = () => {
                                 <Alert
                                     key={`failedProcess-${idx}`}
                                     variant="filled"
-                                    severity="warning"
+                                    severity="error"
                                     className="mb-2"
                                 >
                                     <div style={{ display: 'flex', alignItems: 'flex-start' }}>
