@@ -9,10 +9,13 @@ const ProcessMessages = () => {
     const [warningProcess, setWarningProcess] = useState([]);
     const [errorProcess, setErrorProcess] = useState([]);
     const [infoProcess, setInfoProcess] = useState([]);
-    const [failedProcess, setFailedProcess] = useState([]);
     const [processLog, setProcessLog] = useState([]);
     const [totalCountData, setTotalCountData] = useState([]);
     const [progressData, setProgressData] = useState([]);
+    const [successProcess, setSuccessProcess] = useState([]);
+    const [emptyData, setEmptyData] = useState([]);
+    const [popupMessage, setPopupMessage] = useState([]);
+    const [failedProcess, setFailedProcess] = useState([]);
     const [expandAll, setExpandAll] = useState(false);
     const [fileNameFilter, setFileNameFilter] = useState('');
     const [messageFilter, setMessageFilter] = useState('');
@@ -20,23 +23,29 @@ const ProcessMessages = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [warningRes, errorRes, infoRes, failedRes, logRes, totalProcessRes, progressRes] = await Promise.all([
+                const [warningRes, errorRes, infoRes, logRes, totalProcessRes, progressRes, successRes, emptyRes, popupRes, failedRes] = await Promise.all([
                     axios.get('http://localhost:8080/warning-process'),
                     axios.get('http://localhost:8080/error-process'),
                     axios.get('http://localhost:8080/info-process'),
-                    axios.get('http://localhost:8080/failed-process'),
                     axios.get('http://localhost:8080/process-log'),
                     axios.get('http://localhost:8080/process-count'),
-                    axios.get('http://localhost:8080/process-progress')
+                    axios.get('http://localhost:8080/process-progress'),
+                    axios.get('http://localhost:8080/success-process'),
+                    axios.get('http://localhost:8080/empty-data'),
+                    axios.get('http://localhost:8080/popup-message'),
+                    axios.get('http://localhost:8080/failed-process')
                 ]);
 
                 setWarningProcess(warningRes.data);
                 setErrorProcess(errorRes.data);
                 setInfoProcess(infoRes.data);
-                setFailedProcess(failedRes.data);
                 setProcessLog(logRes.data);
                 setTotalCountData(totalProcessRes.data);
                 setProgressData(progressRes.data);
+                setSuccessProcess(successRes.data);
+                setEmptyData(emptyRes.data);
+                setPopupMessage(popupRes.data);
+                setFailedProcess(failedRes.data);
                 
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -64,7 +73,7 @@ const ProcessMessages = () => {
     const combinedData = infoProcess.reduce((acc, alert) => {
         const { fileName, processId, message } = alert;
         if (!acc[fileName]) {
-            acc[fileName] = { infoProcess: [], warningProcess: [], errorProcess: [], failedProcess: [], processLog: [] };
+            acc[fileName] = { infoProcess: [], warningProcess: [], errorProcess: [], failedProcess: [], processLog: [], successProcess: [], emptyData: [], popupMessage: [] };
         }
         acc[fileName].infoProcess.push({ processId, message });
         return acc;
@@ -73,7 +82,7 @@ const ProcessMessages = () => {
     warningProcess.forEach(warningProcess => {
         const { fileName } = warningProcess;
         if (!combinedData[fileName]) {
-            combinedData[fileName] = { infoProcess: [], warningProcess: [], errorProcess: [], failedProcess: [], processLog: [] };
+            combinedData[fileName] = { infoProcess: [], warningProcess: [], errorProcess: [], failedProcess: [], processLog: [], successProcess: [], emptyData: [], popupMessage: [] };
         }
         combinedData[fileName].warningProcess.push(warningProcess);
     });
@@ -81,36 +90,59 @@ const ProcessMessages = () => {
     errorProcess.forEach(errorProcess => {
         const { fileName } = errorProcess;
         if (!combinedData[fileName]) {
-            combinedData[fileName] = { infoProcess: [], warningProcess: [], errorProcess: [], failedProcess: [], processLog: [] };
+            combinedData[fileName] = { infoProcess: [], warningProcess: [], errorProcess: [], failedProcess: [], processLog: [], successProcess: [], emptyData: [], popupMessage: [] };
         }
         combinedData[fileName].errorProcess.push(errorProcess);
     });
-    
-    failedProcess.forEach(failedProcess => {
-        const { fileName } = failedProcess;
-        if (!combinedData[fileName]) {
-            combinedData[fileName] = { infoProcess: [], warningProcess: [], errorProcess: [], failedProcess: [], processLog: [] };
-        }
-        combinedData[fileName].failedProcess.push(failedProcess);
-    });
 
     processLog.forEach(processLog => {
-        const { fileName } = warningProcess;
+        const { fileName } = processLog;
         if (!combinedData[fileName]) {
-            combinedData[fileName] = { infoProcess: [], warningProcess: [], errorProcess: [], failedProcess: [], processLog: [] };
+            combinedData[fileName] = { infoProcess: [], warningProcess: [], errorProcess: [], failedProcess: [], processLog: [], successProcess: [], emptyData: [], popupMessage: [] };
         }
         combinedData[fileName].processLog.push(processLog);
     });
-    
+
+    successProcess.forEach(successProcess => {
+        const { fileName } = successProcess;
+        if (!combinedData[fileName]) {
+            combinedData[fileName] = { infoProcess: [], warningProcess: [], errorProcess: [], failedProcess: [], processLog: [], successProcess: [], emptyData: [], popupMessage: [] };
+        }
+        combinedData[fileName].successProcess.push(successProcess);
+    });
+
+    emptyData.forEach(emptyData => {
+        const { fileName } = emptyData;
+        if (!combinedData[fileName]) {
+            combinedData[fileName] = { infoProcess: [], warningProcess: [], errorProcess: [], failedProcess: [], processLog: [], successProcess: [], emptyData: [], popupMessage: [] };
+        }
+        combinedData[fileName].emptyData.push(emptyData);
+    });
+
+    popupMessage.forEach(popupMessage => {
+        const { fileName } = popupMessage;
+        if (!combinedData[fileName]) {
+            combinedData[fileName] = { infoProcess: [], warningProcess: [], errorProcess: [], failedProcess: [], processLog: [], successProcess: [], emptyData: [], popupMessage: [] };
+        }
+        combinedData[fileName].popupMessage.push(popupMessage);
+    });
+
+    failedProcess.forEach(failedProcess => {
+        const { fileName } = failedProcess;
+        if (!combinedData[fileName]) {
+            combinedData[fileName] = { infoProcess: [], warningProcess: [], errorProcess: [], failedProcess: [], processLog: [], successProcess: [], emptyData: [], popupMessage: [] };
+        }
+        combinedData[fileName].failedProcess.push(failedProcess);
+    });
     
     const filteredData = Object.entries(combinedData)
         .filter(([fileName, { infoProcess }]) => 
             fileName.toLowerCase().includes(fileNameFilter.toLowerCase()) &&
             infoProcess.some(alert => alert.message.toLowerCase().includes(messageFilter.toLowerCase()))
     );
-        
+    
     return (
-        <div className="container w-full h-[700px] p-6 bg-gray-800 text-white print:w-full print:h-auto print-area">
+        <div className="container w-full h-full p-6 bg-gray-800 text-white print:w-full print:h-auto print-area">
             <h2 className="text-2xl font-bold mb-4 text-center print-title">Алдааны жагсаалт</h2>
             <div className="mb-4 space-y-2">
                 <div className='flex p-2'>
@@ -166,21 +198,47 @@ const ProcessMessages = () => {
                             Нийт сануулга өгсөн процесс тоо: <strong>{progressData.infoCount} </strong>
                         </p>
                         <p className="text-white text-base mb-3 no-print">
-                            Нийт ажлуулж чадаагүй процесс тоо: <strong>{processLog.length }</strong>
+                            Нийт expression алдаатай процесс тоо: <strong>{processLog.length }</strong>
                         </p>
                     </div>
                 </div>
             </div>
                 
 
-            <div className={`space-y-4 w-full ${expandAll ? 'max-h-screen' : 'max-h-[500px] overflow-y-auto'}`}>
+            <div className={`space-y-4 w-full ${expandAll ? 'max-h-screen' : 'max-h-[600px] overflow-y-auto'}`}>
                 {filteredData.length === 0 ? (
                     <p className="text-center">Алдааны жагсаалт олдсонгүй...</p>
                 ) : (
-                    filteredData.map(([fileName, { infoProcess, processLog, warningProcess, errorProcess, failedProcess }], index) => (
+                    filteredData.map(([fileName, { infoProcess, processLog, warningProcess, errorProcess, failedProcess, successProcess, emptyData, popupMessage }], index) => (
                         <div key={index} className="p-4 bg-gray-700 rounded-lg ">
                             <h3 className="text-lg font-semibold text-white mb-2 print-area">{fileName.split('.').slice(0, -1).join('.')}</h3>
 
+                            {errorProcess.length > 0 && (
+                                <h4 className="text-base font-bold text-white print-area">Error messages</h4>
+                            )}
+                            {errorProcess.map((errorProcess, idx) => (
+                                <Alert
+                                    key={`errorProcess-${idx}`}
+                                    variant="filled"
+                                    severity="error"
+                                    className="mb-2"
+                                >
+                                    <div style={{ display: 'flex', alignItems: 'flex-start' }}>
+
+                                        <span className='print-area' style={{ fontWeight: 'bold', marginRight: '8px', color: 'white' }}>
+                                            {idx + 1}.
+                                        </span>
+                                        <div className="flex flex-col gap-1">
+                                            <span className="text-base text-white print-area">Process ID: {errorProcess.processId}</span>
+                                            <span className="text-base text-white print-area">Response: {errorProcess.message}</span>
+                                        </div>
+                                    </div>
+                                </Alert>
+                            ))}
+
+                            {infoProcess.length > 0 && (
+                                <h4 className="text-base font-bold text-white print-area">Info messages</h4>
+                            )}
                             {infoProcess.map((infoProcess, idx) => (
                                 <Alert
                                     key={`infoProcess-${idx}`}
@@ -202,17 +260,15 @@ const ProcessMessages = () => {
                                                 {idx + 1}.
                                         </span>
                                         <div className="flex flex-col gap-1">
-                                            <span className="text-base text-white print-area">Процесс ID: {infoProcess.processId}</span>
-                                            <span className="text-base text-white print-area">Алдаа: {infoProcess.message}</span>
+                                            <span className="text-base text-white print-area">Process ID: {infoProcess.processId}</span>
+                                            <span className="text-base text-white print-area">Response: {infoProcess.message}</span>
                                         </div>
-                        
                                     </div>
-                                    
                                 </Alert>
                             ))}
                             
                             {processLog.length > 0 && (
-                                <h4 className="text-base text-white print-area">Expression алдаа</h4>
+                                <h4 className="text-base font-bold text-white print-area">Expression messages</h4>
                             )}
                             {processLog.map((processLog, idx) => (
                                 <Alert
@@ -227,18 +283,15 @@ const ProcessMessages = () => {
                                             {idx + 1}.
                                         </span>
                                         <div className="flex flex-col gap-1">
-                                            <span className="text-base text-white print-area">Процесс ID: {processLog.processId}</span>
-                                            <span className="text-base text-white print-area">Алдаа: {processLog.message.split("https://dev.veritech.mn/assets/core/js/main/jquery.min.v1621833277.js 1:31702")}</span>
-                                            
+                                            <span className="text-base text-white print-area">Process ID: {processLog.processId}</span>
+                                            <span className="text-base text-white print-area">Response: {processLog.message}</span>
                                         </div>
-                                        
                                     </div>
-                                
                                 </Alert>
                             ))}
 
                             {warningProcess.length > 0 && (
-                                <h4 className="text-base text-white print-area">Expression алдаа</h4>
+                                <h4 className="text-base font-bold text-white print-area">Warning messages</h4>
                             )}
                             {warningProcess.map((warningProcess, idx) => (
                                 <Alert
@@ -253,8 +306,8 @@ const ProcessMessages = () => {
                                             {idx + 1}.
                                         </span>
                                         <div className="flex flex-col gap-1">
-                                            <span className="text-base text-white print-area">Процесс ID: {warningProcess.processId}</span>
-                                            <span className="text-base text-white print-area">Алдаа: {warningProcess.message}</span>
+                                            <span className="text-base text-white print-area">Process ID: {warningProcess.processId}</span>
+                                            <span className="text-base text-white print-area">Response: {warningProcess.message}</span>
                                             
                                         </div>
                                         
@@ -262,13 +315,38 @@ const ProcessMessages = () => {
                                 
                                 </Alert>
                             ))}
-
-                            {errorProcess.length > 0 && (
-                                <h4 className="text-base text-white print-area">Expression алдаа</h4>
+                            {emptyData.length > 0 && (
+                                <h4 className="text-base font-bold text-white print-area">Empty data</h4>
                             )}
-                            {errorProcess.map((errorProcess, idx) => (
+                            {emptyData.map((emptyData, idx) => (
                                 <Alert
-                                    key={`errorProcess-${idx}`}
+                                    key={`emptyData-${idx}`}
+                                    variant="filled"
+                                    severity="info"
+                                    className="mb-2"
+                                >
+                                    <div style={{ display: 'flex', alignItems: 'flex-start' }}>
+
+                                        <span className='print-area' style={{ fontWeight: 'bold', marginRight: '8px', color: 'white' }}>
+                                            {idx + 1}.
+                                        </span>
+                                        <div className="flex flex-col gap-1">
+                                            <span className="text-base text-white print-area">Process ID: {emptyData.processId}</span>
+                                            <span className="text-base text-white print-area">DataPath: {emptyData.dataPath}</span>
+                                            <span className="text-base text-white print-area">DataType: {emptyData.dataType}</span>
+                                        </div>
+                                        
+                                    </div>
+                                
+                                </Alert>
+                            ))}
+
+                            {popupMessage.length > 0 && (
+                                <h4 className="text-base font-bold text-white print-area">Popup Response</h4>
+                            )}
+                            {popupMessage.map((popupMessage, idx) => (
+                                <Alert
+                                    key={`popupMessage-${idx}`}
                                     variant="filled"
                                     severity="error"
                                     className="mb-2"
@@ -279,9 +357,9 @@ const ProcessMessages = () => {
                                             {idx + 1}.
                                         </span>
                                         <div className="flex flex-col gap-1">
-                                            <span className="text-base text-white print-area">Процесс ID: {errorProcess.processId}</span>
-                                            <span className="text-base text-white print-area">Алдаа: {errorProcess.message}</span>
-                                            
+                                            <span className="text-base text-white print-area">Process ID: {popupMessage.processId}</span>
+                                            <span className="text-base text-white print-area">DataPath: {popupMessage.dataPath}</span>
+                                            <span className="text-base text-white print-area">Response: {popupMessage.messageText}</span>
                                         </div>
                                         
                                     </div>
@@ -289,9 +367,28 @@ const ProcessMessages = () => {
                                 </Alert>
                             ))}
 
-
+                            {successProcess.length > 0 && (
+                                <h4 className="text-base font-bold text-white print-area">successfully</h4>
+                            )}
+                            {successProcess.map((successProcess, idx) => (
+                                <Alert
+                                    key={`successProcess-${idx}`}
+                                    variant="filled"
+                                    severity="success"
+                                    className="mb-2"
+                                >
+                                    <div style={{ display: 'flex', alignItems: 'flex-start' }}>
+                                        <span className='print-area' style={{ fontWeight: 'bold', marginRight: '8px', color: 'white' }}>
+                                            {idx + 1}.
+                                        </span>
+                                        <div className="flex flex-col gap-1">
+                                            <span className="text-base text-white print-area">Process ID: {successProcess.processId}</span>                                            
+                                        </div>
+                                    </div>
+                                </Alert>
+                            ))}
                             {failedProcess.length > 0 && (
-                                <h4 className="text-base text-white print-area">Expression алдаа</h4>
+                                <h4 className="text-base font-bold text-white print-area">Failed process</h4>
                             )}
                             {failedProcess.map((failedProcess, idx) => (
                                 <Alert
@@ -301,18 +398,13 @@ const ProcessMessages = () => {
                                     className="mb-2"
                                 >
                                     <div style={{ display: 'flex', alignItems: 'flex-start' }}>
-
                                         <span className='print-area' style={{ fontWeight: 'bold', marginRight: '8px', color: 'white' }}>
                                             {idx + 1}.
                                         </span>
                                         <div className="flex flex-col gap-1">
-                                            <span className="text-base text-white print-area">Процесс ID: {failedProcess.processId}</span>
-                                            <span className="text-base text-white print-area">Алдаа: {failedProcess.message}</span>
-                                            
+                                            <span className="text-base text-white print-area">Process ID: {failedProcess.processId}</span>                                            
                                         </div>
-                                        
                                     </div>
-                                
                                 </Alert>
                             ))}
                         </div>
