@@ -20,7 +20,7 @@ const ProcessMessages = () => {
         const fetchData = async () => {
             try {
                 const [processRes, logRes, totalProcessRes, progressRes, emptyRes, popupRes, saveRes] = await Promise.all([
-                    axios.get('http://localhost:8080/status-process'),
+                    axios.get('http://localhost:8080/process-status'),
                     axios.get('http://localhost:8080/process-log'),
                     axios.get('http://localhost:8080/process-count'),
                     axios.get('http://localhost:8080/process-progress'),
@@ -134,7 +134,7 @@ const ProcessMessages = () => {
     };
     
     const filteredData = Object.entries(combinedData)
-    .filter(([fileName, { processStatus }]) =>
+    .filter(([fileName]) =>
         (fileName && fileName.toLowerCase().includes(fileNameFilter.toLowerCase())) 
     );
 
