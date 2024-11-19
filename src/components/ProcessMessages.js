@@ -15,7 +15,6 @@ const ProcessMessages = () => {
     const [popupMessage, setPopupMessage] = useState([]);
     const [expandAll, setExpandAll] = useState(false);
     const [fileNameFilter, setFileNameFilter] = useState('');
-    const [messageFilter, setMessageFilter] = useState('');
 
     useEffect(() => {
         const fetchData = async () => {
@@ -65,7 +64,7 @@ const ProcessMessages = () => {
     const combinedData = processStatus.reduce((acc, alert) => {
         const { fileName, processId, status, messageText } = alert;
         if (!acc[fileName]) {
-            acc[fileName] = { processStatus: [], processLog: [], emptyData: [], popupMessage: [], saveData:[] };
+            acc[fileName] = { processStatus: [], processLog: [], emptyData: [], popupMessage: [], saveData: [] };
         }
         const matchingPopupData = popupMessage.filter((popup) => String(popup.processId) === String(processId));
         const matchingComboData = emptyData.filter((empty) => String(empty.processId) === String(processId));
@@ -88,7 +87,7 @@ const ProcessMessages = () => {
     processLog.forEach(processLog => {
         const { fileName } = processLog;
         if (!combinedData[fileName]) {
-            combinedData[fileName] = { processStatus: [], processLog: [], emptyData: [], popupMessage: [], saveData:[] };
+            combinedData[fileName] = { processStatus: [], processLog: [], emptyData: [], popupMessage: [], saveData: [] };
         }
         combinedData[fileName].processLog.push(processLog);
     });
@@ -96,7 +95,7 @@ const ProcessMessages = () => {
     saveData.forEach(saveData => {
         const { fileName } = saveData;
         if (!combinedData[fileName]) {
-            combinedData[fileName] = { processStatus: [], processLog: [], emptyData: [], popupMessage: [], saveData:[] };
+            combinedData[fileName] = { processStatus: [], processLog: [], emptyData: [], popupMessage: [], saveData: [] };
         }
         combinedData[fileName].saveData.push(saveData);
     });
@@ -104,7 +103,7 @@ const ProcessMessages = () => {
     emptyData.forEach(emptyData => {
         const { fileName } = emptyData;
         if (!combinedData[fileName]) {
-            combinedData[fileName] = { processStatus: [], processLog: [], emptyData: [], popupMessage: [], saveData:[] };
+            combinedData[fileName] = { processStatus: [], processLog: [], emptyData: [], popupMessage: [], saveData: [] };
         }
         combinedData[fileName].emptyData.push(emptyData);
     });
@@ -112,7 +111,7 @@ const ProcessMessages = () => {
     popupMessage.forEach(popupMessage => {
         const { fileName } = popupMessage;
         if (!combinedData[fileName]) {
-            combinedData[fileName] = { processStatus: [], processLog: [], emptyData: [], popupMessage: [], saveData:[] };
+            combinedData[fileName] = { processStatus: [], processLog: [], emptyData: [], popupMessage: [], saveData: [] };
         }
         combinedData[fileName].popupMessage.push(popupMessage);
     });
@@ -136,8 +135,7 @@ const ProcessMessages = () => {
     
     const filteredData = Object.entries(combinedData)
     .filter(([fileName, { processStatus }]) =>
-        (fileName && fileName.toLowerCase().includes(fileNameFilter.toLowerCase())) &&
-        processStatus.some(alert => alert.messageText && alert.messageText.toLowerCase().includes(messageFilter.toLowerCase()))
+        (fileName && fileName.toLowerCase().includes(fileNameFilter.toLowerCase())) 
     );
 
     return (
@@ -152,24 +150,29 @@ const ProcessMessages = () => {
                         onChange={(e) => setFileNameFilter(e.target.value)}
                         className="w-full p-2 border border-gray-300 rounded-md bg-gray-900 text-white no-print"
                     />
-                    <input
-                        type="text"
-                        placeholder="Алдааны мессежээр шүүх..."
-                        value={messageFilter}
-                        onChange={(e) => setMessageFilter(e.target.value)}
-                        className="w-full p-2 border border-gray-300 rounded-md bg-gray-900 text-white no-print"
-                    />
                     <button
                         onClick={handlePrint}
-                        className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition no-print"
+                        className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition no-print"
                     >
                         Хэвлэх
                     </button>
                 </div>
+
+                <div className="mb-4 no-print">
+                    <p className="font-semibold text-center">
+                       Мета: {((progressData.warningCount + progressData.errorCount + progressData.infoCount + progressData.successCount + progressData.failedCount ) / totalCountData.totalProcessCount * 100).toFixed(1)}%
+                    </p>
+                    <div className="w-full bg-gray-600 h-4 rounded-md overflow-hidden">
+                        <div
+                            className="bg-green-500 h-full"
+                            style={{ width: `${((progressData.warningCount + progressData.errorCount + progressData.infoCount + progressData.successCount + progressData.failedCount ) / totalCountData.totalProcessCount * 100).toFixed(1)}%` }}                            />
+                    </div>
+                </div>
+
                 <div className='flex '>
                     <div className="text-left w-full print-area">
                         <p className="text-white text-base mb-1 no-print">
-                            Нийт шалгасан процесс тоо: <strong>{progressData.warningCount + progressData.errorCount + progressData.infoCount + progressData.successCount + progressData.failedCount} / {totalCountData.totalProcessCount} </strong>
+                            Нийт шалгасан процесс тоо: <strong>{progressData.warningCount + progressData.errorCount + progressData.infoCount + progressData.successCount + progressData.failedCount}  </strong>
                         </p>
                         <p className="text-white text-base mb-2 no-print">
                             Нийт алдаатай процесс тоо: <strong>{progressData.errorCount} </strong>
@@ -251,7 +254,7 @@ const ProcessMessages = () => {
                                     </Alert>
 
                                     {Array.isArray(processStatus.popupMessage) && processStatus.popupMessage.length > 0 && (
-                                        <div className="ml-4 mt-2 bg-[#cbcbcb]">
+                                        <div className="ml-4 mt-2 bg-gray-600">
                                             <h5 className="text-sm font-semibold text-black print-area ml-7">Popup Error Messages:</h5>
                                             {processStatus.popupMessage.map((popupMessage, popupIdx) => (
                                                 <div
@@ -275,7 +278,7 @@ const ProcessMessages = () => {
                                     )}
 
                                     {Array.isArray(processStatus.emptyData) && processStatus.emptyData.length > 0 && (
-                                        <div className="ml-4 mt-2 bg-[#cbcbcb]">
+                                        <div className="ml-4 mt-2 bg-gray-600">
                                             <h5 className="text-sm font-semibold text-black print-area ml-7">Empty data path:</h5>
                                             {processStatus.emptyData.map((emptyData, popupIdx) => (
                                                 <div
@@ -298,9 +301,8 @@ const ProcessMessages = () => {
                                         </div>
                                     )}
 
-
                                     {Array.isArray(processStatus.processLog) && processStatus.processLog.length > 0 && (
-                                        <div className="ml-4 mt-2 bg-[#cbcbcb]">
+                                        <div className="ml-4 mt-2 bg-gray-600">
                                             <h5 className="text-sm font-semibold text-black print-area ml-7">Expression error message:</h5>
                                             {processStatus.processLog.map((processLog, popupIdx) => (
                                                 <div
