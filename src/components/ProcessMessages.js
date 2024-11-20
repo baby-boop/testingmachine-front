@@ -142,7 +142,7 @@ const ProcessMessages = () => {
         <div className="container w-full h-full p-6 bg-gray-800 text-white print:w-full print:h-auto print-area">
             <h2 className="text-2xl font-bold mb-4 text-center print-title">Алдааны жагсаалт</h2>
             <div className="mb-4 space-y-2">
-                <div className='flex p-2'>
+                <div className='flex py-2'>
                     <input
                         type="text"
                         placeholder="Файлын нэрээр шүүх..."
@@ -152,7 +152,7 @@ const ProcessMessages = () => {
                     />
                     <button
                         onClick={handlePrint}
-                        className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition no-print"
+                        className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-700 transition no-print"
                     >
                         Хэвлэх
                     </button>
@@ -160,33 +160,33 @@ const ProcessMessages = () => {
 
                 <div className="mb-4 no-print">
                     <p className="font-semibold text-center">
-                       Мета: {((progressData.warningCount + progressData.errorCount + progressData.infoCount + progressData.successCount + progressData.failedCount ) / totalCountData.totalProcessCount * 100).toFixed(1)}%
+                       Мета: {((progressData.warningCount + progressData.errorCount + progressData.infoCount + progressData.successCount + progressData.failedCount ) / totalCountData.totalProcessCount * 100 || 0).toFixed(1) } %
                     </p>
                     <div className="w-full bg-gray-600 h-4 rounded-md overflow-hidden">
                         <div
                             className="bg-green-500 h-full"
-                            style={{ width: `${((progressData.warningCount + progressData.errorCount + progressData.infoCount + progressData.successCount + progressData.failedCount ) / totalCountData.totalProcessCount * 100).toFixed(1)}%` }}                            />
+                            style={{ width: `${((progressData.warningCount + progressData.errorCount + progressData.infoCount + progressData.successCount + progressData.failedCount ) / totalCountData.totalProcessCount * 100 || 0).toFixed(1)}%`}}/>
                     </div>
                 </div>
 
                 <div className='flex '>
                     <div className="text-left w-full print-area">
                         <p className="text-white text-base mb-1 no-print">
-                            Нийт шалгасан процесс тоо: <strong>{progressData.warningCount + progressData.errorCount + progressData.infoCount + progressData.successCount + progressData.failedCount}  </strong>
+                            Нийт шалгасан процесс тоо: <strong>{progressData.warningCount + progressData.errorCount + progressData.infoCount + progressData.successCount + progressData.failedCount || 0}   </strong>
                         </p>
                         <p className="text-white text-base mb-2 no-print">
-                            Нийт алдаатай процесс тоо: <strong>{progressData.errorCount} </strong>
+                            Нийт алдаатай процесс тоо: <strong>{progressData.errorCount || 0} </strong>
                         </p>
                         <p className="text-white text-base mb-3 no-print">
-                            Нийт ажлуулж чадаагүй процесс тоо: <strong>{progressData.failedCount }</strong>
+                            Нийт ажлуулж чадаагүй процесс тоо: <strong>{progressData.failedCount || 0}</strong>
                         </p>
                     </div>
                     <div className="text-left w-full print-area">
                         <p className="text-white text-base mb-1 no-print">
-                            Нийт анхааруулга өгсөн процесс тоо: <strong>{progressData.warningCount} </strong>
+                            Нийт анхааруулга өгсөн процесс тоо: <strong>{progressData.warningCount || 0} </strong>
                         </p>
                         <p className="text-white text-base mb-2 no-print">
-                            Нийт сануулга өгсөн процесс тоо: <strong>{progressData.infoCount} </strong>
+                            Нийт сануулга өгсөн процесс тоо: <strong>{progressData.infoCount || 0} </strong>
                         </p>
                         <p className="text-white text-base mb-3 no-print">
                             Нийт expression алдаатай процесс тоо: <strong>{processLog.length }</strong>
@@ -194,18 +194,16 @@ const ProcessMessages = () => {
                     </div>
                 </div>
             </div>
-                
 
             <div className={`space-y-4 w-full ${expandAll ? 'max-h-screen' : 'max-h-[600px] overflow-y-auto'}`}>
                 {filteredData.length === 0 ? (
                     <p className="text-center">Алдааны жагсаалт олдсонгүй...</p>
                 ) : (
                     filteredData.map(([fileName, { processStatus }], index) => (
-                        <div key={index} className="p-4 bg-gray-700 rounded-lg ">
+                        <div key={index} className="p-2 bg-gray-700 rounded-lg ">
                             <h3 className="text-lg font-semibold text-white mb-2 print-area">{fileName.split('.').slice(0, -1).join('.')}</h3>
                             {processStatus.length > 0 && (
                             <div>
-                                <h4 className="text-base font-bold text-white print-area">Process Status</h4>
                                 {processStatus.map((processStatus, idx) => (
                                 <div key={`processStatus-${idx}`} className="mb-4">
                                     <Alert
@@ -222,24 +220,23 @@ const ProcessMessages = () => {
                                         </IconButton>
                                     }
                                     >
-                                    <h4 className="text-base  text-white print-area">The alert was of type `{processStatus.status}` </h4>
+                                    <h4 className="text-lg font-['Times New Roman'] text-white print-area">The alert was of type `{processStatus.status}` </h4>
                                     <div style={{ display: 'flex', alignItems: 'flex-start' }}>
-                                        
-                                        <span className='print-area' style={{ fontWeight: 'bold', marginRight: '8px', color: 'white' }}>
-                                        {idx + 1}.
+                                        <span className='print-area' style={{ marginRight: '8px', color: 'white' }}>
+                                            {idx + 1}.
                                         </span>
                                         <div className="flex flex-col gap-1">
                                             {processStatus.status === 'error' ||  processStatus.status === 'warning' ||  processStatus.status === 'info' ? (
                                             <>
-                                                <span className="text-sm text-white print-area">
+                                                <span className="text-base font-['Times New Roman'] text-white print-area">
                                                     Process ID: {processStatus.processId}
                                                 </span>
-                                                <span className="text-sm text-white print-area">
+                                                <span className="text-base font-['Times New Roman'] text-white print-area">
                                                     Response: {processStatus.messageText}
                                                 </span>
                                             </>
                                             ) :  (
-                                                <span className="text-sm text-white print-area">
+                                                <span className="text-basefont-['Times New Roman'] text-white print-area">
                                                     Process ID:: {processStatus.processId}
                                                 </span>
                                             )}
@@ -254,21 +251,22 @@ const ProcessMessages = () => {
                                     </Alert>
 
                                     {Array.isArray(processStatus.popupMessage) && processStatus.popupMessage.length > 0 && (
-                                        <div className="ml-4 mt-2 bg-gray-600">
-                                            <h5 className="text-sm font-semibold text-black print-area ml-7">Popup Error Messages:</h5>
+                                        <div className="ml-4 mt-2 bg-gray-600 ">
+                                            <h5 className="text-base font-['Times New Roman'] text-black print-area ml-9">Popup error messages:</h5>
                                             {processStatus.popupMessage.map((popupMessage, popupIdx) => (
                                                 <div
-                                                    key={`popupMessage-${popupMessage.processId || idx}-${popupIdx}`}
-                                                    style={{ display: 'flex', alignItems: 'flex-start', marginBottom: '8px' }}
+                                                    key={`popupMessage-${popupMessage.processId }-${popupIdx}`}
+                                                    style={{ display: 'flex', alignItems: 'flex-start', marginBottom: '8px',  paddingLeft: '20px'}}
                                                 >
                                                     <span className='print-area' style={{  color: 'black', marginLeft: '35px' }}>
                                                         {popupIdx + 1}.
                                                     </span>
+
                                                     <div className="flex flex-col gap-1">
-                                                        <span className="text-sm text-black print-area">
+                                                        <span className="text-sm font-['Times New Roman'] text-black print-area">
                                                             Data path: {popupMessage.dataPath}
                                                         </span>
-                                                        <span className="text-sm text-black print-area">
+                                                        <span className="text-sm font-['Times New Roman'] text-black print-area">
                                                             Response: {popupMessage.messageText}
                                                         </span>
                                                     </div>
@@ -279,20 +277,20 @@ const ProcessMessages = () => {
 
                                     {Array.isArray(processStatus.emptyData) && processStatus.emptyData.length > 0 && (
                                         <div className="ml-4 mt-2 bg-gray-600">
-                                            <h5 className="text-sm font-semibold text-black print-area ml-7">Empty data path:</h5>
-                                            {processStatus.emptyData.map((emptyData, popupIdx) => (
+                                            <h5 className="text-base font-['Times New Roman'] text-black print-area ml-9">Empty data:</h5>
+                                            {processStatus.emptyData.map((emptyData, emptyIdx) => (
                                                 <div
-                                                    key={`emptyData-${emptyData.processId || idx}-${popupIdx}`} 
-                                                    style={{ display: 'flex', alignItems: 'flex-start', marginBottom: '8px' }}
+                                                    key={`emptyData-${emptyData.processId}-${emptyIdx}`} 
+                                                    style={{ display: 'flex', alignItems: 'flex-start', marginBottom: '8px',  paddingLeft: '20px'}}
                                                 >
                                                     <span className='print-area' style={{  color: 'black', marginLeft: '35px' }}>
-                                                        {popupIdx + 1}.
+                                                        {emptyIdx + 1}.
                                                     </span>
                                                     <div className="flex flex-col gap-1">
-                                                        <span className="text-sm text-black print-area">
+                                                        <span className="text-sm font-['Times New Roman'] text-black print-area">
                                                             Data path: {emptyData.dataPath}
                                                         </span>
-                                                        <span className="text-sm text-black print-area">
+                                                        <span className="text-sm font-['Times New Roman'] text-black print-area">
                                                             Path type: {emptyData.dataType}
                                                         </span>
                                                     </div>
@@ -303,17 +301,17 @@ const ProcessMessages = () => {
 
                                     {Array.isArray(processStatus.processLog) && processStatus.processLog.length > 0 && (
                                         <div className="ml-4 mt-2 bg-gray-600">
-                                            <h5 className="text-sm font-semibold text-black print-area ml-7">Expression error message:</h5>
-                                            {processStatus.processLog.map((processLog, popupIdx) => (
+                                            <h5 className="text-base font-['Times New Roman'] text-black print-area ml-9">Expression error message:</h5>
+                                            {processStatus.processLog.map((processLog, logIdx) => (
                                                 <div
-                                                    key={`processLog-${processLog.processId || idx}-${popupIdx}`}
-                                                    style={{ display: 'flex', alignItems: 'flex-start', marginBottom: '8px' }}
+                                                    key={`processLog-${processLog.processId}-${logIdx}`}
+                                                    style={{ display: 'flex', alignItems: 'flex-start', marginBottom: '8px',  paddingLeft: '20px'}}
                                                 >
                                                     <span className='print-area' style={{  color: 'black', marginLeft: '35px' }}>
-                                                        {popupIdx + 1}.
+                                                        {logIdx + 1}.
                                                     </span>
                                                     <div className="flex flex-col gap-1">
-                                                        <span className="text-sm text-black print-area">
+                                                        <span className="text-sm font-['Times New Roman'] text-black print-area">
                                                             Response: {processLog.message}
                                                         </span>
                                                     </div>
@@ -321,8 +319,6 @@ const ProcessMessages = () => {
                                             ))}
                                         </div>
                                     )}
-
-                                    
                                 </div>
                                 ))}  
                             </div>

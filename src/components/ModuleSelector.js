@@ -9,8 +9,8 @@ function ModuleSelector() {
   const [selectedModule, setSelectedModule] = useState('');
   const [responseMessage, setResponseMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false); // Added isError state
-  const [percent, setPercent] = useState(0); // Added percent state
+  const [isError, setIsError] = useState(false);
+  const [percent, setPercent] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleChange = (e) => {
@@ -76,6 +76,7 @@ function ModuleSelector() {
             <option value="" disabled>Модулиа сонгоно уу...</option>
             <option value="meta">check meta</option>
             <option value="metaverse">check metaverse</option>
+            <option value="process">check process</option>
           </select>
         </label>
         <button
