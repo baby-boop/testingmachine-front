@@ -13,13 +13,15 @@ const ProcessMessages = () => {
     const [emptyData, setEmptyData] = useState([]);
     const [saveData, setSaveData] = useState([]);
     const [popupMessage, setPopupMessage] = useState([]);
+    const [requiredPath, setRequiredPath] = useState([]);
+
     const [expandAll, setExpandAll] = useState(false);
     const [fileNameFilter, setFileNameFilter] = useState('');
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [processRes, logRes, totalProcessRes, progressRes, emptyRes, popupRes, saveRes] = await Promise.all([
+                const [processRes, logRes, totalProcessRes, progressRes, emptyRes, popupRes, saveRes, reqRes] = await Promise.all([
                     axios.get('http://localhost:8080/process-status'),
                     axios.get('http://localhost:8080/process-log'),
                     axios.get('http://localhost:8080/process-count'),
@@ -27,7 +29,7 @@ const ProcessMessages = () => {
                     axios.get('http://localhost:8080/empty-data'),
                     axios.get('http://localhost:8080/popup-message'),
                     axios.get('http://localhost:8080/process-save'),
-
+                    axios.get('http://localhost:8080/process-required'),
                 ]);
 
                 setProcessStatus(processRes.data);
@@ -37,7 +39,7 @@ const ProcessMessages = () => {
                 setEmptyData(emptyRes.data);
                 setPopupMessage(popupRes.data);
                 setSaveData(saveRes.data);
-                
+                setRequiredPath(reqRes.data);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -64,12 +66,14 @@ const ProcessMessages = () => {
     const combinedData = processStatus.reduce((acc, alert) => {
         const { fileName, processId, status, messageText } = alert;
         if (!acc[fileName]) {
-            acc[fileName] = { processStatus: [], processLog: [], emptyData: [], popupMessage: [], saveData: [] };
+            acc[fileName] = { processStatus: [], processLog: [], emptyData: [], popupMessage: [], saveData: [], requiredPath: [] };
         }
         const matchingPopupData = popupMessage.filter((popup) => String(popup.processId) === String(processId));
         const matchingComboData = emptyData.filter((empty) => String(empty.processId) === String(processId));
         const matchingLogData = processLog.filter((log) => String(log.processId) === String(processId));
         const matchingSaveData = saveData.filter((save) => String(save.processId) === String(processId));
+        const matchingRequiredData = requiredPath.filter((required) => String(required.processId) === String(processId));
+
 
         acc[fileName].processStatus.push({
             processId,
@@ -78,7 +82,8 @@ const ProcessMessages = () => {
             popupMessage: matchingPopupData, 
             emptyData: matchingComboData,    
             processLog: matchingLogData,
-            saveData: matchingSaveData
+            saveData: matchingSaveData,
+            requiredPath: matchingRequiredData
         });
         return acc;
 
@@ -87,7 +92,7 @@ const ProcessMessages = () => {
     processLog.forEach(processLog => {
         const { fileName } = processLog;
         if (!combinedData[fileName]) {
-            combinedData[fileName] = { processStatus: [], processLog: [], emptyData: [], popupMessage: [], saveData: [] };
+            combinedData[fileName] = { processStatus: [], processLog: [], emptyData: [], popupMessage: [], saveData: [], requiredPath: [] };
         }
         combinedData[fileName].processLog.push(processLog);
     });
@@ -95,7 +100,7 @@ const ProcessMessages = () => {
     saveData.forEach(saveData => {
         const { fileName } = saveData;
         if (!combinedData[fileName]) {
-            combinedData[fileName] = { processStatus: [], processLog: [], emptyData: [], popupMessage: [], saveData: [] };
+            combinedData[fileName] = { processStatus: [], processLog: [], emptyData: [], popupMessage: [], saveData: [], requiredPath: [] };
         }
         combinedData[fileName].saveData.push(saveData);
     });
@@ -103,7 +108,7 @@ const ProcessMessages = () => {
     emptyData.forEach(emptyData => {
         const { fileName } = emptyData;
         if (!combinedData[fileName]) {
-            combinedData[fileName] = { processStatus: [], processLog: [], emptyData: [], popupMessage: [], saveData: [] };
+            combinedData[fileName] = { processStatus: [], processLog: [], emptyData: [], popupMessage: [], saveData: [], requiredPath: [] };
         }
         combinedData[fileName].emptyData.push(emptyData);
     });
@@ -111,10 +116,20 @@ const ProcessMessages = () => {
     popupMessage.forEach(popupMessage => {
         const { fileName } = popupMessage;
         if (!combinedData[fileName]) {
-            combinedData[fileName] = { processStatus: [], processLog: [], emptyData: [], popupMessage: [], saveData: [] };
+            combinedData[fileName] = { processStatus: [], processLog: [], emptyData: [], popupMessage: [], saveData: [], requiredPath: [] };
         }
         combinedData[fileName].popupMessage.push(popupMessage);
     });
+
+    requiredPath.forEach(requiredPath => {
+        const { fileName } = requiredPath;
+        if (!combinedData[fileName]) {
+            combinedData[fileName] = { processStatus: [], processLog: [], emptyData: [], popupMessage: [], saveData: [], requiredPath: [] };
+        }
+        combinedData[fileName].requiredPath.push(requiredPath);
+    });
+
+
 
     const getSeverity = (status) => {
         switch (status.toLowerCase()) {
@@ -132,6 +147,10 @@ const ProcessMessages = () => {
                 return 'info';
         }
     };
+
+
+
+ 
     
     const filteredData = Object.entries(combinedData)
     .filter(([fileName]) =>
@@ -221,7 +240,7 @@ const ProcessMessages = () => {
                                         }
                                     >
                                         <h4 className="text-lg font-['Times New Roman'] text-white print-area">The alert was of type `{processStatus.status}` </h4>
-                                        
+
                                         <div style={{ display: 'flex', alignItems: 'flex-start' }}>
                                             <span className='print-area' style={{ marginRight: '8px', color: 'white' }}>
                                                 {idx + 1}.
@@ -253,6 +272,7 @@ const ProcessMessages = () => {
 
                                     {Array.isArray(processStatus.popupMessage) && processStatus.popupMessage.length > 0 && (
                                         <div className="ml-4 mt-2 bg-gray-600 ">
+                                            
                                             <h5 className="text-base font-['Times New Roman'] text-black print-area ml-9">Popup error messages:</h5>
                                             {processStatus.popupMessage.map((popupMessage, popupIdx) => (
                                                 <div
@@ -302,7 +322,7 @@ const ProcessMessages = () => {
 
                                     {Array.isArray(processStatus.processLog) && processStatus.processLog.length > 0 && (
                                         <div className="ml-4 mt-2 bg-gray-600">
-                                            <h5 className="text-base font-['Times New Roman'] text-black print-area ml-9">Expression error message:</h5>
+                                            <h5 className="text-base font-['Times New Roman'] text-black print-area ml-9">Expression error message</h5>
                                             {processStatus.processLog.map((processLog, logIdx) => (
                                                 <div
                                                     key={`processLog-${processLog.processId}-${logIdx}`}
@@ -314,6 +334,27 @@ const ProcessMessages = () => {
                                                     <div className="flex flex-col gap-1">
                                                         <span className="text-sm font-['Times New Roman'] text-black print-area">
                                                             Response: {processLog.message}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+
+                                    {Array.isArray(processStatus.requiredPath) && processStatus.requiredPath.length > 0 && (
+                                        <div className="ml-4 mt-2 bg-gray-600">
+                                            <h5 className="text-base font-['Times New Roman'] text-black print-area ml-9">Required path</h5>
+                                            {processStatus.requiredPath.map((requiredPath, logIdx) => (
+                                                <div
+                                                    key={`requiredPath-${requiredPath.processId}-${logIdx}`}
+                                                    style={{ display: 'flex', alignItems: 'flex-start', marginBottom: '8px',  paddingLeft: '20px'}}
+                                                >
+                                                    <span className='print-area' style={{  color: 'black', marginLeft: '35px' }}>
+                                                        {logIdx + 1}.
+                                                    </span>
+                                                    <div className="flex flex-col gap-1">
+                                                        <span className="text-sm font-['Times New Roman'] text-black print-area">
+                                                            {requiredPath.message}
                                                         </span>
                                                     </div>
                                                 </div>
