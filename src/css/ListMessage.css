@@ -13,6 +13,9 @@
         display: block !important;
         color: black !important;
         padding: 0 !important;
+        align-items: center !important;
+        justify-content: center !important;
+        margin-left: 50px;
     }
 
     .print-area {

@@ -246,7 +246,7 @@ const ProcessMessages = () => {
 
                                             {Array.isArray(processStatus.saveData) && processStatus.saveData.length > 0 && (
                                                 <div className=" mt-2">
-                                                    <h5 className="text-sm font-semibold text-white print-area">The alert message didnt show:</h5>
+                                                    <h5 className="text-sm font-semibold text-white print-area">The alert message did not show:</h5>
                                                 </div>
                                             )}
                                         </div>
