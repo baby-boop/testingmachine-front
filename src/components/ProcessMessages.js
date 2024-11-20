@@ -207,47 +207,48 @@ const ProcessMessages = () => {
                                 {processStatus.map((processStatus, idx) => (
                                 <div key={`processStatus-${idx}`} className="mb-4">
                                     <Alert
-                                    variant="filled"
-                                    severity={getSeverity(processStatus.status)}
-                                    className="mb-2"
-                                    action={
-                                        <IconButton
-                                        aria-label="close"
-                                        onClick={() => handleClose(idx)}
-                                        className="text-white no-print"
-                                        >
-                                        <CloseIcon />
-                                        </IconButton>
-                                    }
+                                        variant="filled"
+                                        severity={getSeverity(processStatus.status)}
+                                        className="mb-2"
+                                        action={
+                                            <IconButton
+                                                aria-label="close"
+                                                onClick={() => handleClose(idx)}
+                                                className="text-white no-print"
+                                            >
+                                                <CloseIcon/>
+                                            </IconButton>
+                                        }
                                     >
-                                    <h4 className="text-lg font-['Times New Roman'] text-white print-area">The alert was of type `{processStatus.status}` </h4>
-                                    <div style={{ display: 'flex', alignItems: 'flex-start' }}>
-                                        <span className='print-area' style={{ marginRight: '8px', color: 'white' }}>
-                                            {idx + 1}.
-                                        </span>
-                                        <div className="flex flex-col gap-1">
-                                            {processStatus.status === 'error' ||  processStatus.status === 'warning' ||  processStatus.status === 'info' ? (
-                                            <>
-                                                <span className="text-base font-['Times New Roman'] text-white print-area">
-                                                    Process ID: {processStatus.processId}
-                                                </span>
-                                                <span className="text-base font-['Times New Roman'] text-white print-area">
-                                                    Response: {processStatus.messageText}
-                                                </span>
-                                            </>
-                                            ) :  (
-                                                <span className="text-basefont-['Times New Roman'] text-white print-area">
-                                                    Process ID:: {processStatus.processId}
-                                                </span>
-                                            )}
+                                        <h4 className="text-lg font-['Times New Roman'] text-white print-area">The alert was of type `{processStatus.status}` </h4>
+                                        
+                                        <div style={{ display: 'flex', alignItems: 'flex-start' }}>
+                                            <span className='print-area' style={{ marginRight: '8px', color: 'white' }}>
+                                                {idx + 1}.
+                                            </span>
+                                            <div className="flex flex-col gap-1">
+                                                {processStatus.status === 'error' ||  processStatus.status === 'warning' ||  processStatus.status === 'info' ? (
+                                                <>
+                                                    <span className="text-base font-['Times New Roman'] text-white print-area">
+                                                        Process ID: {processStatus.processId}
+                                                    </span>
+                                                    <span className="text-base font-['Times New Roman'] text-white print-area">
+                                                        Response: {processStatus.messageText}
+                                                    </span>
+                                                </>
+                                                ) :  (
+                                                    <span className="text-basefont-['Times New Roman'] text-white print-area">
+                                                        Process ID:: {processStatus.processId}
+                                                    </span>
+                                                )}
 
-                                            {Array.isArray(processStatus.saveData) && processStatus.saveData.length > 0 && (
-                                                <div className=" mt-2">
-                                                    <h5 className="text-sm font-semibold text-white print-area">The alert message did not show:</h5>
-                                                </div>
-                                            )}
+                                                {Array.isArray(processStatus.saveData) && processStatus.saveData.length > 0 && (
+                                                    <div className=" mt-2">
+                                                        <h5 className="text-sm font-semibold text-white print-area">The alert message did not show:</h5>
+                                                    </div>
+                                                )}
+                                            </div>
                                         </div>
-                                    </div>
                                     </Alert>
 
                                     {Array.isArray(processStatus.popupMessage) && processStatus.popupMessage.length > 0 && (
