@@ -3,11 +3,11 @@
         width: 100%;
         margin: 0;
         color: black !important;
-        background-color: white !important;
+        background-color: #006d6f !important;
+        
     }
     .container {
         width: 100% !important; 
-
     }
     .print-title{
         display: block !important;
@@ -17,28 +17,28 @@
         justify-content: center !important;
         margin-left: 50px;
     }
-
     .print-area {
         display: block !important;
         color: black !important;
+        background-color: #8a1919 !important;
         width: 500px;
         padding: 0 !important;
-
     }
-
     .MuiAlert-message {
         color: black !important;
     }
-
     .print-page {
         page-break-before: always;
     }
-
     .page-break {
         display: none;
     }
-
     .no-print {
         display: none !important;
     }
+
+    .alert-item {
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
 }

@@ -1,0 +1,16 @@
+@media print {
+  .print-container {
+    display: block;
+
+  }
+
+  .print-container section {
+    page-break-inside: avoid;
+  }
+
+  button {
+    display: none;
+  }
+
+
+}

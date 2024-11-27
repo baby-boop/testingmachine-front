@@ -64,6 +64,17 @@ function NavBar() {
                 Process
               </NavLink>
             </li>
+            <li className="nav-item no-print">
+              <NavLink
+                exact
+                to="/test"
+                activeClassName="active"
+                className="nav-links"
+                onClick={handleClick}
+              >
+                test
+              </NavLink>
+            </li>
 
           </ul>
           <div className="nav-icon no-print" onClick={handleClick}>
