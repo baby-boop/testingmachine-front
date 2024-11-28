@@ -1,6 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import './print.css';
 
 const ErrorMessages = () => {
     
@@ -153,8 +154,8 @@ const ErrorMessages = () => {
     );
 
     return (
-            <div className="w-full flex flex-col justify-between">
-                
+            <div className="w-full flex flex-col justify-between ">
+                <h2 className="text-black font-bold text-center w-full font-bold text-2xl">Алдааны жагсаалт</h2>
                 <div className="mb-4 space-y-2">
                     <input
                     type="text"
@@ -168,12 +169,14 @@ const ErrorMessages = () => {
                     {filteredData.length === 0 ? (
                         <p className="text-center">Алдааны жагсаалт олдсонгүй...</p>
                         ) : (
+                        
                         filteredData.map(([fileName, { processStatus }], index) => (
+                            
                             <div
                             key={index}
                             className="p-4 bg-white space-y-4"
                             >
-                            <h3 className="text-lg font-semibold text-black mb-2">
+                            <h3 className="text-lg font-semibold text-black mb-2 module-name">
                                 Модуль нэр: {fileName}
                             </h3>
 
@@ -200,9 +203,8 @@ const ErrorMessages = () => {
                                         <tr className="border-t border-gray-400">
                                             <td className="py-2 border border-gray-300 rounded-md text-center">{idx + 1}.</td>
                                             <td className="py-2 border border-gray-300 rounded-md text-center">{getTranslater(process.status)}</td>
-                                            <td className="py-2 pl-2 border border-gray-300 rounded-md">{process.messageText}</td>
+                                            <td className="py-2 pl-2 border border-gray-300 rounded-md break-words whitespace-normal">{process.messageText}</td>
                                         </tr>
-
                                         {Array.isArray(process.popupMessage) && process.popupMessage.length > 0 && (
                                             <>
                                             <tr className="bg-gray-200">
@@ -216,8 +218,8 @@ const ErrorMessages = () => {
                                                 className="border-t border-gray-300"
                                                 >
                                                 <td className="py-2 border border-gray-400"></td>
-                                                <td className="py-2 pl-2 border border-gray-400">Path: {popupMessage.dataPath}</td>
-                                                <td className="py-2 pl-2 border border-gray-400">
+                                                <td className="py-2 pl-2 border border-gray-400 break-words whitespace-normal">Path: {popupMessage.dataPath}</td>
+                                                <td className="py-2 pl-2 border border-gray-400 break-words whitespace-normal">
                                                     Алдаа: {popupMessage.messageText}
                                                 </td>
                                                 </tr>
@@ -239,7 +241,7 @@ const ErrorMessages = () => {
                                                 >
                                                     <td className="py-2 border border-gray-400"></td>
                                                     
-                                                    <td colSpan={2} className="py-2 pl-2 border border-gray-400">
+                                                    <td colSpan={2} className="py-2 pl-2 border border-gray-400 break-words whitespace-normal">
                                                         Талбар: /Path: {emptyData.dataPath}, Type: {emptyData.dataType}/
                                                     </td> 
                                                 </tr>
@@ -261,7 +263,7 @@ const ErrorMessages = () => {
                                                     className="border-t border-gray-300"
                                                 >
                                                 <td className="py-2 border border-gray-400"></td>
-                                                <td className="py-2 pl-2 border border-gray-400" colSpan={2}>
+                                                <td className="py-2 pl-2 border border-gray-400 " colSpan={2}>
                                                     Алдаа: {log.message.replace('is not a function', ' тухайн expression дээр алдаа гарлаа')}
                                                 </td>
                                                 </tr>
@@ -282,7 +284,7 @@ const ErrorMessages = () => {
                                                 className="border-t border-gray-300"
                                                 >
                                                 <td className="py-2 border border-gray-400"></td>
-                                                <td className="py-2 pl-2 border border-gray-400" colSpan={2}>
+                                                <td className="py-2 pl-2 border border-gray-400 break-words whitespace-normal" colSpan={2}>
                                                     Талбар: /{requiredPath.message.replace('"', '')}/ 
                                                 </td>
                                                 </tr>
@@ -303,10 +305,10 @@ const ErrorMessages = () => {
                                                 className="border-t border-gray-300"
                                                 >
                                                 <td className="py-2 border border-gray-400"></td>
-                                                <td className="py-2 pl-2 border border-gray-400">
+                                                <td className="py-2 pl-2 border border-gray-400 break-words whitespace-normal">
                                                     Path: {standart.dataPath}
                                                 </td>
-                                                <td className="py-2 pl-2 border border-gray-400">
+                                                <td className="py-2 pl-2 border border-gray-400 break-words whitespace-normal">
                                                     Path type: {standart.dataType.replace('code', ' Тухайн popup-ийн код стандарт утга ирсэнгүй')}
                                                 </td>
                                                 </tr>

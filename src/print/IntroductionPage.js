@@ -23,7 +23,6 @@ const IntroductionPage = () => {
                 console.error('Error fetching data:', error);
             }
         };
-    
         fetchData();
         const interval = setInterval(fetchData, 5000); 
         return () => clearInterval(interval);
@@ -34,20 +33,26 @@ const IntroductionPage = () => {
         labels: ['FAILED', 'WARNING', 'ERROR', 'INFO', 'SUCCESS'], 
         datasets: [
           {
-            data: [progressData.failedCount, progressData.warningCount, progressData.errorCount, progressData.infoCount, progressData.successCount], 
+            data: [
+                progressData.failedCount || 0,
+                progressData.warningCount || 0,
+                progressData.errorCount || 0,
+                progressData.infoCount || 0,
+                progressData.successCount || 0
+              ], 
             backgroundColor: [
-              '#ff8c8c',
-              '#ed6c02',
-              '#d32f2f', 
-              '#0288d1',
-              '#2e7d32'
+                '#ff8c8c',
+                '#ed6c02',
+                '#d32f2f', 
+                '#0288d1',
+                '#2e7d32'
             ],
             borderColor: [
-              '#ff8c8c',
-              '#ed6c02',
-              '#d32f2f', 
-              '#0288d1',
-              '#2e7d32'
+                '#ff8c8c',
+                '#ed6c02',
+                '#d32f2f', 
+                '#0288d1',
+                '#2e7d32'
             ],
             borderWidth: 1,
           },
@@ -72,7 +77,7 @@ const IntroductionPage = () => {
         <section className="flex flex-col justify-center items-center space-y-10 px-6 avoid-break">
 
             <div className="flex py-8">
-                <h1 className="text-black text-left font-bold text-3xl ">
+                <h1 className="text-black text-left font-bold text-2xl ">
                     Автомат тестийн ерөнхий мэдээлэл
                 </h1>
             </div>

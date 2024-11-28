@@ -1,7 +1,12 @@
+@media screen {
+  .only-print {
+    display: none;
+  }
+}
+
 @media print {
   .print-container {
     display: block;
-
   }
 
   .print-container section {
@@ -12,5 +17,17 @@
     display: none;
   }
 
+  @page {
+    size: auto;
+    margin: 20mm;
+  }
 
+  @page {
+    @bottom-center {
+      /* content: "Page " counter(page) " of " counter(pages); */
+      content: "Хуудас " counter(page);
+      margin-bottom: 7px;
+    }
+  }
+  
 }

@@ -3,14 +3,14 @@ const imgSrc = "https://dev.veritech.mn/assets/custom/img/veritech_logo.png";
 
 const Homepage = () => {
   return (
-    <div className="container mx-auto h-[1055px] flex flex-col justify-between">
-      <div className="flex py-8 justify-between w-full">
+    <div className="container mx-auto h-[1055px] flex flex-col justify-between items-center">
+      <div className="flex py-8 justify-between w-full px-10">
         <div className="flex justify-center items-center w-[200px]">
-          <img src={imgSrc} alt="Veritech Logo" />
+          <img width="200" height="200" src={imgSrc} alt="Veritech Logo" />
         </div>
 
         <div className="flex flex-col justify-center items-center ">
-          <div className='text-black text-right font-bold text-2xl '>
+          <div className='text-black font-bold text-2xl '>
             dev.veritech.mn
           </div>
           <div className='text-xl'>

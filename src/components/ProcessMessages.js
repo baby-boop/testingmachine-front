@@ -303,8 +303,6 @@ const ProcessMessages = () => {
                                                     <div style={{ fontSize: '16px', paddingLeft: '20px', color: getTypeColor(processStatus.status) } }>
                                                         `{getTranslater(processStatus.status)}`
                                                     </div>
-                                    
-                                                    
                                                 </span>
                                                 <div className="flex flex-col gap-1">
                                                 
@@ -444,7 +442,9 @@ const ProcessMessages = () => {
                     ))
                 )}
             </div>
+            <div className="page-footer"></div>
         </div>
+        
     );
 };
 

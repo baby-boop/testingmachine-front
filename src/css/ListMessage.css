@@ -4,6 +4,7 @@
         margin: 0;
         color: black !important;
         background-color: #006d6f !important;
+        counter-reset: page;
         
     }
     .container {
@@ -41,4 +42,5 @@
         page-break-inside: avoid;
         break-inside: avoid;
       }
+
 }

@@ -15,6 +15,7 @@ const SinglePageApp = () => {
 
   return (
     <div className="container mx-auto py-8 space-y-12">
+
       <div className="text-center mb-6">
         <button
           onClick={handlePrint}
@@ -26,18 +27,18 @@ const SinglePageApp = () => {
 
       <div ref={componentRef} className="print-container">
         
-
-        <section className="bg-white rounded-lg p-8 mb-10">
+        <section className="bg-white rounded-lg only-print">
           <HomePage />
         </section>
 
-        <section className="bg-white rounded-lg p-8">
+        <section className="bg-white rounded-lg ">
           <IntroductionPage />
         </section>
 
-        <section className="bg-white rounded-lg p-8 mt-10">
+        <section className="bg-white rounded-lg">
           <ErrorMessages />
         </section>
+
       </div>
     </div>
   );
