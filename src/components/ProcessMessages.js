@@ -385,7 +385,7 @@ const ProcessMessages = () => {
                                                 >
                                                         <div className="flex flex-col gap-1">
                                                             <span className="text-sm font-['Times New Roman'] text-black print-area ml-4">
-                                                                {logIdx + 1}. Response: {processLog.message.replace('is not a function', ' тухайн expression дээр алдаа гарлаа')}
+                                                                {logIdx + 1}. Response: {processLog.messageText.replace('is not a function', ' тухайн expression дээр алдаа гарлаа')}
                                                             </span>
                                                         </div>
                                                 </div>

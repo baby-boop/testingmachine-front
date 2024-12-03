@@ -107,9 +107,8 @@ const MetaMessages = () => {
         fileName.toLowerCase().includes(fileNameFilter.toLowerCase()) && alerts.length > 0
     );
 
-    
     return (
-        <div className="w-min-[900px] w-[1100px] p-2 bg-black bg-opacity-80 print-area">
+        <div className="w-full p-2 bg-black bg-opacity-80 print-area container">
             <div className='md:container md:mx-auto'>
                 <h2 className="text-xl text-white font-bold text-center  print-area">Алдааны жагсаалт</h2>
                 <div className="w-full mt-6 no-print ">

@@ -1,9 +1,9 @@
 
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './print.css';
+import '../print.css';
 
-const ErrorMessages = () => {
+const MetaProcessMessages = () => {
     
     const [processStatus, setProcessStatus] = useState([]);
     const [processLog, setProcessLog] = useState([]);
@@ -41,7 +41,6 @@ const ErrorMessages = () => {
         const interval = setInterval(fetchData, 5000); 
         return () => clearInterval(interval);
     }, []);
-
 
     const combinedData = processStatus.reduce((acc, alert) => {
         const { fileName, processId, processCode, processName, status, messageText } = alert;
@@ -102,7 +101,6 @@ const ErrorMessages = () => {
         combinedData[fileName].requiredPath.push(requiredPath);
     });
 
-
     standart.forEach(standart => {
         const { fileName } = standart;
         if (!combinedData[fileName]) {
@@ -154,20 +152,21 @@ const ErrorMessages = () => {
     );
 
     return (
-            <div className="w-full flex flex-col justify-between ">
-                <h2 className="text-black font-bold text-center w-full font-bold text-2xl">Алдааны жагсаалт</h2>
-                <div className="mb-4 space-y-2">
-                    <input
+        <div className="w-full flex flex-col justify-between ">
+            <h2 className="text-black font-bold text-center w-full font-bold text-2xl">Үр дүнгийн жагсаалт</h2>
+            <div className="mb-4 space-y-2">
+                <input
                     type="text"
                     placeholder="Файлын нэрээр шүүх..."
                     value={fileNameFilter}
                     onChange={(e) => setFileNameFilter(e.target.value)}
                     className="w-full p-2 border border-gray-300 rounded-md bg-gray-900 text-white no-print"
-                    />
-                </div>
-                <div className="max-h-[600px] overflow-y-auto">
+                />
+            </div>
+                {/* <div className="max-h-[600px] overflow-y-auto"> */}
+                <div className=" overflow-y-auto">
                     {filteredData.length === 0 ? (
-                        <p className="text-center">Алдааны жагсаалт олдсонгүй...</p>
+                        <p className="text-center">Үр дүнгийн жагсаалт олдсонгүй...</p>
                         ) : (
                         
                         filteredData.map(([fileName, { processStatus }], index) => (
@@ -264,7 +263,7 @@ const ErrorMessages = () => {
                                                 >
                                                 <td className="py-2 border border-gray-400"></td>
                                                 <td className="py-2 pl-2 border border-gray-400 " colSpan={2}>
-                                                    Алдаа: {log.message.replace('is not a function', ' тухайн expression дээр алдаа гарлаа')}
+                                                    Алдаа: {log.messageText.replace('is not a function', ' тухайн expression дээр алдаа гарлаа')}
                                                 </td>
                                                 </tr>
                                             ))}
@@ -285,7 +284,8 @@ const ErrorMessages = () => {
                                                 >
                                                 <td className="py-2 border border-gray-400"></td>
                                                 <td className="py-2 pl-2 border border-gray-400 break-words whitespace-normal" colSpan={2}>
-                                                    Талбар: /{requiredPath.message.replace('"', '')}/ 
+                                                    Талбар: /{requiredPath.messageText.replace('"', '')}/ 
+
                                                 </td>
                                                 </tr>
                                             ))}
@@ -321,14 +321,13 @@ const ErrorMessages = () => {
                                 ))}
                                 </>
                             )}
-                            </div>
-                        ))
-                    )}
-                </div>
-                
+                        </div>
+                    ))
+                )}
             </div>
+        </div>
     );
     
 };
 
-export default ErrorMessages;
+export default MetaProcessMessages;

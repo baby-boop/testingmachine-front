@@ -87,7 +87,7 @@ const IntroductionPage = () => {
                     <thead>
                         <tr className="bg-gray-400">
                             <th className="border px-4 py-2 font-semibold w-1/2">Серверийн мэдээлэл</th>
-                            <th className="border px-4 py-2 font-semibold w-1/2">172.169.88.80</th>
+                            <th className="border px-4 py-2 font-semibold w-1/2"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -106,8 +106,6 @@ const IntroductionPage = () => {
                     </tbody>
                 </table>
             </div> 
-
-
 
             <div className="space-y-8 flex w-full max-w-full pt-8">
                 <div className="w-1/2 pr-4 h-[300px]">
@@ -142,7 +140,7 @@ const IntroductionPage = () => {
                     </table>
                 </div>
 
-                <div className="w-1/2 pl-4 h-[300px] flex justify-center items-center">
+                <div className="w-1/2 pl-4 max-h-[300px] flex justify-center items-center">
                     <Doughnut data={chartData} options={chartOptions} />
                 </div>
             </div>

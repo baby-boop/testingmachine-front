@@ -4,10 +4,11 @@ import ModuleSelector from './components/ModuleSelector';
 import MetaMessages from './components//MetaMessages';
 import MetaverseMessages from './components/MetaverseMessages';
 import ProcessMessages from './components/ProcessMessages';
-import Test from './print/test';
+import ProcessPrint from './print/MetaProcess/ProcessPrintMessages';
 import DashboardLayout from './layout/DashboardLayout';
+import MetaListPrint from './print/MetaList/MetaPrintMessage';
 import NavBar from './layout/NavBar';
-import ErrorMessages from './print/ErrorMessage';
+import Test from './testClass';
 import './App.css'; 
 
 function App() {
@@ -23,8 +24,9 @@ function App() {
                         <Route path="/meta" element={<MetaMessages />} />
                         <Route path='/metaverse' element={<MetaverseMessages/>} />
                         <Route path='/process' element={<ProcessMessages/>} />
+                        <Route path='/process-print' element={<ProcessPrint/>} />
+                        <Route path='/metalist-print' element={<MetaListPrint/>} />
                         <Route path='/test' element={<Test/>} />
-                        <Route path='/data' element={<ErrorMessages/>} />
 
                     </Routes>
                 </div>

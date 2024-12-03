@@ -1,12 +1,12 @@
 import React, { useRef } from 'react';
 import { useReactToPrint } from 'react-to-print';
-import IntroductionPage from './IntroductionPage';
-import HomePage from './Homepage';
-import ErrorMessages from './ErrorMessage';
+import IntroductionPage from './MetaListIntroduction';
+import HomePage from '../Homepage';
+import ErrorMessages from './MetaListMessages';
 
-import './print.css';
+import '../print.css';
 
-const SinglePageApp = () => {
+const ProcessPrintMessages = () => { 
   const componentRef = useRef();
 
   const handlePrint = useReactToPrint({
@@ -44,4 +44,4 @@ const SinglePageApp = () => {
   );
 };
 
-export default SinglePageApp;
+export default ProcessPrintMessages;

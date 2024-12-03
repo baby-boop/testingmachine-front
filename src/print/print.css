@@ -5,6 +5,7 @@
 }
 
 @media print {
+
   .print-container {
     display: block;
   }
@@ -19,14 +20,15 @@
 
   @page {
     size: auto;
-    margin: 20mm;
+    margin-bottom: 40px;
+    margin-top: 20px;
   }
 
   @page {
     @bottom-center {
       /* content: "Page " counter(page) " of " counter(pages); */
       content: "Хуудас " counter(page);
-      margin-bottom: 7px;
+      margin-bottom: 20px;
     }
   }
   

@@ -67,12 +67,24 @@ function NavBar() {
             <li className="nav-item no-print">
               <NavLink
                 exact
-                to="/test"
+                to="/process-print"
                 activeClassName="active"
                 className="nav-links"
                 onClick={handleClick}
               >
-                test
+                Process print
+              </NavLink>
+            </li>
+
+            <li className="nav-item no-print">
+              <NavLink
+                exact
+                to="/metalist-print"
+                activeClassName="active"
+                className="nav-links"
+                onClick={handleClick}
+              >
+                metalist print
               </NavLink>
             </li>
 
