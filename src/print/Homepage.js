@@ -12,14 +12,14 @@ function getDate() {
 }
 
 const Homepage = () => {
-  const [currentDate, setCurrentDate] = useState(getDate());
+  const [currentDate] = useState(getDate());
   const [infomation, setInformation] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const [progressRes] = await Promise.all([
-                    axios.get('http://localhost:8080/system-information')
+                    axios.get('http://localhost:8080/system-data')
     
                 ]);
     
@@ -55,7 +55,7 @@ const Homepage = () => {
       <section className="flex-grow flex flex-col justify-center items-center space-y-10 avoid-break">
         <div className="space-y-8 max-w-3xl">
           <div className="text-center">
-            <h3 className="text-3xl font-semibold text-gray-800 ">{infomation.systemName}</h3>
+            <h3 className="text-3xl font-semibold text-gray-800 ">{infomation.customerName}</h3>
             <h4 className="text-xl font-semibold text-gray-800">{currentDate}</h4>
           </div>
           <div className="text-center">

@@ -1,0 +1,37 @@
+
+// const fs = require('fs');
+// const path = require('path-browserify');
+
+// function readJsonFilesFromFolder(folderPath) {
+//   const files = fs.readdirSync(folderPath); 
+//   const jsonFiles = files.filter((file) => file.endsWith('.json')); 
+  
+//   const data = jsonFiles.map((file) => {
+//     const filePath = path.join(folderPath, file); 
+//     const fileContent = fs.readFileSync(filePath, 'utf8');
+//     return JSON.parse(fileContent); 
+//   });
+
+//   return data;
+// }
+
+// function MyComponent() {
+//   const [data, setData] = useState([]);
+//   const [resultData, setResultData] = useState([]);
+//   const [selectedResult, setSelectedResult] = useState(null);
+//   const componentRef = useRef();
+
+//   useEffect(() => {
+//     try {
+//       const headerFolderPath = 'C:/Users/batde/Documents/testingmachine-backend/src/json/header';
+//       const resultFolderPath = 'C:/Users/batde/Documents/testingmachine-backend/src/json/result';
+
+//       const headerData = readJsonFilesFromFolder(headerFolderPath);
+//       const resultData = readJsonFilesFromFolder(resultFolderPath);
+
+//       setData(headerData); 
+//       setResultData(resultData); 
+//     } catch (error) {
+//       console.error('Error loading JSON files:', error);
+//     }
+//   }, []);

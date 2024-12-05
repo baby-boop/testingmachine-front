@@ -15,28 +15,27 @@ function ModuleSelector() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [data, setData] = useState(null);
   const [message, setMessage] = useState('');
-  const [systemId, setSystemId] = useState('');
-  const [systemName, setSystemName] = useState('DevTest');
-  const [systemUrl, setSystemUrl] = useState('dev.veritech.mn');
-  const [systemDatabase, setSystemDabase] = useState('');
-  const [systemDatabaseName, setSystemDabaseName] = useState('');
-  const [systemUsername, setSystemUsername] = useState('batdelger');
-  const [systemPassword, setSystemPassword] = useState('123');
+  const [moduleId, setmoduleId] = useState('');
+  const [customerName, setCustomerName] = useState('DevTest');
+  const [systemURL, setSystemURL] = useState('dev.veritech.mn');
+  const [databaseName, setDatabaseName] = useState('');
+  const [databaseUsername, setDatabaseUsername] = useState('');
+  const [username, setusername] = useState('batdelger');
+  const [password, setpassword] = useState('123');
   const [showPassword, setShowPassword] = useState(false);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
         const body = JSON.stringify({
-          username: systemUsername,
-          password: systemPassword,
+          username: username,
+          password: password,
           command: 'PL_MDVIEW_005',
           parameters: {
             systemmetagroupcode: 'testCaseFindModuleLookupList',
           },
         });
 
-        const response = await fetch(`https://${systemUrl}:8181/erp-services/RestWS/runJson`, {
+        const response = await fetch(`https://${systemURL}:8181/erp-services/RestWS/runJson`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -62,32 +61,32 @@ function ModuleSelector() {
     setShowPassword(!showPassword);
   };
 
-  const handleSystemChange = (event) => {
-    setSystemId(event.target.value);
+  const handleSystemId = (event) => {
+    setmoduleId(event.target.value);
   };
 
-  const handleSystemNameChange = (event) => {
-    setSystemName(event.target.value);
+  const handleCustomerName = (event) => {
+    setCustomerName(event.target.value);
   };
 
-  const handleSystemUrlChange = (event) => {
-    setSystemUrl(event.target.value);
+  const handleSystemURL = (event) => {
+    setSystemURL(event.target.value);
   };
 
-  const handleSystemDatabaseChange = (event) => {
-    setSystemDabase(event.target.value);
+  const handleDatabaseName = (event) => {
+    setDatabaseName(event.target.value);
   };
 
-  const handleSystemDatabaseNameChange = (event) => {
-    setSystemDabaseName(event.target.value);
+  const handleDatabaseUsername = (event) => {
+    setDatabaseUsername(event.target.value);
   };
 
-  const handleSystemUsernameChange = (event) => {
-    setSystemUsername(event.target.value);
+  const handleUsername = (event) => {
+    setusername(event.target.value);
   };
 
-  const handleSystemPasswordChange = (event) => {
-    setSystemPassword(event.target.value);
+  const handlePassword = (event) => {
+    setpassword(event.target.value);
   };
 
   const handleChange = (e) => {
@@ -108,21 +107,24 @@ function ModuleSelector() {
     setResponseMessage('');
     setIsError(false);
 
+    const createdDate = new Date().toISOString();
+
     if (selectedModule === 'process') {
       try {
-        const systemIdResponse = await axios.post('http://localhost:8080/system-information', {
-          systemId,
-          systemUrl,
-          systemName,
-          systemDatabase,
-          systemUsername,
-          systemPassword,
-          systemDatabaseName
+        const systemResponse = await axios.post('http://localhost:8080/system-data', {
+          moduleId,
+          customerName,
+          systemURL,  
+          createdDate,
+          username,
+          password,
+          databaseName,
+          databaseUsername
         });
-        setMessage(systemIdResponse.data);
+        setMessage(systemResponse.data);
       } catch (error) {
-        console.error('Error sending systemId:', error);
-        setMessage('Error sending systemId');
+        console.error('Error sending moduleId:', error);
+        setMessage('Error sending moduleId');
       }
     }
 
@@ -171,24 +173,24 @@ function ModuleSelector() {
           <form className="space-y-4 ml-1 flex flex-col text-white">
             <label>
               Харилцагчийн нэрийг оруулна уу:
-              <textarea onChange={handleSystemNameChange} className="text-black w-full h-14 border-lg border-2 border-solid pl-2" type="text" value={systemName} placeholder='Харилцагчийн нэрийг оруулна уу!'/>
+              <textarea onChange={handleCustomerName} className="text-black w-full h-14 border-lg border-2 border-solid pl-2" type="text" value={customerName} placeholder='Харилцагчийн нэрийг оруулна уу!'/>
             </label>
             <label>
               Тест хийх URL зааж өгнө үү:
-              <textarea onChange={handleSystemUrlChange} className="text-black w-full h-14 border-lg border-2 text-black black border-solid pl-2" type="text" value={systemUrl} placeholder='Тест хийх URL зааж өгнө үү!'  />
+              <textarea onChange={handleSystemURL} className="text-black w-full h-14 border-lg border-2 text-black black border-solid pl-2" type="text" value={systemURL} placeholder='Тест хийх URL зааж өгнө үү!'  />
             </label> 
             <label>
               DB username оруулна уу:
-              <input onChange={handleSystemDatabaseChange} className="text-black w-full h-8 border-lg border-2 text-black black border-solid pl-2" type="text" value={systemDatabase} placeholder='Database оруулна уу!' />
+              <input onChange={handleDatabaseName} className="text-black w-full h-8 border-lg border-2 text-black black border-solid pl-2" type="text" value={databaseName} placeholder='Database оруулна уу!' />
             </label> 
             <label>
               DB_NAME оруулна уу:
-              <input onChange={handleSystemDatabaseNameChange}  className="text-black w-full h-8 border-lg border-2 text-black black border-solid pl-2" type="text" value={systemDatabase} placeholder='Database оруулна уу!' />
+              <input onChange={handleDatabaseUsername}  className="text-black w-full h-8 border-lg border-2 text-black black border-solid pl-2" type="text" value={databaseUsername} placeholder='Database оруулна уу!' />
             </label> 
 
               <label>
                 Нэвтрэх нэрээ оруулна уу:
-                <input onChange={handleSystemUsernameChange} className="text-black w-full h-8 border-lg border-2 text-black black border-solid pl-2" type="text" value={systemUsername} placeholder='Нэвтрэх нэрээ оруулна уу!'/>
+                <input onChange={handleUsername} className="text-black w-full h-8 border-lg border-2 text-black black border-solid pl-2" type="text" value={username} placeholder='Нэвтрэх нэрээ оруулна уу!'/>
               </label> 
             <label>
                 Нууц үгээ оруулна уу:
@@ -196,9 +198,9 @@ function ModuleSelector() {
                 <div className="relative ">
                   <input
                     type={showPassword ? 'text' : 'password'}
-                    onChange={handleSystemPasswordChange}
+                    onChange={handlePassword}
                     className="text-black w-full h-8 border-lg border-2 border-solid pr-10  pl-2"
-                    value={systemPassword}
+                    value={password}
                     placeholder='Нууц үг оруулна уу!'
                   />
                   <button
@@ -235,14 +237,14 @@ function ModuleSelector() {
                 <h2 className="text-white text-lg font-bold mb-2">Модулиа сонгоно уу</h2>
                 {data ? (
                   <select
-                    value={systemId}
-                    onChange={handleSystemChange}
+                    value={moduleId}
+                    onChange={handleSystemId}
                     className="px-4 py-2 border border-gray-300 rounded-md text-black w-full"
                   >
                     <option value="">Бүх модуль</option>
                     {Object.keys(data).map((key) => (
-                      <option key={key} value={data[key].systemid}>
-                        {data[key].systemname}
+                      <option key={key} value={data[key].moduleid}>
+                        {data[key].modulename}
                       </option>
                     ))}
                   </select>

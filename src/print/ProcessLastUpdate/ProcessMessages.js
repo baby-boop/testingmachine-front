@@ -18,7 +18,6 @@ function MyComponent() {
         ]);
         setData(headerRes.data);
         setResultData(resultRes.data);
-        console.log(resultRes.data);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -44,14 +43,22 @@ function MyComponent() {
 
   const getTranslater = (status) => {
     status = String(status);
-    switch (status.toLowerCase()) {
-      case 'info': return 'INFO';
-      case 'warning': return 'WARNING';
-      case 'error': return 'ERROR';
-      case 'failed': return 'FAILED';
-      case 'success': return 'SUCCESS';
-      default: return 'EMPTY';
-    }
+    // switch (status.toLowerCase()) {
+    //   case 'info': return 'INFO';
+    //   case 'warning': return 'WARNING';
+    //   case 'error': return 'ERROR';
+    //   case 'failed': return 'FAILED';
+    //   case 'success': return 'SUCCESS';
+    //   default: return 'EMPTY';
+    // }
+    const wordMap = {
+        info: 'INFO',
+        warning: 'WARNING',
+        error: 'ERROR',
+        success: 'FAILED',
+        failed: 'SUCCESS',
+    };
+    return wordMap[status.toLowerCase()];
   };
 
   const getTypeColor = (statusColor) => {
@@ -77,10 +84,20 @@ function MyComponent() {
       }, {})
     : {};
 
-  
+    const clearCacheData = () => {
+        caches.keys().then((names) => {
+            names.forEach((name) => {
+                caches.delete(name);
+            });
+        });
+        alert("Complete Cache Cleared");
+    };
 
   return (
     <div className="bg-black bg-opacity-80 min-h-[85vh] flex flex-col items-center py-8">
+        <button className='w-[200px] h-[100px] bg-white' onClick={() => clearCacheData()}>
+                Clear Cache Data
+            </button>
       {data.length > 0 ? (
         <div className="container grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full px-4">
           {data.map((json, index) => (
@@ -132,7 +149,7 @@ function MyComponent() {
                     <tbody>
                       <tr className="border-t border-gray-400">
                         <td className="py-2 border border-gray-300 rounded-md text-center">{processIdx + 1}.</td>
-                        <td className="py-2 border border-gray-300 rounded-md text-center">{getTranslater(process.status)}</td>
+                        <td className="py-2 border border-gray-300 rounded-md text-center">{process.status}</td>
                         <td className="py-2 pl-2 border border-gray-300 rounded-md break-words whitespace-normal">{process.messageText}</td>
                       </tr>
                       {Array.isArray(process.popupMessageDTO) && process.popupMessageDTO.length > 0 && (
