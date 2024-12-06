@@ -2,8 +2,25 @@ import { useEffect, useState, useRef } from 'react';
 import { useReactToPrint } from 'react-to-print';
 import { FaPrint } from 'react-icons/fa';
 import axios from 'axios';
+import './print/print.css';
+import { Doughnut } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+
+
+const imgSrc = "https://dev.veritech.mn/assets/custom/img/veritech_logo.png";
+
+function getDate() {
+  const today = new Date();
+  const month = today.getMonth() + 1;
+  const year = today.getFullYear();
+  const date = today.getDate();
+  return `${year}-${month}-${date}`;
+}
 
 function MyComponent() {
+  const [currentDate] = useState(getDate());
   const [data, setData] = useState([]);
   const [resultData, setResultData] = useState([]);
   const [selectedResult, setSelectedResult] = useState(null);
@@ -18,7 +35,6 @@ function MyComponent() {
         ]);
         setData(headerRes.data);
         setResultData(resultRes.data);
-        console.log(resultRes.data);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -66,6 +82,8 @@ function MyComponent() {
     return colorMap[statusColor.toLowerCase()] || '#a855f7';
   };
 
+ 
+
   const groupedData = selectedResult
     ? selectedResult.data.reduce((groups, process) => {
         const { fileName } = process;
@@ -77,7 +95,66 @@ function MyComponent() {
       }, {})
     : {};
 
-  
+
+    const countStatuses = selectedResult
+    ? selectedResult.data.reduce((counters, process) => {
+        const status = getTranslater(process.status).toLowerCase();
+        if (counters[status] !== undefined) {
+          counters[status] += 1;
+        }
+        return counters;
+      }, {
+        info: 0,
+        warning: 0,
+        error: 0,
+        success: 0,
+        failed: 0,
+      })
+    : {};
+    
+    const chartData = {
+      labels: ['FAILED', 'WARNING', 'ERROR', 'INFO', 'SUCCESS'], 
+      datasets: [
+        {
+          data: [
+              countStatuses.failed || 0,
+              countStatuses.warning || 0,
+              countStatuses.error || 0,
+              countStatuses.info || 0,
+              countStatuses.success || 0
+            ], 
+          backgroundColor: [
+              '#ff8c8c',
+              '#ed6c02',
+              '#d32f2f', 
+              '#0288d1',
+              '#2e7d32'
+          ],
+          borderColor: [
+              '#ff8c8c',
+              '#ed6c02',
+              '#d32f2f', 
+              '#0288d1',
+              '#2e7d32'
+          ],
+          borderWidth: 1,
+        },
+      ],
+    };
+
+    const chartOptions = {
+      plugins: {
+        legend: {
+          position: 'left', 
+          labels: {
+            font: {
+              size: 16,
+            },          
+          },
+        },
+          
+      },
+    };
 
   return (
     <div className="bg-black bg-opacity-80 min-h-[85vh] flex flex-col items-center py-8">
@@ -111,153 +188,385 @@ function MyComponent() {
         <div className="text-xl text-gray-600">Loading...</div>
       )}
 
-      <div ref={componentRef} className="w-full flex flex-col justify-between print:block hidden">
-        {Object.keys(groupedData).length > 0 ? (
-          Object.entries(groupedData).map(([fileName, processes], idx) => (
-            <div key={fileName} className="overflow-y-auto">
-              <h3 className="container text-lg font-semibold text-black mb-2 pl-4 pt-5">Модуль нэр: {fileName}</h3>
-              { processes.status !==null && processes.map((process, processIdx) => (
-                <div key={`processTable-${processIdx}`} className="p-4 bg-white space-y-4">
-                  <h4 className={`text-md font-semibold mb-2 text-black`}>
-                    {process.processCode} - {process.processName} /{process.processId}/
-                  </h4>
-                  <table className="w-full table-fixed bg-white text-black border-collapse mb-6">
-                    <thead>
-                      <tr className={`text-white justify-center items rounded-md bg-[${getTypeColor(process.status)}]`}>
-                        <th className="py-2 border border-gray-400 w-[4%]">#</th>
-                        <th className="py-2 border border-gray-400 w-[16%]">Төрөл</th>
-                        <th className="py-2 border border-gray-400 w-[80%]">Алдааны тайлбар</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr className="border-t border-gray-400">
-                        <td className="py-2 border border-gray-300 rounded-md text-center">{processIdx + 1}.</td>
-                        <td className="py-2 border border-gray-300 rounded-md text-center">{getTranslater(process.status)}</td>
-                        <td className="py-2 pl-2 border border-gray-300 rounded-md break-words whitespace-normal">{process.messageText}</td>
-                      </tr>
-                      {Array.isArray(process.popupMessageDTO) && process.popupMessageDTO.length > 0 && (
-                                            <>
-                                            <tr className="bg-gray-200">
-                                                <td colSpan={3} className="px-3 py-2 text-left font-semibold border border-gray-400">
-                                                    Popup дуудах үед гарсан алдаанууд:
-                                                </td>
-                                            </tr>
-                                            {process.popupMessageDTO.map((popupMessage, popupIdx) => (
-                                                <tr
-                                                key={`popupMessage-${popupMessage.processId}-${popupIdx}`}
-                                                className="border-t border-gray-300"
-                                                >
-                                                <td className="py-2 border border-gray-400"></td>
-                                                <td className="py-2 pl-2 border border-gray-400 break-words whitespace-normal">Path: {popupMessage.dataPath}</td>
-                                                <td className="py-2 pl-2 border border-gray-400 break-words whitespace-normal">
-                                                    Алдаа: {popupMessage.messageText}
-                                                </td>
-                                                </tr>
-                                            ))}
-                                            </>
-                                        )}
-                                        {Array.isArray(process.emptyDataDTO) && process.emptyDataDTO.length > 0 && (
-                                            <>
-                                            <tr className="bg-gray-200">
-                                                <td colSpan={3} className="px-3 py-2 text-left font-semibold border border-gray-400">
-                                                    Заавал талбартай боловч утга олдсонгүй:
-                                                </td>
-                                            </tr>
-                                            {process.emptyDataDTO.map((emptyData, emptyIdx) => (
-                                                <tr
-                                                key={`emptyData-${emptyData.processId}-${emptyIdx}`}
-                                                className="border-t border-gray-300"
-                                                >
-                                                    <td className="py-2 border border-gray-400"></td>
-                                                    
-                                                    <td colSpan={2} className="py-2 pl-2 border border-gray-400 break-words whitespace-normal">
-                                                        Талбар: /Path: {emptyData.dataPath}, Type: {emptyData.dataType}/
-                                                    </td> 
-                                                </tr>
+      <div ref={componentRef} className="print-container w-full flex flex-col justify-between print:block hidden"> 
+      {selectedResult ? (
+        <section>
+          <div className="container mx-auto h-[1055px] flex flex-col justify-between items-center">
+            <div className="flex py-8 justify-between w-full px-10">
+              <div className="flex justify-center items-center w-[200px]">
+                <img width="200" height="200" src={imgSrc} alt="Veritech Logo" />
+              </div>
 
-                                                
-
-                                            ))}
-                                            </>
-                                        )}
-                                        {Array.isArray(process.processLogDTO) && process.processLogDTO.length > 0 && (
-                                            <>
-                                            <tr className="bg-gray-200">
-                                                <td colSpan={3} className="px-3 py-2 text-left font-semibold border border-gray-400">
-                                                    Expression алдааны жагсаалт:
-                                                </td>
-                                            </tr>
-                                            {process.processLogDTO.map((log, logIdx) => (
-                                                <tr
-                                                    key={`processLog-${log.processId}-${logIdx}`}
-                                                    className="border-t border-gray-300"
-                                                >
-                                                <td className="py-2 border border-gray-400"></td>
-                                                <td className="py-2 pl-2 border border-gray-400 " colSpan={2}>
-                                                    Алдаа: {log.messageText.replace('is not a function', ' тухайн expression дээр алдаа гарлаа')}
-                                                </td>
-                                                </tr>
-                                            ))}
-
-                                            </>
-                                        )}
-
-                                        {Array.isArray(process.requiredPathDTO) && process.requiredPathDTO.length > 0 && (
-                                            <>
-                                            <tr className="bg-gray-200">
-                                                <td colSpan={3} className="px-3 py-2 text-left font-semibold border border-gray-400">
-                                                    Заавал талбарууд:
-                                                </td>
-                                            </tr>
-                                            {process.requiredPathDTO.map((requiredPath, logIdx) => (
-                                                <tr
-                                                key={`requiredPath-${requiredPath.processId}-${logIdx}`}
-                                                className="border-t border-gray-300"
-                                                >
-                                                <td className="py-2 border border-gray-400"></td>
-                                                <td className="py-2 pl-2 border border-gray-400 break-words whitespace-normal" colSpan={2}>
-                                                    Талбар: /{requiredPath.messageText.replace('"', '')}/ 
-
-                                                </td>
-                                                </tr>
-                                            ))}
-                                            </>
-                                        )}
-
-                                        {Array.isArray(process.popupStandardFieldsDTO) && process.popupStandardFieldsDTO.length > 0 && (
-                                            <>
-                                            <tr className="bg-gray-200">
-                                                <td colSpan={3} className="px-3 py-2 text-left font-semibold border border-gray-400">
-                                                    Стандарт талбарууд:
-                                                </td>
-                                            </tr>
-                                            {process.popupStandardFieldsDTO.map((standart, logIdx) => (
-                                                <tr
-                                                key={`standart-${standart.processId}-${logIdx}`}
-                                                className="border-t border-gray-300"
-                                                >
-                                                <td className="py-2 border border-gray-400"></td>
-                                                <td className="py-2 pl-2 border border-gray-400 break-words whitespace-normal">
-                                                    Path: {standart.dataPath}
-                                                </td>
-                                                <td className="py-2 pl-2 border border-gray-400 break-words whitespace-normal">
-                                                    Path type: {standart.dataType.replace('code', ' Тухайн popup-ийн код стандарт утга ирсэнгүй')}
-                                                </td>
-                                                </tr>
-                                            ))}
-                                            </>
-                                        )}
-                    </tbody>
-                  </table>
+              <div className="flex flex-col justify-center items-center ">
+                <div className='text-black font-bold text-2xl '>
+                  {selectedResult.testURL}
                 </div>
-              ))}
+                <div className='text-xl'>
+                  Автотестийн үр дүн
+                </div>
+              </div>
             </div>
-          ))
+
+
+            <div className="flex-grow flex flex-col justify-center items-center space-y-10 avoid-break">
+              <div className="space-y-8 max-w-3xl">
+                <div className="text-center">
+                  <h3 className="text-3xl font-semibold text-gray-800 ">{selectedResult.customerName}</h3>
+                  <h4 className="text-xl font-semibold text-gray-800">{currentDate}</h4>
+                </div>
+                <div className="text-center">
+                  <h3 className="text-3xl font-semibold text-gray-800">Автомат тестийн тайлан</h3>
+                  <p className="text-gray-600 mt-2">
+                    Шалгалт хийсэн: PLATFORM TEAM
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="text-center">
+              <p className="text-gray-700">Powered by Veritech ERP</p>
+            </div>
+          </div>
+        </section>
+          ) : (
+            <div className="text-center text-gray-600">No result selected.</div>
+          )}
+
+        {selectedResult ? (
+        <section>
+          <div className="w-full flex flex-col justify-between"> 
+            <div className="flex flex-col justify-center items-center space-y-10 px-6 avoid-break">
+
+                <div className="flex py-8">
+                    <h1 className="text-black text-left font-bold text-2xl ">
+                        Автомат тестийн ерөнхий мэдээлэл
+                    </h1>
+                </div>
+
+                <div className="flex space-y-8 max-w-full w-full mt-5"> 
+                    <table className="table-auto w-full text-left border-collapse border border-black">
+                        <thead>
+                            <tr className="bg-gray-400">
+                                <th className="border px-4 py-2 font-semibold w-1/2">Серверийн мэдээлэл</th>
+                                <th className="border px-4 py-2 font-semibold w-1/2"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td className="border px-4 py-2">Хариу өгсөн эсэх</td>
+                                <td className="border px-4 py-2">Тийм</td>
+                            </tr>
+                            <tr>
+                                <td className="border px-4 py-2">Test tool</td>
+                                <td className="border px-4 py-2">version 0.0.1</td>
+                            </tr>
+                            <tr>
+                                <td className="border px-4 py-2">Серверийн үйлдлийн систем</td>
+                                <td className="border px-4 py-2">Windows</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div> 
+
+                <div className="space-y-8 flex w-full max-w-full pt-8">
+                    <div className="w-1/2 pr-4 h-[300px]">
+                        <table className="table-auto w-full text-left border-collapse border border-black h-full">
+                        <thead>
+                            <tr>
+                            <th className="border px-4 py-2 font-semibold bg-gray-400" colSpan="2">Илэрсэн алдааны тоо</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr className="">
+                                <td className="border px-4 py-2 bg-[#ff8c8c] w-[20px]">FAILED</td>
+                                <td className="border px-4 py-2">{countStatuses.failed}</td>
+                            </tr>
+                            <tr>
+                                <td className="border px-4 py-2 bg-[#ed6c02]">WARNING</td>
+                                <td className="border px-4 py-2">{countStatuses.warning}</td>
+                            </tr>
+                            <tr>
+                                <td className="border px-4 py-2 bg-[#d32f2f]">ERROR</td>
+                                <td className="border px-4 py-2">{countStatuses.error}</td>
+                            </tr>
+                            <tr>
+                                <td className="border px-4 py-2 bg-[#0288d1]">INFO</td>
+                                <td className="border px-4 py-2">{countStatuses.info}</td>
+                            </tr>
+                            <tr>
+                                <td className="border px-4 py-2 bg-[#2e7d32]">SUCCESS</td>
+                                <td className="border px-4 py-2">{countStatuses.success}</td>
+                            </tr>
+                        </tbody>
+                        </table>
+                    </div>
+
+                    <div className="w-1/2 pl-4 max-h-[300px] flex justify-center items-center">
+                        {/* <Doughnut data={chartData} options={chartOptions}/> */}
+                    </div>
+                </div>
+
+
+                <div className="space-y-8 max-w-full w-full"> 
+                    <table className="table-auto w-full text-left border-collapse border border-black">
+                        <thead className="bg-[#ff8c8c]">
+                            <tr>
+                                <th className="border px-4 py-2 w-[80px] font-semibold">1</th>
+                                <th className="border px-4 py-2 font-semibold">FAILED</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td className="border px-4 py-2">Тайлбар</td>
+                                <td className="border px-4 py-2">Энэ алдааг ашиглан автотест нь процессийн expression гаргаж авах бөгөөд цаашлаад системийн алдааг илрүүлэх боломжтой</td>
+                            </tr>
+                            <tr>
+                                <td className="border px-4 py-2">Шийдэл</td>
+                                <td className="border px-4 py-2">Автотестийн үр дүнг ажиглан процессийн алдааг хянаж шийдвэрлэх. Хэрэв ямар нэг алдаа гараагүй зөвхөн 'FAILED' болсон тохиолдолд автомат тестийг хариуцсан хүнд хэлж шалгуулах</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div className="space-y-8 max-w-full w-full mt-5 pt-5"> 
+                    <table className="table-auto w-full text-left border-collapse border border-black">
+                        <thead className="bg-[#d32f2f]">
+                            <tr>
+                                <th className="border px-4 py-2 w-[80px] font-semibold">2</th>
+                                <th className="border px-4 py-2 font-semibold">ERROR</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td className="border px-4 py-2">Тайлбар</td>
+                                <td className="border px-4 py-2">Энэ алдааг ашиглан автотест нь процесс дээр гарж болох бүхий л алдааг илрүүлэнэ. Жишээ нь expression, dataview тохируулах, талбаруудыг буруу тохируулсан эсэх гэх мэт ...</td>
+                            </tr>
+                            <tr>
+                                <td className="border px-4 py-2">Шийдэл</td>
+                                <td className="border px-4 py-2">Автотестийн үр дүнг ажиглан алдааг хянаж шийдвэрлэх.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div className="space-y-8 max-w-full w-full"> 
+                    <table className="table-auto w-full text-left border-collapse border border-black">
+                        <thead className="bg-[#ed6c02]">
+                            <tr>
+                                <th className="border px-4 py-2 w-[80px] font-semibold">3</th>
+                                <th className="border px-4 py-2 font-semibold">WARNING</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td className="border px-4 py-2">Тайлбар</td>
+                                <td className="border px-4 py-2">Энэ алдааг ашиглан автотест нь процессийг ажлуулах үед тухайн процесс бүрэн гүйцэт ажиллах нөхцөл бүрдээгүй үед гарна. Тухайн автомат тест нь popup, combo гэх мэт талбаруудын зөвхөн эхний утгыг авж ажилладаг юм</td>
+                            </tr>
+                            <tr>
+                                <td className="border px-4 py-2">Шийдэл</td>
+                                <td className="border px-4 py-2">Автотестийн үр дүнг ажиглан алдааг хянаж шийдвэрлэх.  Шаардлагатай тохиолдолд автомат тест хариуцсан хүнд мэдэгдэж алдааг ямар шалтгааны улмаас гарж байгаа олох</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div className="space-y-8 max-w-full w-full"> 
+                    <table className="table-auto w-full text-left border-collapse border border-black">
+                        <thead className="bg-[#0288d1]">
+                            <tr>
+                                <th className="border px-4 py-2 w-[80px] font-semibold">4</th>
+                                <th className="border px-4 py-2 font-semibold">INFO</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td className="border px-4 py-2">Тайлбар</td>
+                                <td className="border px-4 py-2">Энэ алдааг ашиглан автотест нь процессийг ажлуулах үед тухайн процесс бүрэн гүйцэт ажиллах нөхцөл бүрдээгүй болон шаарлагатай талбаруудыг бөглөж чадаагүй үед гарна. Тухайн автомат тест нь popup, combo гэх мэт талбаруудын зөвхөн эхний утгыг авж ажилладаг юм</td>
+                            </tr>
+                            <tr>
+                                <td className="border px-4 py-2">Шийдэл</td>
+                                <td className="border px-4 py-2">Автотестийн үр дүнг ажиглан алдааг хянаж шийдвэрлэх.  Шаардлагатай тохиолдолд автомат тест хариуцсан хүнд мэдэгдэж алдааг ямар шалтгааны улмаас гарж байгаа олох</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div className="space-y-8 max-w-full w-full"> 
+                    <table className="table-auto w-full text-left border-collapse border border-black">
+                        <thead className="bg-[#2e7d32]">
+                            <tr>
+                                <th className="border px-4 py-2 w-[80px] font-semibold">5</th>
+                                <th className="border px-4 py-2 font-semibold">SUCCESS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td className="border px-4 py-2">Тайлбар</td>
+                                <td className="border px-4 py-2">Энэ алдааг ашиглан автотест нь процессийг бүрэн ажилттай ажлуулсан үед гарна</td>
+                            </tr>
+                            <tr>
+                                <td className="border px-4 py-2">Шийдэл</td>
+                                <td className="border px-4 py-2">Автотестийн үр дүнтэй танилцах. </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+          </div>
+        </section>
         ) : (
-          <div className="text-lg text-gray-600 text-center">Үр дүн олдсонгүй</div>
+          <div className="text-center text-gray-600">No result selected.</div>
         )}
+
+        <section>
+          {Object.keys(groupedData).length > 0 ? (
+            Object.entries(groupedData).map(([fileName, processes], idx) => (
+              <div key={fileName} className="overflow-y-auto">
+                <h3 className="container text-lg font-semibold text-black mb-2 pl-4 pt-5">Модуль нэр: {fileName}</h3>
+                {  processes.map((process, processIdx) => (
+                  <div key={`processTable-${processIdx}`} className="p-4 bg-white space-y-4">
+                    <h4 className={`text-md font-semibold mb-2 text-black`}>
+                      {process.processCode} - {process.processName} /{process.processId}/
+                    </h4>
+                    <table className="w-full table-fixed bg-white text-black border-collapse mb-6">
+                      <thead>
+                        <tr className={`text-white justify-center items rounded-md bg-[${getTypeColor(process.status)}]`}>
+                          <th className="py-2 border border-gray-400 w-[4%]">#</th>
+                          <th className="py-2 border border-gray-400 w-[16%]">Төрөл</th>
+                          <th className="py-2 border border-gray-400 w-[80%]">Алдааны тайлбар</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr className="border-t border-gray-400">
+                          <td className="py-2 border border-gray-300 rounded-md text-center">{processIdx + 1}.</td>
+                          <td className="py-2 border border-gray-300 rounded-md text-center">{getTranslater(process.status)}</td>
+                          <td className="py-2 pl-2 border border-gray-300 rounded-md break-words whitespace-normal">{process.messageText}</td>
+                        </tr>
+                        {Array.isArray(process.popupMessageDTO) && process.popupMessageDTO.length > 0 && (
+                                              <>
+                                              <tr className="bg-gray-200">
+                                                  <td colSpan={3} className="px-3 py-2 text-left font-semibold border border-gray-400">
+                                                      Popup дуудах үед гарсан алдаанууд:
+                                                  </td>
+                                              </tr>
+                                              {process.popupMessageDTO.map((popupMessage, popupIdx) => (
+                                                  <tr
+                                                  key={`popupMessage-${popupMessage.processId}-${popupIdx}`}
+                                                  className="border-t border-gray-300"
+                                                  >
+                                                  <td className="py-2 border border-gray-400"></td>
+                                                  <td className="py-2 pl-2 border border-gray-400 break-words whitespace-normal">Path: {popupMessage.dataPath}</td>
+                                                  <td className="py-2 pl-2 border border-gray-400 break-words whitespace-normal">
+                                                      Алдаа: {popupMessage.messageText}
+                                                  </td>
+                                                  </tr>
+                                              ))}
+                                              </>
+                                          )}
+                                          {Array.isArray(process.emptyDataDTO) && process.emptyDataDTO.length > 0 && (
+                                              <>
+                                              <tr className="bg-gray-200">
+                                                  <td colSpan={3} className="px-3 py-2 text-left font-semibold border border-gray-400">
+                                                      Заавал талбартай боловч утга олдсонгүй:
+                                                  </td>
+                                              </tr>
+                                              {process.emptyDataDTO.map((emptyData, emptyIdx) => (
+                                                  <tr
+                                                  key={`emptyData-${emptyData.processId}-${emptyIdx}`}
+                                                  className="border-t border-gray-300"
+                                                  >
+                                                      <td className="py-2 border border-gray-400"></td>
+                                                      
+                                                      <td colSpan={2} className="py-2 pl-2 border border-gray-400 break-words whitespace-normal">
+                                                          Талбар: /Path: {emptyData.dataPath}, Type: {emptyData.dataType}/
+                                                      </td> 
+                                                  </tr>
+
+                                                  
+
+                                              ))}
+                                              </>
+                                          )}
+                                          {Array.isArray(process.processLogDTO) && process.processLogDTO.length > 0 && (
+                                              <>
+                                              <tr className="bg-gray-200">
+                                                  <td colSpan={3} className="px-3 py-2 text-left font-semibold border border-gray-400">
+                                                      Expression алдааны жагсаалт:
+                                                  </td>
+                                              </tr>
+                                              {process.processLogDTO.map((log, logIdx) => (
+                                                  <tr
+                                                      key={`processLog-${log.processId}-${logIdx}`}
+                                                      className="border-t border-gray-300"
+                                                  >
+                                                  <td className="py-2 border border-gray-400"></td>
+                                                  <td className="py-2 pl-2 border border-gray-400 " colSpan={2}>
+                                                      Алдаа: {log.messageText.replace('is not a function', ' тухайн expression дээр алдаа гарлаа')}
+                                                  </td>
+                                                  </tr>
+                                              ))}
+
+                                              </>
+                                          )}
+
+                                          {Array.isArray(process.requiredPathDTO) && process.requiredPathDTO.length > 0 && (
+                                              <>
+                                              <tr className="bg-gray-200">
+                                                  <td colSpan={3} className="px-3 py-2 text-left font-semibold border border-gray-400">
+                                                      Заавал талбарууд:
+                                                  </td>
+                                              </tr>
+                                              {process.requiredPathDTO.map((requiredPath, logIdx) => (
+                                                  <tr
+                                                  key={`requiredPath-${requiredPath.processId}-${logIdx}`}
+                                                  className="border-t border-gray-300"
+                                                  >
+                                                  <td className="py-2 border border-gray-400"></td>
+                                                  <td className="py-2 pl-2 border border-gray-400 break-words whitespace-normal" colSpan={2}>
+                                                      Талбар: /{requiredPath.messageText.replace('"', '')}/ 
+
+                                                  </td>
+                                                  </tr>
+                                              ))}
+                                              </>
+                                          )}
+
+                                          {Array.isArray(process.popupStandardFieldsDTO) && process.popupStandardFieldsDTO.length > 0 && (
+                                              <>
+                                              <tr className="bg-gray-200">
+                                                  <td colSpan={3} className="px-3 py-2 text-left font-semibold border border-gray-400">
+                                                      Стандарт талбарууд:
+                                                  </td>
+                                              </tr>
+                                              {process.popupStandardFieldsDTO.map((standart, logIdx) => (
+                                                  <tr
+                                                  key={`standart-${standart.processId}-${logIdx}`}
+                                                  className="border-t border-gray-300"
+                                                  >
+                                                  <td className="py-2 border border-gray-400"></td>
+                                                  <td className="py-2 pl-2 border border-gray-400 break-words whitespace-normal">
+                                                      Path: {standart.dataPath}
+                                                  </td>
+                                                  <td className="py-2 pl-2 border border-gray-400 break-words whitespace-normal">
+                                                      Path type: {standart.dataType.replace('code', ' Тухайн popup-ийн код стандарт утга ирсэнгүй')}
+                                                  </td>
+                                                  </tr>
+                                              ))}
+                                              </>
+                                          )}
+                      </tbody>
+                    </table>
+                  </div>
+                ))}
+              </div>
+            ))
+          ) : (
+            <div className="text-lg text-gray-600 text-center">Үр дүн олдсонгүй</div>
+          )}
+        </section>
       </div>
     </div>
+   
   );
 }
 

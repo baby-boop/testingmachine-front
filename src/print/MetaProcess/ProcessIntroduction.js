@@ -74,7 +74,7 @@ const IntroductionPage = () => {
       };
   return (
     <div className="w-full flex flex-col justify-between"> 
-        <section className="flex flex-col justify-center items-center space-y-10 px-6 avoid-break">
+        <div className="flex flex-col justify-center items-center space-y-10 px-6 avoid-break">
 
             <div className="flex py-8">
                 <h1 className="text-black text-left font-bold text-2xl ">
@@ -250,7 +250,7 @@ const IntroductionPage = () => {
                     </tbody>
                 </table>
             </div>
-        </section>
+        </div>
     </div>
   );
 };

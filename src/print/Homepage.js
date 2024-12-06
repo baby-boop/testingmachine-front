@@ -52,7 +52,7 @@ const Homepage = () => {
       </div>
 
 
-      <section className="flex-grow flex flex-col justify-center items-center space-y-10 avoid-break">
+      <div className="flex-grow flex flex-col justify-center items-center space-y-10 avoid-break">
         <div className="space-y-8 max-w-3xl">
           <div className="text-center">
             <h3 className="text-3xl font-semibold text-gray-800 ">{infomation.customerName}</h3>
@@ -65,7 +65,7 @@ const Homepage = () => {
             </p>
           </div>
         </div>
-      </section>
+      </div>
 
       <div className="text-center">
         <p className="text-gray-700">Powered by Veritech ERP</p>

@@ -33,58 +33,48 @@ function NavBar() {
             <li className="nav-item no-print">
               <NavLink
                 exact
-                to="/meta"
+                to="/old-process"
                 activeClassName="active"
                 className="nav-links"
                 onClick={handleClick}
               >
-                Meta
-              </NavLink>
-            </li>
-            <li className="nav-item no-print">
-              <NavLink
-                exact
-                to="/metaverse"
-                activeClassName="active"
-                className="nav-links"
-                onClick={handleClick}
-              >
-                Metaverse
+                old process
               </NavLink>
             </li>
 
             <li className="nav-item no-print">
               <NavLink
                 exact
-                to="/process"
+                to="/new-process"
                 activeClassName="active"
                 className="nav-links"
                 onClick={handleClick}
               >
-                Process
-              </NavLink>
-            </li>
-            <li className="nav-item no-print">
-              <NavLink
-                exact
-                to="/process-print"
-                activeClassName="active"
-                className="nav-links"
-                onClick={handleClick}
-              >
-                Process print
+                New process
               </NavLink>
             </li>
 
             <li className="nav-item no-print">
               <NavLink
                 exact
-                to="/metalist-print"
+                to="/home"
                 activeClassName="active"
                 className="nav-links"
                 onClick={handleClick}
               >
-                metalist print
+                New home
+              </NavLink>
+            </li>
+
+            <li className="nav-item no-print">
+              <NavLink
+                exact
+                to="/test"
+                activeClassName="active"
+                className="nav-links"
+                onClick={handleClick}
+              >
+                JustTest
               </NavLink>
             </li>
 

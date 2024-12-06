@@ -23,6 +23,7 @@ function ModuleSelector() {
   const [username, setusername] = useState('batdelger');
   const [password, setpassword] = useState('123');
   const [showPassword, setShowPassword] = useState(false);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -30,11 +31,12 @@ function ModuleSelector() {
           username: username,
           password: password,
           command: 'PL_MDVIEW_005',
+          unitname: databaseUsername,
           parameters: {
             systemmetagroupcode: 'testCaseFindModuleLookupList',
           },
         });
-
+  
         const response = await fetch(`https://${systemURL}:8181/erp-services/RestWS/runJson`, {
           method: 'POST',
           headers: {
@@ -42,20 +44,61 @@ function ModuleSelector() {
           },
           body,
         });
-
+  
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-
+  
         const result = await response.json();
         setData(result.response.result);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
-
+  
+    const fetchDatas = async () => {
+      try {
+        const body = JSON.stringify({
+          username: username,
+          password: password,
+          command: 'PL_MDVIEW_005',
+          unitname: databaseUsername,
+          parameters: {
+            systemmetagroupcode: 'pfFindModuleMetaLookupIdsDvLookup',
+          },
+        });
+  
+        const response = await fetch(`http://${systemURL}:8080/erp-services/RestWS/runJson`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body,
+        });
+  
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+  
+        const result = await response.json();
+        setData(result.response.result);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+  
     fetchData();
+    fetchDatas();
+  
+    const interval1 = setInterval(fetchData, 1000);
+    const interval2 = setInterval(fetchDatas, 1000);
+  
+    return () => {
+      clearInterval(interval1);
+      clearInterval(interval2);
+    };
   }, []);
+  
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -107,7 +150,6 @@ function ModuleSelector() {
     setResponseMessage('');
     setIsError(false);
 
-    const createdDate = new Date().toISOString();
 
     if (selectedModule === 'process') {
       try {
@@ -115,7 +157,6 @@ function ModuleSelector() {
           moduleId,
           customerName,
           systemURL,  
-          createdDate,
           username,
           password,
           databaseName,
@@ -181,11 +222,11 @@ function ModuleSelector() {
             </label> 
             <label>
               DB username оруулна уу:
-              <input onChange={handleDatabaseName} className="text-black w-full h-8 border-lg border-2 text-black black border-solid pl-2" type="text" value={databaseName} placeholder='Database оруулна уу!' />
+              <input onChange={handleDatabaseUsername} className="text-black w-full h-8 border-lg border-2 text-black black border-solid pl-2" type="text" value={databaseUsername} placeholder='Database оруулна уу!' />
             </label> 
             <label>
               DB_NAME оруулна уу:
-              <input onChange={handleDatabaseUsername}  className="text-black w-full h-8 border-lg border-2 text-black black border-solid pl-2" type="text" value={databaseUsername} placeholder='Database оруулна уу!' />
+              <input onChange={handleDatabaseName}  className="text-black w-full h-8 border-lg border-2 text-black black border-solid pl-2" type="text" value={databaseName} placeholder='Database оруулна уу!' />
             </label> 
 
               <label>

@@ -1,12 +1,12 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import ModuleSelector from './components/ModuleSelector';
-import MetaMessages from './components//MetaMessages';
-import MetaverseMessages from './components/MetaverseMessages';
-import ProcessMessages from './components/ProcessMessages';
+
+import HomePage from './test/merge.js';
+import NewProcessMessage from './print/ProcessLastUpdate/ProcessMessages.js'
+
 import ProcessPrint from './print/MetaProcess/ProcessPrintMessages';
 import DashboardLayout from './layout/DashboardLayout';
-import MetaListPrint from './print/MetaList/MetaPrintMessage';
 import NavBar from './layout/NavBar';
 import Test from './testClass';
 import './App.css'; 
@@ -21,13 +21,10 @@ function App() {
                     <Routes>
                         <Route path="/" element={<ModuleSelector />} />
                         <Route path="/dashboard" element={<DashboardLayout />} />
-                        <Route path="/meta" element={<MetaMessages />} />
-                        <Route path='/metaverse' element={<MetaverseMessages/>} />
-                        <Route path='/process' element={<ProcessMessages/>} />
-                        <Route path='/process-print' element={<ProcessPrint/>} />
-                        <Route path='/metalist-print' element={<MetaListPrint/>} />
+                        <Route path='/old-process' element={<ProcessPrint/>} />
+                        <Route path='/new-process' element={<NewProcessMessage/>}/>
                         <Route path='/test' element={<Test/>} />
-
+                        <Route path='/home' element={<HomePage/>} />
                     </Routes>
                 </div>
             </div>
