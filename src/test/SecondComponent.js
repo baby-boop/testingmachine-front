@@ -34,9 +34,13 @@ import errImg from '../img/11104.jpg';
             },
           });
   
-          const url = data.systemURL === 'dev.veritech.mn'
-            ? `https://${data.systemURL}:8181/erp-services/RestWS/runJson`
-            : `http://${data.systemURL}:8080/erp-services/RestWS/runJson`;
+          // const url = data.systemURL === 'dev.veritech.mn'
+          //   ? `https://${data.systemURL}:8181/erp-services/RestWS/runJson`
+          //   : `http://${data.systemURL}:8080/erp-services/RestWS/runJson`;
+
+          const url =`/erp-services/RestWS/runJson`;
+          // const url =`https://${data.systemURL}:8181/erp-services/RestWS/runJson`;
+
   
           const response = await fetch(url, {
             method: 'POST',
@@ -45,7 +49,7 @@ import errImg from '../img/11104.jpg';
             },
             body,
           });
-  
+          
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
           }
@@ -58,7 +62,7 @@ import errImg from '../img/11104.jpg';
       };
       fetchData();
   
-    const interval = setInterval(fetchData, 1000);
+    const interval = setInterval(fetchData, 3000);
   
     return () => {
       clearInterval(interval);
@@ -88,7 +92,7 @@ import errImg from '../img/11104.jpg';
       setIsError(false);
   
   
-      if (selectedModule === 'process' || selectedModule === 'meta') {
+      if (selectedModule === 'process' || selectedModule === 'meta' || selectedModule === 'metaWithProcess') {
         try {
           const systemResponse = await axios.post('http://localhost:8080/system-data', {
             moduleId,
@@ -145,7 +149,7 @@ import errImg from '../img/11104.jpg';
       }
     }, [isLoading]);
 
-
+console.log(datas)
     return (
     <div className="flex flex-col border-lg border-2 text-black black border-none">
       <div className="flex flex-row min-h-[300px] border rounded-t-lg">
@@ -209,6 +213,7 @@ import errImg from '../img/11104.jpg';
                   className="text-black w-full h-8 border-lg border-2 border-solid pr-10  pl-2 disabled:bg-gray-300"
                   value={data.password}
                   placeholder='Нууц үг оруулна уу!'
+                  autocomplete="on"
                   disabled
                 />
               </div>
@@ -224,9 +229,11 @@ import errImg from '../img/11104.jpg';
                 <option value="" disabled>Төрөл сонгоно уу...</option>
                 <option value="pfFindModuleMetaLookupIdsDvLookup">Металист</option>
                 <option value="testCaseFindModuleLookupList">Процесс</option>
+                <option value="pfFindModuleMetaLookupIdsDv">Процесстой мета</option>
               </select>
             </label>
-            <button type="submit" className="button-19 mt-4">Өмнөх хуудас руу шилжих</button>
+            <button exact
+                to="/home" type="submit" className="button-19 mt-4" >Өмнөх хуудас руу шилжих</button>
           </form>
         </div>
         {datas ? (
@@ -256,7 +263,7 @@ import errImg from '../img/11104.jpg';
                           onChange={handleSystemId}
                           className="px-4 py-2 border border-gray-300 rounded-md text-black w-full"
                         >
-                          <option value="" disabled>Модуль сонгох ...</option>
+                          <option value="">Бүгдийн модуль тестлэх</option>
                           
                           {Object.keys(datas).map((key) => (
                             
@@ -289,7 +296,6 @@ import errImg from '../img/11104.jpg';
                         Төрөл сонгоно уу...
                       </option>
                       <option value="meta">Металист</option>
-                      <option value="metaprocess">Процесстой металист</option>
                     </select>
                   </label>
                   {selectedModule === 'meta' && (
@@ -321,7 +327,53 @@ import errImg from '../img/11104.jpg';
                 </form>
               )}
 
-                          <div className="flex flex-col p-3 mx-auto bg-black bg-opacity-80  w-full grid place-items-center py-8 px-28 rounded-b-3xl">
+              {data.metaType === 'pfFindModuleMetaLookupIdsDv' && (
+                <form onSubmit={handleSubmit} className="space-y-4 ml-1">
+                  <label className={`block text-lg font-semibold text-white text-center ${isLoading ? 'pointer-events-none opacity-80' : ''}`}>
+                    Шалгах тестийн төрөл сонгоно уу?
+                    <select
+                      className="block w-full mt-3 p-3 border border-gray-300 rounded-md shadow-sm text-black focus:ring-blue-500 focus:border-blue-500"
+                      value={selectedModule}
+                      onChange={handleChange}
+                    >
+                      <option value="" disabled>
+                        Төрөл сонгоно уу...
+                      </option>
+                      <option value="metaWithProcess">Процесстой мета</option>
+                    </select>
+                  </label>
+                  {selectedModule === 'metaWithProcess' && (
+                    <div>
+                      {datas ? (
+                        <div>
+                        <select
+                          value={moduleId}
+                          onChange={handleSystemId}
+                          className="px-4 py-2 border border-gray-300 rounded-md text-black w-full"
+                        >
+                          <option value="">Бүгдийн сонгох</option>
+                          
+                          {Object.keys(datas).map((key) => (
+                            
+                            <option key={key} value={datas[key].metadataid}>
+                              {datas[key].metadataid}
+                            </option>
+                          ))}
+                        </select>
+
+                        </div>
+                        
+                      ) : (
+                        <div className="text-white text-red-400 font-bold text-xl">Дата олдсонгүй...</div>
+                      )}
+                    </div>
+                  )}
+
+                  
+                </form>
+              )}
+
+              <div className="flex flex-col p-3 mx-auto bg-black bg-opacity-80  w-full grid place-items-center py-8 px-28 rounded-b-3xl">
                             <button
                                 type="button" 
                                 className={`button-19 flex w-full flex items-center justify-center ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
@@ -365,7 +417,7 @@ import errImg from '../img/11104.jpg';
                                 </button>
                               </div>
                             </Modal>
-                          </div>
+              </div>
             </div>
           
         ) : (

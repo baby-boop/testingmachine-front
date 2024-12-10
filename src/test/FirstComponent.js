@@ -99,6 +99,7 @@ function FirstComponent({ onFormSubmit }) {
                   onChange={(e) => setPassword(e.target.value)}
                   className="text-black w-full h-8 border-lg border-2 border-solid pr-10  pl-2"
                   value={password}
+                  autocomplete="on"
                   placeholder='Нууц үг оруулна уу!'
                 />
                 <button
@@ -122,6 +123,7 @@ function FirstComponent({ onFormSubmit }) {
                 <option value="" disabled>Төрөл сонгоно уу...</option>
                 <option value="pfFindModuleMetaLookupIdsDvLookup">Металист</option>
                 <option value="testCaseFindModuleLookupList">Процесс</option>
+                <option value="pfFindModuleMetaLookupIdsDv">Процесстой мета</option>
               </select>
             </label>
             <button type="submit" className="button-19 mt-4">Дараагийн хуудас руу шилжих</button>

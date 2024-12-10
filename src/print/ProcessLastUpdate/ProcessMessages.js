@@ -30,8 +30,8 @@ function MyComponent() {
     const fetchData = async () => {
       try {
         const [headerRes, resultRes] = await Promise.all([
-          axios.get('http://localhost:8080/header'),
-          axios.get('http://localhost:8080/result'),
+          axios.get('http://localhost:8080/process-header'),
+          axios.get('http://localhost:8080/process-result'),
         ]);
         setData(headerRes.data);
         setResultData(resultRes.data);
@@ -229,7 +229,7 @@ function MyComponent() {
           </div>
         </section>
           ) : (
-            <div className="text-center text-gray-600">No result selected.</div>
+            <div className="text-center text-gray-600">No result ...</div>
           )}
 
         {selectedResult ? (
@@ -415,7 +415,7 @@ function MyComponent() {
           </div>
         </section>
         ) : (
-          <div className="text-center text-gray-600">No result selected.</div>
+          <div className="text-center text-gray-600">No result ...</div>
         )}
 
         <section>
