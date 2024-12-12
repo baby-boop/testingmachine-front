@@ -3,10 +3,10 @@ import { useReactToPrint } from 'react-to-print';
 import { FaPrint } from 'react-icons/fa';
 import axios from 'axios';
 import '../print.css';
-import { Doughnut } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+// import { Doughnut } from 'react-chartjs-2';
+// import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+// ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 
 const imgSrc = "https://dev.veritech.mn/assets/custom/img/veritech_logo.png";
@@ -82,8 +82,6 @@ function MyComponent() {
     return colorMap[statusColor.toLowerCase()] || '#a855f7';
   };
 
- 
-
   const groupedData = selectedResult
     ? selectedResult.data.reduce((groups, process) => {
         const { fileName } = process;
@@ -112,49 +110,49 @@ function MyComponent() {
       })
     : {};
     
-    const chartData = {
-      labels: ['FAILED', 'WARNING', 'ERROR', 'INFO', 'SUCCESS'], 
-      datasets: [
-        {
-          data: [
-              countStatuses.failed || 0,
-              countStatuses.warning || 0,
-              countStatuses.error || 0,
-              countStatuses.info || 0,
-              countStatuses.success || 0
-            ], 
-          backgroundColor: [
-              '#ff8c8c',
-              '#ed6c02',
-              '#d32f2f', 
-              '#0288d1',
-              '#2e7d32'
-          ],
-          borderColor: [
-              '#ff8c8c',
-              '#ed6c02',
-              '#d32f2f', 
-              '#0288d1',
-              '#2e7d32'
-          ],
-          borderWidth: 1,
-        },
-      ],
-    };
+    // const chartData = {
+    //   labels: ['FAILED', 'WARNING', 'ERROR', 'INFO', 'SUCCESS'], 
+    //   datasets: [
+    //     {
+    //       data: [
+    //           countStatuses.failed || 0,
+    //           countStatuses.warning || 0,
+    //           countStatuses.error || 0,
+    //           countStatuses.info || 0,
+    //           countStatuses.success || 0
+    //         ], 
+    //       backgroundColor: [
+    //           '#ff8c8c',
+    //           '#ed6c02',
+    //           '#d32f2f', 
+    //           '#0288d1',
+    //           '#2e7d32'
+    //       ],
+    //       borderColor: [
+    //           '#ff8c8c',
+    //           '#ed6c02',
+    //           '#d32f2f', 
+    //           '#0288d1',
+    //           '#2e7d32'
+    //       ],
+    //       borderWidth: 1,
+    //     },
+    //   ],
+    // };
 
-    const chartOptions = {
-      plugins: {
-        legend: {
-          position: 'left', 
-          labels: {
-            font: {
-              size: 16,
-            },          
-          },
-        },
+    // const chartOptions = {
+    //   plugins: {
+    //     legend: {
+    //       position: 'left', 
+    //       labels: {
+    //         font: {
+    //           size: 16,
+    //         },          
+    //       },
+    //     },
           
-      },
-    };
+    //   },
+    // };
 
   return (
     <div className="bg-black bg-opacity-80 min-h-[85vh] flex flex-col items-center py-8">
@@ -177,9 +175,11 @@ function MyComponent() {
                 </div>
               </div>
               <div className="p-4 flex flex-col space-y-2 bg-gray-50">
-                <h3 className="text-lg font-semibold text-gray-800">{json.customerName}</h3>
-                <span className="text-sm text-gray-500">{json.createdDate}</span>
-                <span className="text-sm text-gray-500">{json.generatedId}</span>
+                <h3 className="text-xl font-semibold text-gray-800">{json.customerName}</h3>
+                <span className="text-lg text-gray-500">{json.systemURL}</span>
+                <span className="text-base text-gray-500">{json.createdDate}</span>
+                {/* <span className="text-base text-gray-500">{json.generatedId}</span> */}
+
               </div>
             </div>
           ))}
@@ -191,7 +191,7 @@ function MyComponent() {
       <div ref={componentRef} className="print-container w-full flex flex-col justify-between print:block hidden"> 
       {selectedResult ? (
         <section>
-          <div className="container mx-auto h-[1055px] flex flex-col justify-between items-center">
+          <div className="container mx-auto h-[980px] flex flex-col justify-between items-center">
             <div className="flex py-8 justify-between w-full px-10">
               <div className="flex justify-center items-center w-[200px]">
                 <img width="200" height="200" src={imgSrc} alt="Veritech Logo" />
@@ -208,7 +208,7 @@ function MyComponent() {
             </div>
 
 
-            <div className="flex-grow flex flex-col justify-center items-center space-y-10 avoid-break">
+            <div className="flex-grow flex flex-col justify-center items-center space-y-9 avoid-break">
               <div className="space-y-8 max-w-3xl">
                 <div className="text-center">
                   <h3 className="text-3xl font-semibold text-gray-800 ">{selectedResult.customerName}</h3>

@@ -19,6 +19,8 @@ import errImg from '../img/11104.jpg';
     const [databaseUsername, setDatabaseUsername] = useState(data.databaseUsername);
     const [username, setusername] = useState(data.username);
     const [password, setpassword] = useState(data.password);
+    const [createdDate, setCreatedDate] = useState('');
+
     const [selectedModule, setSelectedModule] = useState('');
 
     useEffect(() => {
@@ -229,7 +231,7 @@ console.log(datas)
                 <option value="" disabled>Төрөл сонгоно уу...</option>
                 <option value="pfFindModuleMetaLookupIdsDvLookup">Металист</option>
                 <option value="testCaseFindModuleLookupList">Процесс</option>
-                <option value="pfFindModuleMetaLookupIdsDv">Процесстой мета</option>
+                <option value="testEmptyProcess">Процесстой мета</option>
               </select>
             </label>
             <button exact
@@ -327,7 +329,7 @@ console.log(datas)
                 </form>
               )}
 
-              {data.metaType === 'pfFindModuleMetaLookupIdsDv' && (
+              {data.metaType === 'testEmptyProcess' && (
                 <form onSubmit={handleSubmit} className="space-y-4 ml-1">
                   <label className={`block text-lg font-semibold text-white text-center ${isLoading ? 'pointer-events-none opacity-80' : ''}`}>
                     Шалгах тестийн төрөл сонгоно уу?
@@ -355,8 +357,8 @@ console.log(datas)
                           
                           {Object.keys(datas).map((key) => (
                             
-                            <option key={key} value={datas[key].metadataid}>
-                              {datas[key].metadataid}
+                            <option key={key} value={datas[key].moduleid}>
+                              {datas[key].modulename}
                             </option>
                           ))}
                         </select>

@@ -1,12 +1,11 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import ModuleSelector from './components/ModuleSelector';
 
 import HomePage from './test/merge.js';
-import NewProcessMessage from './print/ProcessLastUpdate/ProcessMessages.js'
+import NewProcessMessage from './print/LastUpdate/ProcessMessages.js'
+import NewMetalistMessage from './print/LastUpdate/MetalistMessages.js'
+import NewMetaProcessMessage from './print/LastUpdate/MetaWithProcessMessage.js'
 
-import ProcessPrint from './print/MetaProcess/ProcessPrintMessages';
-import DashboardLayout from './layout/DashboardLayout';
 import NavBar from './layout/NavBar';
 import Test from './testClass';
 import './App.css'; 
@@ -19,12 +18,11 @@ function App() {
                 
                 <div className="content-container">
                     <Routes>
-                        <Route path="/" element={<ModuleSelector />} />
-                        <Route path="/dashboard" element={<DashboardLayout />} />
-                        <Route path='/old-process' element={<ProcessPrint/>} />
+                        <Route path="/" element={<HomePage />} />
                         <Route path='/new-process' element={<NewProcessMessage/>}/>
+                        <Route path='/new-meta' element={<NewMetalistMessage/>}/>
+                        <Route path='/new-metaprocess' element={<NewMetaProcessMessage/>}/>
                         <Route path='/test' element={<Test/>} />
-                        <Route path='/home' element={<HomePage/>} />
                     </Routes>
                 </div>
             </div>

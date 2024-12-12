@@ -22,47 +22,36 @@ function NavBar() {
             <li className="nav-item no-print">
               <NavLink
                 exact
-                to="/dashboard"
-                activeClassName="active"
-                className="nav-links"
-                onClick={handleClick}
-              >
-                Dashboard
-              </NavLink>
-            </li>
-            <li className="nav-item no-print">
-              <NavLink
-                exact
-                to="/old-process"
-                activeClassName="active"
-                className="nav-links"
-                onClick={handleClick}
-              >
-                old process
-              </NavLink>
-            </li>
-
-            <li className="nav-item no-print">
-              <NavLink
-                exact
                 to="/new-process"
                 activeClassName="active"
                 className="nav-links"
                 onClick={handleClick}
               >
-                New process
+                Процесс
               </NavLink>
             </li>
 
             <li className="nav-item no-print">
               <NavLink
                 exact
-                to="/home"
+                to="/new-metaprocess"
                 activeClassName="active"
                 className="nav-links"
                 onClick={handleClick}
               >
-                New home
+                Металист процесс
+              </NavLink>
+            </li>
+
+            <li className="nav-item no-print">
+              <NavLink
+                exact
+                to="/new-meta"
+                activeClassName="active"
+                className="nav-links"
+                onClick={handleClick}
+              >
+                Металист
               </NavLink>
             </li>
 
@@ -74,9 +63,10 @@ function NavBar() {
                 className="nav-links"
                 onClick={handleClick}
               >
-                JustTest
+                Тест класс
               </NavLink>
             </li>
+
 
           </ul>
           <div className="nav-icon no-print" onClick={handleClick}>
