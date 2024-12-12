@@ -13,13 +13,12 @@ import errImg from '../img/11104.jpg';
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [message, setMessage] = useState('');
     const [moduleId, setmoduleId] = useState('');
-    const [customerName, setCustomerName] = useState(data.customerName);
-    const [systemURL, setSystemURL] = useState(data.systemURL);
-    const [databaseName, setDatabaseName] = useState(data.databaseName);
-    const [databaseUsername, setDatabaseUsername] = useState(data.databaseUsername);
-    const [username, setusername] = useState(data.username);
-    const [password, setpassword] = useState(data.password);
-    const [createdDate, setCreatedDate] = useState('');
+    const [customerName] = useState(data.customerName);
+    const [systemURL] = useState(data.systemURL);
+    const [databaseName] = useState(data.databaseName);
+    const [databaseUsername] = useState(data.databaseUsername);
+    const [username] = useState(data.username);
+    const [password] = useState(data.password);
 
     const [selectedModule, setSelectedModule] = useState('');
 
@@ -36,11 +35,11 @@ import errImg from '../img/11104.jpg';
             },
           });
   
-          // const url = data.systemURL === 'dev.veritech.mn'
-          //   ? `https://${data.systemURL}:8181/erp-services/RestWS/runJson`
-          //   : `http://${data.systemURL}:8080/erp-services/RestWS/runJson`;
+          const url = data.systemURL === 'dev.veritech.mn'
+            ? `/erp-services/RestWS/runJson`
+            : `http://${data.systemURL}:8080/erp-services/RestWS/runJson`;
 
-          const url =`/erp-services/RestWS/runJson`;
+          // const url =`/erp-services/RestWS/runJson`;
           // const url =`https://${data.systemURL}:8181/erp-services/RestWS/runJson`;
 
   
