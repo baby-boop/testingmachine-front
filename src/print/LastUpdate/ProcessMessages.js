@@ -3,6 +3,7 @@ import { useReactToPrint } from 'react-to-print';
 import { FaPrint } from 'react-icons/fa';
 import axios from 'axios';
 import '../print.css';
+import Pagination from '@mui/material/Pagination'
 // import { Doughnut } from 'react-chartjs-2';
 // import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 
@@ -24,6 +25,8 @@ function MyComponent() {
   const [data, setData] = useState([]);
   const [resultData, setResultData] = useState([]);
   const [selectedResult, setSelectedResult] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
   const componentRef = useRef();
 
   useEffect(() => {
@@ -51,7 +54,13 @@ function MyComponent() {
 
   const handleCardClick = (generatedId) => {
     const matchedResult = resultData.find((result) => result.fileName === generatedId);
-    setSelectedResult(matchedResult || null);
+    const matchedHeader = data.find((header) => header.generatedId === generatedId);
+    const combinedData = {
+      ...matchedHeader,
+      ...matchedResult,
+    };
+
+    setSelectedResult(combinedData || null);
 
     setTimeout(() => {
       handlePrint();
@@ -109,56 +118,16 @@ function MyComponent() {
         failed: 0,
       })
     : {};
-    
-    // const chartData = {
-    //   labels: ['FAILED', 'WARNING', 'ERROR', 'INFO', 'SUCCESS'], 
-    //   datasets: [
-    //     {
-    //       data: [
-    //           countStatuses.failed || 0,
-    //           countStatuses.warning || 0,
-    //           countStatuses.error || 0,
-    //           countStatuses.info || 0,
-    //           countStatuses.success || 0
-    //         ], 
-    //       backgroundColor: [
-    //           '#ff8c8c',
-    //           '#ed6c02',
-    //           '#d32f2f', 
-    //           '#0288d1',
-    //           '#2e7d32'
-    //       ],
-    //       borderColor: [
-    //           '#ff8c8c',
-    //           '#ed6c02',
-    //           '#d32f2f', 
-    //           '#0288d1',
-    //           '#2e7d32'
-    //       ],
-    //       borderWidth: 1,
-    //     },
-    //   ],
-    // };
-
-    // const chartOptions = {
-    //   plugins: {
-    //     legend: {
-    //       position: 'left', 
-    //       labels: {
-    //         font: {
-    //           size: 16,
-    //         },          
-    //       },
-    //     },
-          
-    //   },
-    // };
-
+  const handlePageChange = (event, value) => {
+    setCurrentPage(value);
+  };
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedData = data.slice(startIndex, startIndex + itemsPerPage);
   return (
-    <div className="bg-black bg-opacity-80 min-h-[85vh] flex flex-col items-center py-8">
+    <div className="bg-black bg-opacity-80 min-h-[85vh] flex flex-col items-center pt-8">
       {data.length > 0 ? (
         <div className="container grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full px-4">
-          {data.map((json, index) => (
+          {paginatedData.map((json, index) => (
             <div
               key={index}
               className="bg-white shadow-lg rounded-lg overflow-hidden transform transition duration-300 hover:scale-105 cursor-pointer"
@@ -175,18 +144,20 @@ function MyComponent() {
                 </div>
               </div>
               <div className="p-4 flex flex-col space-y-2 bg-gray-50">
-                <h3 className="text-xl font-semibold text-gray-800">{json.customerName}</h3>
+                <h3 className=" text-xl font-semibold text-gray-800">{json.customerName}</h3>
                 <span className="text-lg text-gray-500">{json.systemURL}</span>
                 <span className="text-base text-gray-500">{json.createdDate}</span>
-                {/* <span className="text-base text-gray-500">{json.generatedId}</span> */}
-
               </div>
             </div>
           ))}
+          
         </div>
+        
       ) : (
         <div className="text-xl text-gray-600">Loading...</div>
       )}
+     
+
 
       <div ref={componentRef} className="print-container w-full flex flex-col justify-between print:block hidden"> 
       {selectedResult ? (
@@ -199,12 +170,19 @@ function MyComponent() {
 
               <div className="flex flex-col justify-center items-center ">
                 <div className='text-black font-bold text-2xl '>
-                  {selectedResult.testURL}
+                  {selectedResult.systemURL}
                 </div>
                 <div className='text-xl'>
                   Автотестийн үр дүн
                 </div>
+
               </div>
+            </div>
+
+            <div className="flex flex-col justify-center items-center space-y-9 avoid-break bg-slate-50 w-full rounded-xl">
+              <p className="block text-gray-800 my-2 text-lg font-semibold">
+                Процесс
+              </p>
             </div>
 
 
@@ -216,9 +194,11 @@ function MyComponent() {
                 </div>
                 <div className="text-center">
                   <h3 className="text-3xl font-semibold text-gray-800">Автомат тестийн тайлан</h3>
+                  
                   <p className="text-gray-600 mt-2">
                     Шалгалт хийсэн: PLATFORM TEAM
                   </p>
+                  
                 </div>
               </div>
             </div>
@@ -564,6 +544,18 @@ function MyComponent() {
             <div className="text-lg text-gray-600 text-center">Үр дүн олдсонгүй</div>
           )}
         </section>
+      </div>
+      <div className="flex-grow"></div>
+        <div className="flex mt-6 p-4 bg-gray-100 w-full justify-center">
+        <Pagination
+          variant="outlined"
+          color="primary"
+          count={Math.ceil(data.length / itemsPerPage)}
+          page={currentPage}
+          onChange={handlePageChange}
+          shape="rounded"
+          showFirstButton showLastButton
+        />
       </div>
     </div>
    

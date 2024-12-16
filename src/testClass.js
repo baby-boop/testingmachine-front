@@ -1,79 +1,113 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import { useEffect, useState, useRef } from 'react';
+import { useReactToPrint } from 'react-to-print';
+import { FaPrint } from 'react-icons/fa';
+import axios from 'axios';
+import Pagination from '@mui/material/Pagination'
 
-const FolderManager = () => {
-  const [folders, setFolders] = useState([]);
-  const [selectedFolder, setSelectedFolder] = useState("");
+
+function MyComponent() {
+  const [data, setData] = useState([]);
+  const [resultData, setResultData] = useState([]);
+  const [selectedResult, setSelectedResult] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
+  const componentRef = useRef();
 
   useEffect(() => {
-    const fetchFolders = async () => {
+    const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/list-folders");
-        setFolders(response.data);
+        const [headerRes, resultRes] = await Promise.all([
+          axios.get('http://localhost:8080/meta-header'),
+          axios.get('http://localhost:8080/process-result'),
+        ]);
+        setData(headerRes.data);
+        setResultData(resultRes.data);
       } catch (error) {
-        console.error("Error fetching folder list:", error);
+        console.error('Error fetching data:', error);
       }
     };
 
-    fetchFolders();
+    fetchData();
+    const interval = setInterval(fetchData, 1000);
+    return () => clearInterval(interval);
   }, []);
 
-  const deleteJsonFiles = async () => {
-    if (!selectedFolder) {
-      alert("Please select a folder!");
-      return;
-    }
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  });
 
-    try {
-      const response = await axios.delete("http://localhost:8080/delete-json-files", {
-        params: { folderName: selectedFolder },
-      });
-      alert(response.data);
-    } catch (error) {
-      console.error("Error deleting JSON files:", error);
-      alert("Failed to delete JSON files.");
-    }
+  const handleCardClick = (generatedId) => {
+    const matchedResult = resultData.find((result) => result.fileName === generatedId);
+    const matchedHeader = data.find((header) => header.generatedId === generatedId);
+    const combinedData = {
+      ...matchedHeader,
+      ...matchedResult,
+    };
+
+    setSelectedResult(combinedData || null);
+
+    setTimeout(() => {
+      handlePrint();
+    }, 0);
+  };
+  const handlePageChange = (event, value) => {
+    setCurrentPage(value);
   };
 
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedData = data.slice(startIndex, startIndex + itemsPerPage);
+  
   return (
-    <div className="min-h-[500px] flex items-center justify-center bg-black bg-opacity-80">
-      <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
-        <h1 className="text-2xl font-bold text-gray-800 mb-6">JSON файлуудыг удирдах</h1>
-
-        <label
-          htmlFor="folderSelect"
-          className="block text-sm font-medium text-gray-700 mb-2"
-        >
-          Фолдер сонгоно уу:
-        </label>
-        <select
-          id="folderSelect"
-          value={selectedFolder}
-          onChange={(e) => setSelectedFolder(e.target.value)}
-          className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none mb-6"
-        >
-          <option value="">--Фолдер сонгоно уу--</option>
-          {folders.map((folder, index) => (
-            <option key={index} value={folder}>
-              {folder}
-            </option>
+    <div className="bg-black bg-opacity-80 h-[80vh] flex flex-col items-center pt-8">
+      {data.length > 0 ? (
+        <div className="container grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full px-4">
+          {paginatedData.map((json, index) => (
+            <div
+              key={index}
+              className="bg-white shadow-lg rounded-lg overflow-hidden transform transition duration-300 hover:scale-105 cursor-pointer"
+              onClick={() => handleCardClick(json.generatedId)}
+            >
+              <div className="relative">
+                <img
+                  src="https://banner2.cleanpng.com/20180420/ypq/avfw0k0pe.webp"
+                  alt="PDF icon"
+                  className="w-full h-40 object-cover"
+                />
+                <div className="absolute top-4 right-4 bg-white p-2 rounded-full shadow-md hover:bg-gray-200">
+                  <FaPrint className="text-xl text-gray-700 cursor-pointer" />
+                </div>
+              </div>
+              <div className="p-4 flex flex-col space-y-2 bg-gray-50">
+                <h3 className="text-xl font-semibold text-gray-800">{json.customerName}</h3>
+                <span className="text-lg text-gray-500">{json.systemURL}</span>
+                <span className="text-base text-gray-500">{json.createdDate}</span>
+              </div>
+            </div>
           ))}
-        </select>
-
-        <button
-          onClick={deleteJsonFiles}
-          disabled={!selectedFolder}
-          className={`w-full py-3 px-4 rounded-lg text-white font-bold text-lg shadow-md transition-all duration-200 ${
-            !selectedFolder
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-blue-500 hover:bg-blue-600"
-          }`}
-        >
-          JSON файлуудыг устгах
-        </button>
+          
+        </div>
+        
+      ) : (
+        <div className="text-xl text-gray-600">Loading...</div>
+      )}
+     
+     <div className="flex-grow"></div>
+     <div className="flex mt-6 bottom-0 p-4 bg-gray-100 w-full justify-center">
+      <Pagination
+        variant="outlined"
+        color="primary"
+        count={Math.ceil(data.length / itemsPerPage)}
+        page={currentPage}
+        shape="rounded"
+        onChange={handlePageChange}
+        showFirstButton showLastButton
+      />
       </div>
     </div>
+   
   );
-};
+}
 
-export default FolderManager;
+export default MyComponent;
+
+// Хуудаслалт хэрэгтэй байна ашиглаж Pagination. data-гаас хамаарч Хуудасны тоо гарж ирнэ мөн design-г сайжруулаад өгөөч. Мөн 1 хуудаст дээд тал нь 6-н дата багтана

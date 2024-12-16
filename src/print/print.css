@@ -26,7 +26,7 @@
 
   @page {
     @bottom-center {
-      /* content: "Page " counter(page) " of " counter(pages); */
+      /* content: "Хуудас " counter(page) " / " counter(pages); */
       content: "Хуудас " counter(page);
       margin-bottom: 20px;
     }
