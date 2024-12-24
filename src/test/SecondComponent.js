@@ -22,9 +22,15 @@ import errImg from '../img/11104.jpg';
 
     const [selectedModule, setSelectedModule] = useState('');
 
+
+
+
     useEffect(() => {
       const fetchData = async () => {
         try {
+
+          process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+         
           const body = JSON.stringify({
             username: data.username,
             password: data.password,
@@ -34,15 +40,12 @@ import errImg from '../img/11104.jpg';
               systemmetagroupcode: data.metaType,
             },
           });
-  
+
+          // const url =`https://dev.veritech.mn:8181/erp-services/RestWS/runJson`;
           const url = data.systemURL === 'dev.veritech.mn'
-            ? `/erp-services/RestWS/runJson`
-            : `http://${data.systemURL}:8080/erp-services/RestWS/runJson`;
-
-          // const url =`/erp-services/RestWS/runJson`;
-          // const url =`https://${data.systemURL}:8181/erp-services/RestWS/runJson`;
-
-  
+          ? `/erp-services/RestWS/runJson`
+          : `http://${data.systemURL}:8080/erp-services/RestWS/runJson`;
+          
           const response = await fetch(url, {
             method: 'POST',
             headers: {
@@ -150,7 +153,6 @@ import errImg from '../img/11104.jpg';
       }
     }, [isLoading]);
 
-console.log(datas)
     return (
     <div className="flex flex-col border-lg border-2 text-black black border-none">
       <div className="flex flex-row min-h-[300px] border rounded-t-lg">
@@ -424,9 +426,7 @@ console.log(datas)
         ) : (
           <div className="text-black text-red-400 font-bold text-xl w-full">Server дуудаж чадсангүй...</div>
         )}
-        
       </div>
-
     </div>
     );
   }

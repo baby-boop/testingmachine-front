@@ -3,4 +3,9 @@ module.exports = {
     tailwindcss: {},
     autoprefixer: {},
   },
+  resolve: {
+    fallback: {
+      "https": require.resolve("https-browserify")
+    }
+  },
 }

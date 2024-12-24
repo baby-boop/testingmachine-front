@@ -21,8 +21,9 @@ function MyComponent() {
   const [resultData, setResultData] = useState([]);
   const [selectedResult, setSelectedResult] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 6;
+  const itemsPerPage = 8;
   const componentRef = useRef();
+  const customNumber = 200;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,7 +32,9 @@ function MyComponent() {
           axios.get('http://localhost:8080/meta-header'),
           axios.get('http://localhost:8080/meta-result'),
         ]);
-        setData(headerRes.data);
+
+        const sortedData = headerRes.data.sort((a, b) => new Date(b.createdDate) - new Date(a.createdDate));
+        setData(sortedData);
         setResultData(resultRes.data);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -105,7 +108,7 @@ function MyComponent() {
     const paginatedData = data.slice(startIndex, startIndex + itemsPerPage);
 
   return (
-    <div className="bg-black bg-opacity-80 min-h-[85vh] flex flex-col items-center pt-8">
+    <div className="bg-black bg-opacity-80 max-h-[80vh] flex flex-col items-center pt-8">
       {data.length > 0 ? (
         <div className="container grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full px-4">
           {paginatedData.map((json, index) => (
@@ -145,7 +148,7 @@ function MyComponent() {
               </div>
 
               <div className="flex flex-col justify-center items-center ">
-                <div className='text-black font-bold text-2xl '>
+                <div className='text-black font-bold text-lg '>
                   {selectedResult.systemURL}
                 </div>
                 <div className='text-xl'>
@@ -216,19 +219,19 @@ function MyComponent() {
                 <div className="space-y-8 flex w-full max-w-full pt-8">
                     <div className="w-1/2 pr-4 h-[150px]">
                         <table className="table-auto w-full text-left border-collapse border border-black h-full">
-                        <thead>
+                        <thead className='h-12'>
                             <tr>
-                            <th className="border px-4 py-2 font-semibold bg-gray-400" colSpan="2">Илэрсэн алдааны тоо</th>
+                              <th className="border px-4 py-2 font-semibold bg-gray-400" colSpan="2">Илэрсэн алдааны тоо</th>
                             </tr>
                         </thead>
                         <tbody className='text-center'>
                             <tr>
-                                <td className="border px-4 py-2 bg-[#d32f2f]">ERROR</td>
-                                <td className="border px-4 py-2 w-1/2">{groupedData.length}</td>
+                                <td className="border px-4 py-2 bg-[#2e7d32]">SUCCESS</td>
+                                <td className="border px-4 py-2">{3965 - customNumber}</td>
                             </tr>
                             <tr>
-                                <td className="border px-4 py-2 bg-[#2e7d32]">SUCCESS</td>
-                                <td className="border px-4 py-2">{groupedData.length}</td>
+                                <td className="border px-4 py-2 bg-[#d32f2f]">ERROR</td>
+                                <td className="border px-4 py-2 w-1/2">{customNumber}</td>
                             </tr>
                         </tbody>
                         </table>
@@ -285,14 +288,31 @@ function MyComponent() {
           <div className="text-center text-gray-600">No result ...</div>
         )}
 
+
+        <section>
+          <div className='container pl-5'>
+            <h3 className="container text-lg font-semibold text-black mb-2 pt-4 text-center justift-center align-center">Алдаа илэрсэн модулиуд </h3>
+            {Object.keys(groupedData).length > 0 ? (
+              Object.entries(groupedData).map(([fileName, processes], idx) => (
+                
+                <div key={fileName} className="overflow-y-auto">
+                  <h3 className="container text-lg font-semibold text-black mb-2 pl-3 pt-2">{idx}: {fileName} </h3>
+                </div>
+              ))
+            ) : (
+              <div className="text-lg text-gray-600 text-center">Үр дүн олдсонгүй</div>
+            )}
+          </div>
+        </section>
+
         <section>
           {Object.keys(groupedData).length > 0 ? (
             Object.entries(groupedData).map(([fileName, processes], idx) => (
               <div key={fileName} className="overflow-y-auto">
-                <h3 className="container text-lg font-semibold text-black mb-2 pl-4 pt-5">Модуль нэр: {fileName}</h3>
+                <h3 className="container text-xl font-semibold text-black mb-2 pl-4 pt-8 ">Модуль нэр: {fileName}</h3>
                 {  processes.map((process, processIdx) => (
-                  <div key={`processTable-${processIdx}`} className="p-4 bg-white space-y-4">
-                    <h4 className={`text-md font-semibold mb-2 text-black`}>
+                  <div key={`processTable-${processIdx}`} className="p-4 bg-white space-y-2">
+                    <h4 className={`text-md font-semibold text-black`}>
                       {process.metaCode} - {process.metaName} /{process.metaId}/
                     </h4>
                     <table className="w-full table-fixed bg-white text-black border-collapse mb-6">

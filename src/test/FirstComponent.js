@@ -7,12 +7,20 @@ function FirstComponent({ onFormSubmit }) {
 
 
   const [customerName, setCustomerName] = useState('DevTest');
+  // const [systemURL, setSystemURL] = useState('http://dev.veritech.mn');
   const [systemURL, setSystemURL] = useState('dev.veritech.mn');
   const [databaseName, setDatabaseName] = useState('');
   const [databaseUsername, setDatabaseUsername] = useState('');
   const [username, setUsername] = useState('batdelger');
   const [password, setPassword] = useState('123');
 
+  
+  // const [customerName, setCustomerName] = useState('GOLOMT UAT');
+  // const [systemURL, setSystemURL] = useState('erpuatnode1.golomtbank.local');
+  // const [databaseName, setDatabaseName] = useState('');
+  // const [databaseUsername, setDatabaseUsername] = useState('');
+  // const [username, setUsername] = useState('264b12848');
+  // const [password, setPassword] = useState('Golomt@dev');
   
   // const [customerName, setCustomerName] = useState('Hishig arvin');
   // const [systemURL, setSystemURL] = useState('202.131.244.213');
