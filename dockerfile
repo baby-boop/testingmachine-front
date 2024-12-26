@@ -1,12 +1,12 @@
-FROM node:20.12.2
-
+FROM node:20.17.0 AS build
+ 
 WORKDIR /app
 
 COPY package*.json ./
 
 RUN npm install
 
-COPY . ./
+COPY . .
 
 RUN npm run build
 
