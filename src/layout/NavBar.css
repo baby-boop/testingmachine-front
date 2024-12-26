@@ -108,14 +108,14 @@
     }
   
     .nav-menu.active {
-      background: #1f5156;
+      background: #2c2c2c;
       left: 0px;
       opacity: 1;
       transition: all 0.5s ease;
       z-index: 1;
     }
     .nav-item .active {
-      color: #00FFFF;
+      color: #7cefef;
       border: none;
     }
     .nav-links {

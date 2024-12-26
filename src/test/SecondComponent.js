@@ -9,7 +9,7 @@ import errImg from '../img/11104.jpg';
     const [responseMessage, setResponseMessage] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
-    const [percent, setPercent] = useState(0);
+    const [percent, setPercent] = useState({ count: 0, totalCount: 0 });
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [message, setMessage] = useState('');
     const [moduleId, setmoduleId] = useState('');
@@ -145,13 +145,22 @@ import errImg from '../img/11104.jpg';
     };
   
     useEffect(() => {
-      if (isLoading) {
-        const interval = setInterval(() => {
-          setPercent((prev) => (prev < 100 ? prev + 10 : 100));
-        }, 500);
-        return () => clearInterval(interval);
-      }
-    }, [isLoading]);
+      const fetchData = () => {
+        axios.get('http://localhost:8080/api/meta-counter')
+          .then(response => {
+            setPercent(response.data);
+          })
+          .catch(error => {
+            console.error('Алдаа олдсонгүй:', error);
+          });
+      };
+  
+      fetchData();
+  
+      const interval = setInterval(fetchData, 10000);
+      return () => clearInterval(interval);
+    }, []);
+  
 
     return (
     <div className="flex flex-col border-lg border-2 text-black black border-none">
@@ -236,7 +245,7 @@ import errImg from '../img/11104.jpg';
               </select>
             </label>
             <button exact
-                to="/home" type="submit" className="button-19 mt-4" >Өмнөх хуудас руу шилжих</button>
+                to="/home" type="submit" className="button-19 mt-4 disabled:bg-gray-300" >Өмнөх хуудас руу шилжих</button>
           </form>
         </div>
         {datas ? (
@@ -386,11 +395,11 @@ import errImg from '../img/11104.jpg';
                                 {isLoading ? 'Тестлэж байна...' : 'Тестлэх'}
                               </button>
                             <div className="w-full mt-6 rounded-t-full">
-                              <p className="text-center text-lg font-semibold text-white mb-2">Процесс: {percent}%</p>
+                              <p className="text-center text-lg font-semibold text-white mb-2">Процесс: {percent.count / percent.totalCount * 100}%</p>
                               <div className="relative w-full h-6 bg-gray-300 rounded-full overflow-hidden">
                                 <div
                                   className="absolute top-0 left-0 h-full bg-green-500 rounded-full"
-                                  style={{ width: `${percent}%` }}
+                                  style={{ width: `${percent.count / percent.totalCount * 100}%` }}
                                 />
                               </div>
                             </div>
