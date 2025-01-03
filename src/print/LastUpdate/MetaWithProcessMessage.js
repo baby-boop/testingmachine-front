@@ -93,11 +93,11 @@ function MyComponent() {
 
   const groupedData = selectedResult
     ? selectedResult.data.reduce((groups, process) => {
-        const { fileName } = process;
-        if (!groups[fileName]) {
-          groups[fileName] = [];
+        const { moduleName } = process;
+        if (!groups[moduleName]) {
+          groups[moduleName] = [];
         }
-        groups[fileName].push(process);
+        groups[moduleName].push(process);
         return groups;
       }, {})
     : {};
@@ -393,9 +393,9 @@ function MyComponent() {
 
         <section>
           {Object.keys(groupedData).length > 0 ? (
-            Object.entries(groupedData).map(([fileName, processes], idx) => (
-              <div key={fileName} className="overflow-y-auto">
-                <h3 className="container text-lg font-semibold text-black mb-2 pl-4 pt-5">Модуль нэр: {fileName}</h3>
+            Object.entries(groupedData).map(([moduleName, processes], idx) => (
+              <div key={moduleName} className="overflow-y-auto">
+                <h3 className="container text-lg font-semibold text-black mb-2 pl-4 pt-5">Модуль нэр: {moduleName}</h3>
                 {  processes.map((process, processIdx) => (
                   <div key={`processTable-${processIdx}`} className="p-4 bg-white space-y-4">
                     <h4 className={`text-md font-semibold mb-2 text-black`}>
