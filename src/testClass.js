@@ -56,7 +56,7 @@ function MyComponent() {
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const paginatedData = data.slice(startIndex, startIndex + itemsPerPage);
-  
+
   return (
     <div className="bg-black bg-opacity-80 h-[80vh] flex flex-col items-center pt-8">
       {data.length > 0 ? (
@@ -84,27 +84,27 @@ function MyComponent() {
               </div>
             </div>
           ))}
-          
+
         </div>
-        
+
       ) : (
         <div className="text-xl text-gray-600">Loading...</div>
       )}
-     
-     <div className="flex-grow"></div>
-     <div className="flex mt-6 bottom-0 p-4 bg-gray-100 w-full justify-center">
-      <Pagination
-        variant="outlined"
-        color="primary"
-        count={Math.ceil(data.length / itemsPerPage)}
-        page={currentPage}
-        shape="rounded"
-        onChange={handlePageChange}
-        showFirstButton showLastButton
-      />
+
+      <div className="flex-grow"></div>
+      <div className="flex mt-6 bottom-0 p-4 bg-gray-100 w-full justify-center">
+        <Pagination
+          variant="outlined"
+          color="primary"
+          count={Math.ceil(data.length / itemsPerPage)}
+          page={currentPage}
+          shape="rounded"
+          onChange={handlePageChange}
+          showFirstButton showLastButton
+        />
       </div>
     </div>
-   
+
   );
 }
 

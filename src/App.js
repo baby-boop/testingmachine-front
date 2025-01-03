@@ -8,21 +8,20 @@ import NewMetaProcessMessage from './print/LastUpdate/MetaWithProcessMessage.js'
 
 import NavBar from './layout/NavBar';
 import Test from './testClass';
-import './App.css'; 
+import './App.css';
 
 function App() {
     return (
         <Router>
-            <NavBar/>
+            <NavBar />
             <div className="app-container"> ,
-                
                 <div className="content-container">
                     <Routes>
                         <Route path="/" element={<HomePage />} />
-                        <Route path='/new-process' element={<NewProcessMessage/>}/>
-                        <Route path='/new-meta' element={<NewMetalistMessage/>}/>
-                        <Route path='/new-metaprocess' element={<NewMetaProcessMessage/>}/>
-                        <Route path='/test' element={<Test/>} />
+                        <Route path='/new-process' element={<NewProcessMessage />} />
+                        <Route path='/new-meta' element={<NewMetalistMessage />} />
+                        <Route path='/new-metaprocess' element={<NewMetaProcessMessage />} />
+                        <Route path='/test' element={<Test />} />
                     </Routes>
                 </div>
             </div>
