@@ -29,8 +29,8 @@ function MyComponent() {
     const fetchData = async () => {
       try {
         const [headerRes, resultRes] = await Promise.all([
-          axios.get('http://localhost:8080/meta-header'),
-          axios.get('http://localhost:8080/meta-result'),
+          axios.get('http://localhost:8282/meta-header'),
+          axios.get('http://localhost:8282/meta-result'),
         ]);
 
         const sortedData = headerRes.data.sort((a, b) => new Date(b.createdDate) - new Date(a.createdDate));
@@ -129,7 +129,7 @@ function MyComponent() {
               </div>
               <div className="p-4 flex flex-col space-y-2 bg-gray-50">
                 <h3 className="text-xl font-semibold text-gray-800">{json.customerName}</h3>
-                <span className="text-lg text-gray-500">{json.systemURL}</span>
+                <span className="text-lg text-gray-500">{selectedResult.systemURL.split('://')[1]}</span>
                 <span className="text-base text-gray-500">{json.createdDate}</span>
               </div>
             </div>
@@ -149,7 +149,7 @@ function MyComponent() {
 
                 <div className="flex flex-col justify-center items-center ">
                   <div className='text-black font-bold text-lg '>
-                    {selectedResult.systemURL}
+                    {selectedResult.systemURL.split('://')[1]}
                   </div>
                   <div className='text-xl'>
                     Автотестийн үр дүн

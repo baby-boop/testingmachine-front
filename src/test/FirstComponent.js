@@ -7,8 +7,8 @@ function FirstComponent({ onFormSubmit }) {
 
 
   const [customerName, setCustomerName] = useState('DevTest');
-  // const [systemURL, setSystemURL] = useState('http://dev.veritech.mn');
-  const [systemURL, setSystemURL] = useState('dev.veritech.mn');
+  const [systemURL, setSystemURL] = useState('http://dev.veritech.mn');
+  // const [systemURL, setSystemURL] = useState('dev.veritech.mn');
   const [databaseName, setDatabaseName] = useState('');
   const [databaseUsername, setDatabaseUsername] = useState('');
   const [username, setUsername] = useState('batdelger');

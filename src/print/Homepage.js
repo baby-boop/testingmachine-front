@@ -19,7 +19,7 @@ const Homepage = () => {
         const fetchData = async () => {
             try {
                 const [progressRes] = await Promise.all([
-                    axios.get('http://localhost:8080/system-data')
+                    axios.get('http://localhost:8282/system-data')
     
                 ]);
     
