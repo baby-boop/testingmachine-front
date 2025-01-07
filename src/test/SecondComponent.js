@@ -21,6 +21,8 @@ function SecondComponent({ data }) {
   const [password] = useState(data.password);
 
   const [selectedModule, setSelectedModule] = useState('');
+  const apiBaseUrl = "http://192.168.192.57:8282";
+  // const apiBaseUrl = "http://172.169.88.222:8282";
 
   useEffect(() => {
     const fetchData = async () => {
@@ -86,7 +88,7 @@ function SecondComponent({ data }) {
 
     if (selectedModule === 'process' || selectedModule === 'meta' || selectedModule === 'metaWithProcess') {
       try {
-        const systemResponse = await axios.post('http://localhost:8282/system-data', {
+        const systemResponse = await axios.post(`${apiBaseUrl}/system-data`, {
           moduleId,
           customerName,
           systemURL,
@@ -104,7 +106,7 @@ function SecondComponent({ data }) {
     }
 
     axios
-      .post('http://localhost:8282/api/module', { module: selectedModule })
+      .post(`${apiBaseUrl}/module`, { module: selectedModule })
       .then((response) => {
         const responseData = response.data;
         if (
@@ -134,7 +136,7 @@ function SecondComponent({ data }) {
 
   useEffect(() => {
     const fetchData = () => {
-      axios.get('http://localhost:8282/api/meta-counter')
+      axios.get(`${apiBaseUrl}/meta-counter`)
         .then(response => {
           setPercent(response.data);
         })

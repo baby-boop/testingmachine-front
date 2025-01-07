@@ -24,13 +24,15 @@ function MyComponent() {
   const itemsPerPage = 8;
   const componentRef = useRef();
   const customNumber = 200;
+  const apiBaseUrl = "http://192.168.192.57:8282";
+  // const apiBaseUrl = "http://172.169.88.222:8282";
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const [headerRes, resultRes] = await Promise.all([
-          axios.get('http://localhost:8282/meta-header'),
-          axios.get('http://localhost:8282/meta-result'),
+          axios.get(`${apiBaseUrl}/meta-header`),
+          axios.get(`${apiBaseUrl}/meta-result`),
         ]);
 
         const sortedData = headerRes.data.sort((a, b) => new Date(b.createdDate) - new Date(a.createdDate));
@@ -42,7 +44,7 @@ function MyComponent() {
     };
 
     fetchData();
-    const interval = setInterval(fetchData, 10000);
+    const interval = setInterval(fetchData, 1000);
     return () => clearInterval(interval);
   }, []);
 
@@ -129,7 +131,7 @@ function MyComponent() {
               </div>
               <div className="p-4 flex flex-col space-y-2 bg-gray-50">
                 <h3 className="text-xl font-semibold text-gray-800">{json.customerName}</h3>
-                <span className="text-lg text-gray-500">{selectedResult.systemURL.split('://')[1]}</span>
+                <span className="text-lg text-gray-500">{json.systemURL.split('://')[1]}</span>
                 <span className="text-base text-gray-500">{json.createdDate}</span>
               </div>
             </div>
