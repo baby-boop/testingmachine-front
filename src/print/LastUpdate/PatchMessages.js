@@ -2,11 +2,16 @@ import { useEffect, useState, useRef } from 'react';
 import { useReactToPrint } from 'react-to-print';
 import { FaPrint } from 'react-icons/fa';
 import axios from 'axios';
-import './print/print.css';
+import '../print.css';
 import Pagination from '@mui/material/Pagination';
-import config from './config';
+import config from '../../config';
+// import { Doughnut } from 'react-chartjs-2';
+// import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+
+// ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const imgSrc = "https://dev.veritech.mn/assets/custom/img/veritech_logo.png";
+// const publicIp = process.env.REACT_APP_PUBLIC_IP;
 
 function getDate() {
   const today = new Date();

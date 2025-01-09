@@ -3,7 +3,7 @@ import axios from 'axios';
 import Modal from 'react-modal';
 import succImg from '../img/23991388_6895877.jpg';
 import errImg from '../img/11104.jpg';
-
+import config from '../config'
 function SecondComponent({ data }) {
   const [datas, setDatas] = useState(null);
   const [responseMessage, setResponseMessage] = useState('');
@@ -21,7 +21,7 @@ function SecondComponent({ data }) {
   const [password] = useState(data.password);
 
   const [selectedModule, setSelectedModule] = useState('');
-  const apiBaseUrl = "http://192.168.192.57:8282";
+  // const apiBaseUrl = "http://192.168.192.57:8282";
   // const apiBaseUrl = "http://172.169.88.222:8282";
 
   useEffect(() => {
@@ -88,7 +88,7 @@ function SecondComponent({ data }) {
 
     if (selectedModule === 'process' || selectedModule === 'meta' || selectedModule === 'metaWithProcess') {
       try {
-        const systemResponse = await axios.post(`${apiBaseUrl}/system-data`, {
+        const systemResponse = await axios.post(`${config.apiBaseUrl}/system-data`, {
           moduleId,
           customerName,
           systemURL,
@@ -106,7 +106,7 @@ function SecondComponent({ data }) {
     }
 
     axios
-      .post(`${apiBaseUrl}/module`, { module: selectedModule })
+      .post(`${config.apiBaseUrl}/module`, { module: selectedModule })
       .then((response) => {
         const responseData = response.data;
         if (
@@ -136,7 +136,7 @@ function SecondComponent({ data }) {
 
   useEffect(() => {
     const fetchData = () => {
-      axios.get(`${apiBaseUrl}/meta-counter`)
+      axios.get(`${config.apiBaseUrl}/meta-counter`)
         .then(response => {
           setPercent(response.data);
         })

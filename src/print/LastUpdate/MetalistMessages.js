@@ -4,6 +4,7 @@ import { FaPrint } from 'react-icons/fa';
 import axios from 'axios';
 import '../print.css';
 import Pagination from '@mui/material/Pagination'
+import config from '../../config'
 
 const imgSrc = "https://dev.veritech.mn/assets/custom/img/veritech_logo.png";
 
@@ -24,15 +25,15 @@ function MyComponent() {
   const itemsPerPage = 8;
   const componentRef = useRef();
   const customNumber = 200;
-  const apiBaseUrl = "http://192.168.192.57:8282";
+  // const apiBaseUrl = config.apiBaseUrl;
   // const apiBaseUrl = "http://172.169.88.222:8282";
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const [headerRes, resultRes] = await Promise.all([
-          axios.get(`${apiBaseUrl}/meta-header`),
-          axios.get(`${apiBaseUrl}/meta-result`),
+          axios.get(`${config.apiBaseUrl}/meta-header`),
+          axios.get(`${config.apiBaseUrl}/meta-result`),
         ]);
 
         const sortedData = headerRes.data.sort((a, b) => new Date(b.createdDate) - new Date(a.createdDate));

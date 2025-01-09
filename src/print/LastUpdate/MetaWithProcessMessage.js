@@ -3,7 +3,8 @@ import { useReactToPrint } from 'react-to-print';
 import { FaPrint } from 'react-icons/fa';
 import axios from 'axios';
 import '../print.css';
-import Pagination from '@mui/material/Pagination'
+import Pagination from '@mui/material/Pagination';
+import config from '../../config';
 // import { Doughnut } from 'react-chartjs-2';
 // import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 
@@ -28,14 +29,14 @@ function MyComponent() {
   const itemsPerPage = 6;
   const componentRef = useRef();
   // const apiBaseUrl = "http://192.168.192.57:8282";
-  const apiBaseUrl = "http://172.169.88.222:8282";
+  // const apiBaseUrl = "http://172.169.88.222:8282";
   
   useEffect(() => {
     const fetchData = async () => {
       try {
         const [headerRes, resultRes] = await Promise.all([
-          axios.get(`${apiBaseUrl}/metaprocess-header`),
-          axios.get(`${apiBaseUrl}/metaprocess-result`),
+          axios.get(`${config.apiBaseUrl}/metaprocess-header`),
+          axios.get(`${config.apiBaseUrl}/metaprocess-result`),
         ]);
         setData(headerRes.data);
         setResultData(resultRes.data);

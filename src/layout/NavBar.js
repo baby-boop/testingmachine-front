@@ -54,6 +54,17 @@ function NavBar() {
                 Металист
               </NavLink>
             </li>
+            <li className="nav-item no-print">
+              <NavLink
+                exact
+                to="/new-patch"
+                activeClassName="active"
+                className="nav-links"
+                onClick={handleClick}
+              >
+                Patch
+              </NavLink>
+            </li>
 
             <li className="nav-item no-print">
               <NavLink
