@@ -315,11 +315,11 @@ function MyComponent() {
                 {processes.map((process, processIdx) => (
                   <div key={`processTable-${processIdx}`} className="p-4 bg-white space-y-2">
                     <h4 className={`text-md font-semibold text-black`}>
-                      {process.metaCode} - {process.metaName} /{process.metaId}/
+                      {process.metaDataCode} - {process.metaDataName} /{process.metaDataId}/
                     </h4>
                     <table className="w-full table-fixed bg-white text-black border-collapse mb-6">
                       <thead>
-                        <tr className={`text-white justify-center items rounded-md bg-[${getTypeColor(process.metaType)}]`}>
+                        <tr className={`text-white justify-center items rounded-md bg-[${getTypeColor(process.status)}]`}>
                           <th className="py-2 border border-gray-400 w-[4%]">#</th>
                           <th className="py-2 border border-gray-400 w-[16%]">Төрөл</th>
                           <th className="py-2 border border-gray-400 w-[80%]">Алдааны тайлбар</th>
@@ -328,7 +328,7 @@ function MyComponent() {
                       <tbody>
                         <tr className="border-t border-gray-400">
                           <td className="py-2 border border-gray-300 rounded-md text-center">{processIdx + 1}.</td>
-                          <td className="py-2 border border-gray-300 rounded-md text-center">{getTranslater(process.metaType)}</td>
+                          <td className="py-2 border border-gray-300 rounded-md text-center">{getTranslater(process.status)}</td>
                           <td className="py-2 pl-2 border border-gray-300 rounded-md break-words whitespace-normal">{process.messageText}</td>
                         </tr>
                       </tbody>

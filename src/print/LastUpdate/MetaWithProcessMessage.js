@@ -400,7 +400,7 @@ function MyComponent() {
                 {processes.map((process, processIdx) => (
                   <div key={`processTable-${processIdx}`} className="p-4 bg-white space-y-4">
                     <h4 className={`text-md font-semibold mb-2 text-black`}>
-                      {process.processCode} - {process.processName} /{process.processId}/
+                      {process.metaDataCode} - {process.metaDataName} /{process.metaDataId}/
                     </h4>
                     <table className="w-full table-fixed bg-white text-black border-collapse mb-6">
                       <thead>
