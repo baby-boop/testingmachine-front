@@ -22,7 +22,7 @@ function MyComponent() {
   const [resultData, setResultData] = useState([]);
   const [selectedResult, setSelectedResult] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 6;
+  const itemsPerPage = 8;
   const componentRef = useRef();
   const percentComplete = 100;
 
@@ -31,10 +31,13 @@ function MyComponent() {
     const fetchData = async () => {
       try {
         const [headerRes, resultRes] = await Promise.all([
-          axios.get(`${config.apiBaseUrl}/patch-header`),
-          axios.get(`${config.apiBaseUrl}/patch-result`),
+          axios.get(`${config.apiBaseUrl}/process-percent`),
+          axios.get(`${config.apiBaseUrl}/percent-result`),
         ]);
-        const sortedData = headerRes.data.sort((a, b) => new Date(b.createdDate) - new Date(a.createdDate));
+        const sortedData = headerRes.data
+        // .flatMap(item => item.data) 
+        .sort((a, b) => new Date(b.createdDate) - new Date(a.createdDate));
+        
         setData(sortedData);
         setResultData(resultRes.data);
       } catch (error) {
@@ -53,7 +56,7 @@ function MyComponent() {
 
   const handleCardClick = (generatedId) => {
     const matchedResult = resultData.find((result) => result.fileName === generatedId);
-    const matchedHeader = data.find((header) => header.generatedId === generatedId);
+    const matchedHeader = data.find((header) => header.jsonId === generatedId);
     const combinedData = {
       ...matchedHeader,
       ...matchedResult,
@@ -130,7 +133,7 @@ function MyComponent() {
             <div
               key={index}
               className="bg-white shadow-lg rounded-lg overflow-hidden transform transition duration-300 hover:scale-105 cursor-pointer"
-              onClick={() => handleCardClick(json.generatedId)}
+              onClick={() => handleCardClick(json.jsonId)}
             >
               <div className="relative">
                 <img
@@ -144,18 +147,18 @@ function MyComponent() {
               </div>
               <div className="p-4 flex flex-col space-y-2 bg-gray-50">
                 <h3 className=" text-xl font-semibold text-gray-800">{json.customerName}</h3>
-                <span className="text-lg text-gray-500">{json.systemURL.split('://')[1]}</span>
+                <span className="text-lg text-gray-500">{json.systemUrl.split('://')[1]}</span>
                 <span className="text-base text-gray-500">{json.createdDate}</span>
               </div>
 
               <div className="bg-gray-100 p-5 rounded-xl shadow-md w-full">
                 <div className="bg-gray-300 rounded-md w-full h-6 overflow-hidden relative">
                   <div
-                    className={`h-full rounded-md ${percentComplete === 100 ? 'bg-green-500' : 'bg-blue-500'}`}
-                    style={{ width: `${percentComplete}%` }}
+                    className={`h-full rounded-md ${((json.processCount / json.totalProcessCount) * 100) === 100 ? 'bg-green-500' : 'bg-blue-500'}`}
+                    style={{ width: `${((json.processCount / json.totalProcessCount) * 100)}%` }}
                   />
                   <p className="absolute inset-0 text-sm text-gray-700 font-semibold flex justify-center items-center">
-                    {percentComplete.toFixed(2)}%
+                    {((json.processCount / json.totalProcessCount) * 100).toFixed(2)}%
                   </p>
                 </div>
               </div>

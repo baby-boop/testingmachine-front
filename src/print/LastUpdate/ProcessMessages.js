@@ -56,7 +56,7 @@ function MyComponent() {
   });
 
   const handleCardClick = (generatedId) => {
-    const matchedResult = resultData.find((result) => result.fileName === generatedId);
+    const matchedResult = resultData.find((result) => result.id === generatedId);
     const matchedHeader = data.find((header) => header.generatedId === generatedId);
     const combinedData = {
       ...matchedHeader,

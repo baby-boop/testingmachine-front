@@ -17,7 +17,7 @@ function App() {
             <div className="app-container"> ,
                 <div className="content-container">
                     <Routes>
-                        <Route path="/" element={<HomePage />} />
+                        {/* <Route path="/" element={<HomePage />} /> */}
                         <Route path='/new-process' element={<NewProcessMessage />} />
                         <Route path='/new-meta' element={<NewMetalistMessage />} />
                         <Route path='/new-metaprocess' element={<NewMetaProcessMessage />} />
