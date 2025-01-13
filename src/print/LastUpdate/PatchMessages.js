@@ -543,6 +543,28 @@ function MyComponent() {
                             ))}
                           </>
                         )}
+
+                        {Array.isArray(process.comboMessageDTO) && process.comboMessageDTO.length > 0 && (
+                          <>
+                            <tr className="bg-gray-200">
+                              <td colSpan={3} className="px-3 py-2 text-left font-semibold border border-gray-400">
+                                Combo дуудах үед гарсан алдаанууд:
+                              </td>
+                            </tr>
+                            {process.comboMessageDTO.map((comboMessage, popupIdx) => (
+                              <tr
+                                key={`popupMessage-${comboMessage.metaDataId}-${popupIdx}`}
+                                className="border-t border-gray-300"
+                              >
+                                <td className="py-2 border border-gray-400"></td>
+                                <td className="py-2 pl-2 border border-gray-400 break-words whitespace-normal">Path: {comboMessage.dataPath}</td>
+                                <td className="py-2 pl-2 border border-gray-400 break-words whitespace-normal">
+                                  Алдаа: {comboMessage.message}
+                                </td>
+                              </tr>
+                            ))}
+                          </>
+                        )}
                       </tbody>
                     </table>
                   </div>

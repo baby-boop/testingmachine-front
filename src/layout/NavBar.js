@@ -65,7 +65,7 @@ function NavBar() {
                 Patch
               </NavLink>
             </li>
-
+{/* 
             <li className="nav-item no-print">
               <NavLink
                 exact
@@ -76,7 +76,7 @@ function NavBar() {
               >
                 Тест класс
               </NavLink>
-            </li>
+            </li> */}
 
 
           </ul>
