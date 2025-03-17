@@ -1,0 +1,28 @@
+@media print {
+    body * {
+      visibility: hidden;
+    }
+    
+    .print-container, .print-container * {
+      visibility: visible;
+    }
+  
+    .print-container {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: auto; 
+      overflow: visible !important;
+    }
+  
+    .print-container table {
+      page-break-inside: auto;
+    }
+  
+    .print-container tr {
+      page-break-inside: avoid;
+      page-break-after: auto;
+    }
+  }
+  

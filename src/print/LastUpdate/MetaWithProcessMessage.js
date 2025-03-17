@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { useReactToPrint } from 'react-to-print';
-import { FaPrint } from 'react-icons/fa';
+import { FaPrint, FaSearch } from 'react-icons/fa';
 import axios from 'axios';
 import '../print.css';
 import Pagination from '@mui/material/Pagination';
@@ -26,7 +26,8 @@ function MyComponent() {
   const [resultData, setResultData] = useState([]);
   const [selectedResult, setSelectedResult] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 6;
+  const [searchQuery, setSearchQuery] = useState("")
+  const itemsPerPage = 8;
   const componentRef = useRef();
   // const apiBaseUrl = "http://192.168.192.57:8282";
   // const apiBaseUrl = "http://172.169.88.222:8282";
@@ -121,15 +122,32 @@ function MyComponent() {
     })
     : {};
 
+  const filteredData = data.filter((item) =>
+    item.customerName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    item.systemURL.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   const handlePageChange = (event, value) => {
     setCurrentPage(value);
   };
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedData = data.slice(startIndex, startIndex + itemsPerPage);
+  const paginatedData = filteredData.slice(startIndex, startIndex + itemsPerPage);
 
   return (
     <div className="bg-black bg-opacity-80 min-h-[85vh] flex flex-col items-center pt-8">
-      {data.length > 0 ? (
+      <div className="w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/4 mb-6">
+        <div className="relative">
+          <input
+            type="text"
+            className="w-full p-3 pl-10 pr-4 border rounded-full text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-md transition-all ease-in-out duration-300"
+            placeholder="Search by customer name or URL..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)} 
+          />
+          <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-600" />
+        </div>
+      </div>
+      {filteredData.length > 0 ? (
         <div className="container grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full px-4">
           {paginatedData.map((json, index) => (
             <div

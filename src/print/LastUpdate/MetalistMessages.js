@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { useReactToPrint } from 'react-to-print';
-import { FaPrint } from 'react-icons/fa';
+import { FaPrint, FaSearch } from 'react-icons/fa';
 import axios from 'axios';
 import '../print.css';
 import Pagination from '@mui/material/Pagination'
@@ -22,9 +22,9 @@ function MyComponent() {
   const [resultData, setResultData] = useState([]);
   const [selectedResult, setSelectedResult] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState("")
   const itemsPerPage = 8;
   const componentRef = useRef();
-  const customNumber = 200;
   // const apiBaseUrl = config.apiBaseUrl;
   // const apiBaseUrl = "http://172.169.88.222:8282";
 
@@ -55,18 +55,26 @@ function MyComponent() {
 
   const handleCardClick = (generatedId) => {
     const matchedResult = resultData.find((result) => result.id === generatedId);
+  
+    if (!matchedResult) {
+      console.error("No matching result found for ID:", generatedId);
+      return;
+    }
+  
     const matchedHeader = data.find((header) => header.generatedId === generatedId);
+  
     const combinedData = {
       ...matchedHeader,
-      ...matchedResult,
+      ...matchedResult.data, 
     };
-
+  
     setSelectedResult(combinedData || null);
-
+  
     setTimeout(() => {
       handlePrint();
     }, 0);
   };
+  
 
   const getTranslater = (status) => {
     status = String(status);
@@ -92,27 +100,43 @@ function MyComponent() {
     return colorMap[statusColor.toLowerCase()] || '#a855f7';
   };
 
-  const groupedData = selectedResult
-    ? selectedResult.data.reduce((groups, process) => {
-      const { moduleName } = process;
-      if (!groups[moduleName]) {
-        groups[moduleName] = [];
-      }
-      groups[moduleName].push(process);
-      return groups;
-    }, {})
-    : {};
+  const groupedData = selectedResult?.metaDetails?.reduce((groups, process) => {
+    const { moduleName } = process;
+    if (!groups[moduleName]) {
+      groups[moduleName] = [];
+    }
+    groups[moduleName].push(process);
+    return groups;
+  }, {}) || {};
+  
 
+  const filteredData = data.filter((item) =>
+    item.customerName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    item.systemURL.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const handlePageChange = (event, value) => {
     setCurrentPage(value);
   };
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedData = data.slice(startIndex, startIndex + itemsPerPage);
+  const paginatedData = filteredData.slice(startIndex, startIndex + itemsPerPage);
+
 
   return (
     <div className="bg-black bg-opacity-80 max-h-[80vh] flex flex-col items-center pt-8">
-      {data.length > 0 ? (
+      <div className="w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/4 mb-6">
+        <div className="relative">
+          <input
+            type="text"
+            className="w-full p-3 pl-10 pr-4 border rounded-full text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-md transition-all ease-in-out duration-300"
+            placeholder="Search by customer name or URL..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-600" />
+        </div>
+      </div>
+      {filteredData.length > 0 ? (
         <div className="container grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full px-4">
           {paginatedData.map((json, index) => (
             <div
@@ -230,11 +254,11 @@ function MyComponent() {
                       <tbody className='text-center'>
                         <tr>
                           <td className="border px-4 py-2 bg-[#2e7d32]">SUCCESS</td>
-                          <td className="border px-4 py-2">{3965 - customNumber}</td>
+                          <td className="border px-4 py-2">{selectedResult.totalCount - selectedResult.errorCount}</td>
                         </tr>
                         <tr>
                           <td className="border px-4 py-2 bg-[#d32f2f]">ERROR</td>
-                          <td className="border px-4 py-2 w-1/2">{customNumber}</td>
+                          <td className="border px-4 py-2 w-1/2">{selectedResult.errorCount}</td>
                         </tr>
                       </tbody>
                     </table>
@@ -292,21 +316,22 @@ function MyComponent() {
         )}
 
 
-        <section>
+        {/* <section>
           <div className='container pl-5'>
-            <h3 className="container text-lg font-semibold text-black mb-2 pt-4 text-center justift-center align-center">Алдаа илэрсэн модулиуд </h3>
+            <h3 className="container text-lg font-semibold text-black mb-2 pt-4 text-center">Алдаа илэрсэн модулиуд</h3>
             {Object.keys(groupedData).length > 0 ? (
               Object.entries(groupedData).map(([moduleName, processes], idx) => (
-
                 <div key={moduleName} className="overflow-y-auto">
-                  <h3 className="container text-lg font-semibold text-black mb-2 pl-3 pt-2">{idx}: {moduleName} </h3>
+                  <h3 className="container text-lg font-semibold text-black mb-2 pl-3 pt-2">
+                    {idx + 1}: {moduleName} ({processes.length})
+                  </h3>
                 </div>
               ))
             ) : (
               <div className="text-lg text-gray-600 text-center">Үр дүн олдсонгүй</div>
             )}
           </div>
-        </section>
+        </section> */}
 
         <section>
           {Object.keys(groupedData).length > 0 ? (
