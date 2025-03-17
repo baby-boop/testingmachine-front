@@ -3,8 +3,8 @@ import { useReactToPrint } from 'react-to-print';
 import { FaPrint, FaSearch } from 'react-icons/fa';
 import axios from 'axios';
 import '../print.css';
-import Pagination from '@mui/material/Pagination'
-import config from '../../config'
+import Pagination from '@mui/material/Pagination';
+import config from '../../config';
 
 const imgSrc = "https://dev.veritech.mn/assets/custom/img/veritech_logo.png";
 
