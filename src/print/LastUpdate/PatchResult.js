@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { useReactToPrint } from 'react-to-print';
-import { FaPrint, FaSearch } from 'react-icons/fa';
+import { FaPrint } from 'react-icons/fa';
 import axios from 'axios';
 import './Patch.css';
 import Pagination from '@mui/material/Pagination';
@@ -21,7 +21,7 @@ function getDate() {
 function MyComponent() {
     const { jsonId } = useParams();
     const [currentDate] = useState(getDate());
-    const [data, setData] = useState([]);
+    const [data] = useState([]);
     const [resultData, setResultData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 8;
